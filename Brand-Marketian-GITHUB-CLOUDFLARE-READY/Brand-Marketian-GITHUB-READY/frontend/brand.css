@@ -1,0 +1,88 @@
+/* Brand Marketian — palette + type override
+   Ground: white. Primary: JBL-style orange. Depth: near-black ink.
+   Supporting hues used only as card tints, never as text on white. */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root{
+  --font-heading:'Archivo','Helvetica Neue',Arial,sans-serif;
+  --font-body:'Plus Jakarta Sans','Helvetica Neue',Arial,sans-serif;
+
+  --color-bg:#ffffff;
+  --color-surface:#f5f5f6;
+  --color-text:#111214;
+  --color-accent:#ff6600;
+  --color-accent-2:#1b3bd8;
+  --color-divider:rgba(17,18,20,.12);
+
+  --color-neutral-100:#fafafa;--color-neutral-200:#f0f0f1;--color-neutral-300:#dedee1;
+  --color-neutral-400:#bcbcc1;--color-neutral-500:#94949b;--color-neutral-600:#6e6e76;
+  --color-neutral-700:#4c4c53;--color-neutral-800:#2a2b2f;--color-neutral-900:#111214;
+
+  --color-accent-100:#fff2e8;--color-accent-200:#ffdcc2;--color-accent-300:#ffb680;
+  --color-accent-400:#ff8c33;--color-accent-500:#ff6600;--color-accent-600:#e05600;
+  --color-accent-700:#b34300;--color-accent-800:#7d2f00;--color-accent-900:#4a1c00;
+
+  --color-accent-2-100:#eef1ff;--color-accent-2-200:#d6ddff;--color-accent-2-300:#adbaff;
+  --color-accent-2-400:#6f83f2;--color-accent-2-500:#1b3bd8;--color-accent-2-600:#152fac;
+  --color-accent-2-700:#102386;--color-accent-2-800:#0a165a;--color-accent-2-900:#060d34;
+
+  --bm-ink:#111214;
+  --bm-teal:#0e7c86;--bm-teal-100:#e6f4f5;
+  --bm-amber:#f4a300;--bm-amber-100:#fff5e0;
+  --bm-plum:#6b21a8;--bm-plum-100:#f4ebff;
+
+  --radius-md:10px;--radius-lg:18px;
+
+  --shadow-sm:0 1px 2px rgba(17,18,20,.08);
+  --shadow-md:0 6px 18px rgba(17,18,20,.10);
+  --shadow-lg:0 18px 44px rgba(17,18,20,.14);
+}
+
+body{background:var(--color-bg)}
+
+h1,h2,h3,h4,h5,.card-title{
+  font-family:var(--font-heading);
+  font-weight:800;
+  letter-spacing:-.022em;
+  text-wrap:pretty;
+}
+
+.card-kicker{
+  font-family:var(--font-body);
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  font-size:10.5px;
+  color:var(--color-accent-700);
+}
+
+.btn{font-family:var(--font-body);font-weight:600;letter-spacing:0}
+.btn-primary{background:var(--color-accent);border-color:var(--color-accent);color:#fff}
+.btn-primary:hover{background:var(--color-accent-600);border-color:var(--color-accent-600)}
+.table th{font-family:var(--font-body);font-weight:700;letter-spacing:.06em}
+
+/* motion + media utilities */
+@keyframes bm-rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes bm-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes bm-marquee-rev{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+@keyframes bm-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes bm-pulse{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:.9;transform:scale(1.35)}}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .card, [data-rise] {
+      animation: bm-rise .7s cubic-bezier(.22,.9,.28,1) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+
+.card{transition:transform .3s cubic-bezier(.22,.9,.28,1), box-shadow .3s ease}
+.card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md)}
+.btn{transition:transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease}
+.btn:hover{transform:translateY(-2px)}
+
+.bm-marquee-row{display:flex;width:max-content;animation:bm-marquee var(--bm-marq,42s) linear infinite}
+.bm-marquee-row.rev{animation-name:bm-marquee-rev;animation-duration:calc(var(--bm-marq,42s) * 1.24)}
+.bm-marquee:hover .bm-marquee-row{animation-play-state:paused}

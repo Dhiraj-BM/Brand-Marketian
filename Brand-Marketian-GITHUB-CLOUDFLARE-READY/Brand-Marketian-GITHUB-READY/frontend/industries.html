@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-fef53163-6fb7-44b0-a953-acc5c3c3b818/styles.css">
+<link rel="stylesheet" href="brand.css">
+<meta name="bm-page" content="industries" />
+<meta name="bm-api" content="" />
+<script src="cms.js"></script>
+<script src="_ds/organic-fef53163-6fb7-44b0-a953-acc5c3c3b818/_ds_bundle.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)}a{color:var(--color-accent-700);text-decoration:none}a:hover{color:var(--color-accent-600)}</style>
+</helmet>
+<dc-import name="Site Nav" current="Industries" hint-size="100%,80px"></dc-import>
+
+<section style="max-width:1240px;margin:0 auto;padding:56px 32px 24px">
+<span class="tag tag-accent" style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase">Industries</span>
+<h1 style="font-size:54px;margin:20px 0 10px;max-width:16ch">We already know your benchmarks.</h1>
+<p style="font-size:17px;max-width:54ch;color:color-mix(in srgb, var(--color-text) 74%, transparent)">Five sectors we work in most. Pick yours to see the channel mix, the numbers we hold ourselves to, and what the first quarter looks like.</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:26px">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+<button class="btn btn-secondary" onClick="{{ t.pick }}" style="font-size:13.5px;border-color:{{ t.border }};background:{{ t.bg }}">{{ t.name }}</button>
+</sc-for>
+</div>
+</section>
+
+<section style="max-width:1240px;margin:0 auto;padding:14px 32px 40px">
+<div style="border-radius:calc(var(--radius-lg) * 1.4);background:var(--color-surface);padding:48px 44px;display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center">
+<div>
+<h2 style="font-size:44px;margin:0 0 12px;max-width:15ch">{{ active.headline }}</h2>
+<p style="font-size:16.5px;max-width:46ch;color:color-mix(in srgb, var(--color-text) 78%, transparent)">{{ active.sub }}</p>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px">
+<sc-for list="{{ active.benchmarks }}" as="b" hint-placeholder-count="3">
+<div class="card" style="background:var(--color-bg)"><div style="font-family:var(--font-heading);font-size:28px;line-height:1;color:var(--color-accent-700)">{{ b.value }}</div><div style="font-size:12px;opacity:.65">{{ b.label }}</div></div>
+</sc-for>
+</div>
+<a class="btn btn-primary" href="contact.html" style="margin-top:26px;padding:12px 26px">Get a plan for {{ active.short }}</a>
+</div>
+<dc-import name="Media" query="business,handshake,meeting" label="CRM pipeline" tone="cobalt" stat="11 / wk" stat-label="qualified leads" lock="11" hint-size="100%,300px" style="width:100%;height:300px"></dc-import>
+</div>
+</section>
+
+<section style="max-width:1240px;margin:0 auto;padding:0 32px 40px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:22px">
+<div class="card elev-sm" style="padding:var(--space-6)"><div class="card-kicker">What usually goes wrong</div><ul style="list-style:none;margin:0;padding:0;display:grid;gap:11px;font-size:14.5px"><sc-for list="{{ active.pains }}" as="p" hint-placeholder-count="4"><li style="display:flex;gap:10px;align-items:flex-start"><span style="flex:none;opacity:.4">✕</span><span style="flex:1;min-width:0">{{ p }}</span></li></sc-for></ul></div>
+<div class="card elev-sm" style="padding:var(--space-6);background:var(--color-accent-100)"><div class="card-kicker">Our channel mix</div><ul style="list-style:none;margin:0;padding:0;display:grid;gap:11px;font-size:14.5px"><sc-for list="{{ active.mix }}" as="m" hint-placeholder-count="4"><li style="display:flex;gap:10px;align-items:flex-start"><span style="flex:none;color:var(--color-accent-700)">✦</span><span style="flex:1;min-width:0">{{ m }}</span></li></sc-for></ul></div>
+</div>
+</section>
+
+<section style="max-width:1240px;margin:0 auto;padding:0 32px 72px">
+<div class="card elev-sm" style="padding:var(--space-6);background:var(--color-accent-2-100);flex-direction:row;align-items:center;gap:28px;flex-wrap:wrap">
+<div style="flex:1;min-width:280px"><div class="card-kicker">Proof</div><p style="font-family:var(--font-heading);font-size:24px;line-height:1.35;margin:6px 0 0">“{{ active.quote }}”</p></div>
+<a class="btn btn-secondary" href="case-studies.html">See the case study →</a>
+</div>
+</section>
+
+<dc-import name="Site Footer" hint-size="100%,520px"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280}}">
+class Component extends DCLogic {
+  state = { i: 0 };
+  data() {
+    return [
+      { name: 'D2C / e-commerce', short: 'D2C', headline: 'Sell more without discounting every month.', imageNote: 'product grid + cart funnel',
+        sub: 'Acquisition that respects contribution margin, plus a retention engine so repeat buyers carry a real share of revenue.',
+        benchmarks: [{ value: '3.5–4.5', label: 'target blended ROAS' }, { value: '25–35%', label: 'revenue from repeats' }, { value: '<2s', label: 'store load on 4G' }],
+        pains: ['Discounting to hit the monthly number', 'Catalogue ads set up wrong or not at all', 'No email or WhatsApp retention flows', 'Marketplace and D2C cannibalising each other'],
+        mix: ['Meta + Google catalogue and dynamic ads', 'Store CRO on revenue-carrying pages', 'Email + WhatsApp retention flows', 'Creator content as the top-of-funnel engine'],
+        quote: 'Repeat purchase went from an afterthought to a third of monthly revenue.' },
+      { name: 'Local businesses & clinics', short: 'local brands', headline: 'Fill the calendar, city by city.', imageNote: 'location pages + booking flow',
+        sub: 'Location-level campaigns, Google My Business done properly, and follow-up fast enough that the lead still remembers you.',
+        benchmarks: [{ value: '₹40–90', label: 'cost per qualified lead' }, { value: '<60s', label: 'first response time' }, { value: '2x', label: 'appointment show rate' }],
+        pains: ['One national campaign for many locations', 'Unclaimed or inconsistent GMB listings', 'Leads called back hours later', 'No call or walk-in tracking'],
+        mix: ['Per-location campaigns and landing pages', 'Google My Business + local SEO', 'WhatsApp instant follow-up', 'Review generation and reputation'],
+        quote: 'Cost per lead halved, and the people who booked actually turned up.' },
+      { name: 'B2B SaaS', short: 'SaaS', headline: 'Pipeline, not impressions.', imageNote: 'demo funnel + content map',
+        sub: 'Content and search that reach buyers before they shortlist, and paid that only chases the intent worth paying for.',
+        benchmarks: [{ value: '30–40%', label: 'pipeline from organic' }, { value: '₹4–8K', label: 'cost per demo' }, { value: '2 quarters', label: 'to compounding traffic' }],
+        pains: ['A blog written for nobody in particular', 'Paid chasing broad, unqualified terms', 'Sales collateral that does not exist', 'Attribution stopping at the form fill'],
+        mix: ['Keyword-to-revenue content clusters', 'LinkedIn + Google intent campaigns', 'Lead magnets and nurture sequences', 'CRM-linked reporting to closed-won'],
+        quote: 'Our blog went from a cost centre to the second biggest source of demo requests.' },
+      { name: 'Startups scaling', short: 'startups', headline: 'Build the brand while you buy the growth.', imageNote: 'launch assets + growth chart',
+        sub: 'Everything from identity to the first ₹1L of monthly spend, set up so the next round of growth does not need a rebuild.',
+        benchmarks: [{ value: '4–6 wks', label: 'brand to live site' }, { value: '10 days', label: 'to first campaigns live' }, { value: '1 pod', label: 'instead of 4 vendors' }],
+        pains: ['Four vendors, four versions of the brand', 'Growth spend before tracking exists', 'A site that cannot be edited without a developer', 'No repeatable content system'],
+        mix: ['Identity, website and funnel built together', 'Founder-led content and creator seeding', 'Paid started small and scaled on data', 'Analytics and CRM wired from day one'],
+        quote: 'It feels like an in-house team that just sits somewhere else.' },
+      { name: 'Enterprise teams', short: 'enterprise', headline: 'An extension of your marketing team.', imageNote: 'governance + reporting dashboard',
+        sub: 'Campaign execution at volume with the governance, approvals and reporting an internal team already answers to.',
+        benchmarks: [{ value: '48–72h', label: 'creative turnaround' }, { value: 'Weekly', label: 'review cadence' }, { value: 'SLA', label: 'backed delivery' }],
+        pains: ['Rotating account managers with no context', 'Approval cycles measured in weeks', 'Global playbooks reused for India', 'Reporting that never reaches the CMO deck'],
+        mix: ['Dedicated pod with named owners', 'Always-on creative production line', 'Regional and festive campaign calendars', 'Board-ready monthly reporting'],
+        quote: 'The reporting is the part I did not expect, it goes straight into the leadership deck.' }
+    ];
+  }
+  renderVals() {
+    const d = this.data(), i = this.state.i;
+    return {
+      active: d[i],
+      tabs: d.map((t, k) => ({
+        name: t.name,
+        border: k === i ? 'var(--color-accent)' : 'var(--color-divider)',
+        bg: k === i ? 'var(--color-accent-100)' : 'transparent',
+        pick: () => this.setState({ i: k })
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

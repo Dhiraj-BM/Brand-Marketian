@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-fef53163-6fb7-44b0-a953-acc5c3c3b818/styles.css">
+<link rel="stylesheet" href="brand.css">
+<script src="_ds/organic-fef53163-6fb7-44b0-a953-acc5c3c3b818/_ds_bundle.js"></script>
+</helmet>
+<div style="position:relative;width:100%;height:100%;border-radius:var(--radius-lg);overflow:hidden;background:{{ tint }}">
+<img src="{{ src }}" alt="{{ label }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.22,.9,.28,1)" style-hover="transform:scale(1.06)">
+<div style="position:absolute;inset:0;background:{{ overlay }}"></div>
+<div style="position:absolute;left:14px;bottom:14px;display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.94);border-radius:999px;padding:7px 13px;box-shadow:var(--shadow-sm)">
+<span style="width:8px;height:8px;border-radius:50%;background:{{ dot }};animation:bm-pulse 2.6s ease-in-out infinite"></span>
+<span style="font-weight:700;font-size:11.5px;letter-spacing:.02em;color:var(--bm-ink);white-space:nowrap">{{ label }}</span>
+</div>
+<sc-if value="{{ hasStat }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;right:14px;top:14px;background:{{ dot }};color:#fff;border-radius:12px;padding:9px 13px;box-shadow:var(--shadow-md);animation:bm-float 5s ease-in-out infinite">
+<div style="font-family:var(--font-heading);font-weight:800;font-size:19px;line-height:1">{{ stat }}</div>
+<div style="font-size:10px;font-weight:600;opacity:.9;letter-spacing:.04em;text-transform:uppercase">{{ statLabel }}</div>
+</div>
+</sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:460,&quot;height&quot;:320},&quot;query&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;marketing,office&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Brand Marketian&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;tone&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;orange&quot;,&quot;cobalt&quot;,&quot;teal&quot;,&quot;amber&quot;,&quot;plum&quot;,&quot;ink&quot;],&quot;default&quot;:&quot;orange&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;stat&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;statLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;lock&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:7,&quot;tsType&quot;:&quot;number&quot;},&quot;w&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:900,&quot;tsType&quot;:&quot;number&quot;},&quot;h&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:640,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    const tones = {
+      orange: { dot: 'var(--color-accent)', tint: 'var(--color-accent-100)', overlay: 'linear-gradient(180deg, rgba(17,18,20,.06), rgba(255,102,0,.26))' },
+      cobalt: { dot: 'var(--color-accent-2)', tint: 'var(--color-accent-2-100)', overlay: 'linear-gradient(180deg, rgba(17,18,20,.06), rgba(27,59,216,.30))' },
+      teal: { dot: 'var(--bm-teal)', tint: 'var(--bm-teal-100)', overlay: 'linear-gradient(180deg, rgba(17,18,20,.06), rgba(14,124,134,.30))' },
+      amber: { dot: 'var(--bm-amber)', tint: 'var(--bm-amber-100)', overlay: 'linear-gradient(180deg, rgba(17,18,20,.06), rgba(244,163,0,.28))' },
+      plum: { dot: 'var(--bm-plum)', tint: 'var(--bm-plum-100)', overlay: 'linear-gradient(180deg, rgba(17,18,20,.06), rgba(107,33,168,.30))' },
+      ink: { dot: 'var(--bm-ink)', tint: 'var(--color-surface)', overlay: 'linear-gradient(180deg, rgba(17,18,20,.10), rgba(17,18,20,.42))' }
+    };
+    const t = tones[p.tone || 'orange'] || tones.orange;
+    const q = p.query || 'marketing,office';
+    const w = p.w || 900, h = p.h || 640;
+    return {
+      src: p.src || 'assets/d2c.png',
+      label: p.label || 'Brand Marketian',
+      stat: p.stat || '',
+      statLabel: p.statLabel || '',
+      hasStat: !!p.stat,
+      dot: t.dot, tint: t.tint, overlay: t.overlay
+    };
+  }
+}
+</script>
+</body>
+</html>
