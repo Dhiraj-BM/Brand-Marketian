@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<template id="__bundler_thumbnail" data-bg-color="#ffffff">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+<rect width="240" height="240" fill="#ffffff"/>
+<circle cx="120" cy="120" r="62" fill="#ff6600"/>
+<path d="M92 140 A28 26 0 0 1 148 140 Z" fill="#ffffff"/>
+<rect x="86" y="140" width="68" height="12" rx="4" fill="#ffffff"/>
+</svg>
+</template>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="brand.css">
+<script src="_ds_bundle.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="bm-page" content="home" />
+<meta name="bm-api" content="" />
+<script src="cms.js"></script>
+<meta name="ext-resource-dependency" content="pillar1.png" data-resource-id="pillar1" />
+<meta name="ext-resource-dependency" content="pillar2.png" data-resource-id="pillar2" />
+<meta name="ext-resource-dependency" content="pillar3.png" data-resource-id="pillar3" />
+<meta name="ext-resource-dependency" content="d2c.png" data-resource-id="mediaD2c" />
+<meta name="ext-resource-dependency" content="b2b.png" data-resource-id="mediaB2b" />
+<meta name="ext-resource-dependency" content="icon-meta.svg" data-resource-id="icMeta" />
+<meta name="ext-resource-dependency" content="icon-instagram.svg" data-resource-id="icInstagram" />
+<meta name="ext-resource-dependency" content="icon-googleads.svg" data-resource-id="icGoogleads" />
+<meta name="ext-resource-dependency" content="icon-youtube.svg" data-resource-id="icYoutube" />
+<meta name="ext-resource-dependency" content="icon-whatsapp.svg" data-resource-id="icWhatsapp" />
+<meta name="ext-resource-dependency" content="icon-googlemaps.svg" data-resource-id="icGooglemaps" />
+<meta name="ext-resource-dependency" content="icon-googleanalytics.svg" data-resource-id="icAnalytics" />
+<meta name="ext-resource-dependency" content="icon-shopify.svg" data-resource-id="icShopify" />
+<meta name="ext-resource-dependency" content="icon-hubspot.svg" data-resource-id="icHubspot" />
+<meta name="ext-resource-dependency" content="icon-linkedin.svg" data-resource-id="icLinkedin" />
+<style>
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)}
+a{color:var(--color-accent-700);text-decoration:none}
+a:hover{color:var(--color-accent-600)}
+@keyframes bm-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;overflow-x:hidden">
+
+<dc-import name="Site Nav" current="" hint-size="100%,80px"></dc-import>
+
+<section style="max-width:1240px;margin:0 auto;padding:72px 32px 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:56px;align-items:center">
+<div>
+<span class="tag tag-accent-2" style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase" data-cms="heroEyebrow">For founders and small business owners</span>
+<h1 style="font-size:60px;line-height:1.03;letter-spacing:-.02em;margin:20px 0 0;max-width:15ch"><span data-cms="heroTitle">Posting every day and still not getting </span><span style="color:var(--color-accent-700)" data-cms="heroTitleAccent">customers?</span></h1>
+<p style="font-size:18px;line-height:1.6;max-width:48ch;margin:20px 0 0;color:color-mix(in srgb, var(--color-text) 78%, transparent)" data-cms="heroSub">You do not need more posts. You need a system. We run your social, your ads and your follow-up together, so every rupee you spend comes back as an enquiry you can actually count.</p>
+<div style="display:flex;gap:12px;margin-top:30px;flex-wrap:wrap">
+<a class="btn btn-primary" href="contact.html" style="font-size:15px;padding:12px 26px;white-space:nowrap" data-cms="heroCta">Book a free audit for your business</a>
+<a class="btn btn-secondary" href="pricing.html" style="font-size:15px;padding:12px 26px;white-space:nowrap">See pricing</a>
+</div>
+<p style="margin-top:18px;font-size:13px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Custom plan in your inbox within 48 hours. No jargon, no pressure.</p>
+</div>
+<div style="position:relative">
+<div style="position:absolute;width:320px;height:320px;border-radius:50%;background:var(--color-accent-200);right:-60px;top:-50px;filter:blur(6px);opacity:.75"></div>
+<div style="position:relative;height:432px" onMouseEnter="{{ pause }}" onMouseLeave="{{ resume }}">
+
+<div style="position:absolute;inset:0;border-radius:calc(var(--radius-lg) * 1.3);box-shadow:var(--shadow-lg);background:var(--color-bg);border:1px solid var(--color-divider);padding:20px;transition:opacity .5s ease, transform .5s cubic-bezier(.22,.9,.28,1);opacity:{{ slide0.opacity }};transform:{{ slide0.transform }};pointer-events:{{ slide0.pointer }};z-index:{{ slide0.z }}">
+<div style="display:flex;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid var(--color-divider)">
+<img src="logo.jpg" alt="" style="width:26px;height:26px;border-radius:50%;display:block">
+<span style="font-family:var(--font-heading);font-size:15px">Growth dashboard</span>
+<span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:var(--color-accent-100);color:var(--color-accent-800);padding:4px 10px;border-radius:999px">Last 30 days</span>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px">
+<div style="background:var(--color-surface);border-radius:var(--radius-md);padding:12px"><div style="font-size:10.5px;opacity:.6">Enquiries</div><div style="font-family:var(--font-heading);font-size:24px;line-height:1.1">412</div><div style="font-size:10.5px;color:var(--color-accent-700)">▲ 38%</div></div>
+<div style="background:var(--color-surface);border-radius:var(--radius-md);padding:12px"><div style="font-size:10.5px;opacity:.6">Cost per lead</div><div style="font-family:var(--font-heading);font-size:24px;line-height:1.1">₹58</div><div style="font-size:10.5px;color:var(--color-accent-700)">▼ 41%</div></div>
+<div style="background:var(--color-surface);border-radius:var(--radius-md);padding:12px"><div style="font-size:10.5px;opacity:.6">Reach</div><div style="font-family:var(--font-heading);font-size:24px;line-height:1.1">1.4M</div><div style="font-size:10.5px;color:var(--color-accent-700)">▲ 3.2x</div></div>
+</div>
+<div style="background:var(--color-surface);border-radius:var(--radius-md);padding:14px;margin-top:12px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:11.5px;opacity:.65">Enquiries per week</span><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.5">Meta · Google · Organic</span></div>
+<div style="display:flex;align-items:flex-end;gap:8px;height:96px;margin-top:12px">
+<sc-for list="{{ bars }}" as="b" hint-placeholder-count="7">
+<div style="flex:1;height:{{ b.h }};background:{{ b.bg }};border-radius:6px 6px 3px 3px;transition:height .7s cubic-bezier(.22,.9,.28,1)"></div>
+</sc-for>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:10px;background:var(--color-accent-100);border-radius:999px;padding:9px 14px;margin-top:12px">
+<span style="width:8px;height:8px;border-radius:50%;background:var(--color-accent)"></span>
+<span style="font-size:12.5px">New WhatsApp enquiry from a Delhi customer</span>
+<span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.55">now</span>
+</div>
+</div>
+
+<div style="position:absolute;inset:0;border-radius:calc(var(--radius-lg) * 1.3);box-shadow:var(--shadow-lg);background:var(--color-bg);border:1px solid var(--color-divider);padding:22px;transition:opacity .5s ease, transform .5s cubic-bezier(.22,.9,.28,1);opacity:{{ slide1.opacity }};transform:{{ slide1.transform }};pointer-events:{{ slide1.pointer }};z-index:{{ slide1.z }}">
+<div style="display:flex;align-items:center;gap:9px">
+<span style="font-size:13.5px;font-weight:600">Brand visibility score</span>
+<span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;background:var(--color-surface);padding:3px 8px;border-radius:999px;opacity:.7">Local search</span>
+</div>
+<div style="display:flex;align-items:flex-end;gap:26px;margin-top:16px">
+<div>
+<div style="display:flex;align-items:baseline;gap:4px"><span style="font-family:var(--font-heading);font-size:52px;line-height:1">78</span><span style="font-size:15px;opacity:.55">/100</span></div>
+<span style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:var(--color-accent-100);color:var(--color-accent-800);border-radius:999px;padding:5px 11px;font-size:12px;font-weight:600">▲ 12 pts</span>
+<div style="font-size:11.5px;opacity:.6;margin-top:8px">vs prior 30 days</div>
+</div>
+<div style="flex:1;min-width:0">
+<svg viewBox="0 0 220 96" preserveAspectRatio="none" style="width:100%;height:96px;display:block">
+<line x1="0" y1="8" x2="220" y2="8" stroke="currentColor" stroke-opacity=".12"></line>
+<line x1="0" y1="36" x2="220" y2="36" stroke="currentColor" stroke-opacity=".12"></line>
+<line x1="0" y1="64" x2="220" y2="64" stroke="currentColor" stroke-opacity=".12"></line>
+<line x1="0" y1="92" x2="220" y2="92" stroke="currentColor" stroke-opacity=".2"></line>
+<path d="M3,68 L56,60 L109,47 L162,30 L217,13 L217,92 L3,92 Z" fill="var(--color-accent)" fill-opacity=".13"></path>
+<path d="M3,68 L56,60 L109,47 L162,30 L217,13" fill="none" stroke="var(--color-accent)" stroke-width="2.75" stroke-linecap="round"></path>
+<circle cx="217" cy="13" r="4.5" fill="var(--color-accent)"></circle>
+</svg>
+<div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:9.5px;opacity:.5;margin-top:5px"><span>Wk 1</span><span>Wk 2</span><span>Wk 3</span><span>Wk 4</span><span>Now</span></div>
+</div>
+</div>
+<div style="height:1px;background:var(--color-divider);margin:18px 0 14px"></div>
+<div style="font-size:13.5px;font-weight:600">Searches you now show up for</div>
+<div style="display:grid;gap:8px;margin-top:11px">
+<sc-for list="{{ terms }}" as="t" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius-md);background:var(--color-surface);transition:transform .25s ease" style-hover="transform:translateX(4px)">
+<span style="font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.label }}</span>
+<span style="margin-left:auto;font-size:11px;font-weight:600;border-radius:999px;padding:3px 10px;white-space:nowrap;background:{{ t.bg }};color:{{ t.color }}">{{ t.level }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="position:absolute;inset:0;border-radius:calc(var(--radius-lg) * 1.3);box-shadow:var(--shadow-lg);background:var(--color-bg);border:1px solid var(--color-divider);padding:22px;transition:opacity .5s ease, transform .5s cubic-bezier(.22,.9,.28,1);opacity:{{ slide2.opacity }};transform:{{ slide2.transform }};pointer-events:{{ slide2.pointer }};z-index:{{ slide2.z }}">
+<div style="font-size:13.5px;font-weight:600">Channels we run for you</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+<sc-for list="{{ channels }}" as="c" hint-placeholder-count="6">
+<div style="display:flex;align-items:center;gap:10px;padding:12px;border-radius:var(--radius-md);background:var(--color-surface);transition:transform .25s ease, box-shadow .25s ease" style-hover="transform:translateY(-3px);box-shadow:var(--shadow-sm)">
+<span style="width:22px;height:22px;display:block;flex:none;background-image:{{ c.bg }};background-size:cover;background-position:center"></span>
+<span style="font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.name }}</span>
+</div>
+</sc-for>
+</div>
+<div style="height:1px;background:var(--color-divider);margin:18px 0 14px"></div>
+<div style="font-size:13.5px;font-weight:600">This week on your account</div>
+<div style="display:grid;gap:8px;margin-top:11px">
+<div style="display:flex;align-items:center;gap:10px;font-size:12.5px;padding:10px 12px;border-radius:var(--radius-md);background:var(--color-surface)"><span style="width:7px;height:7px;border-radius:50%;background:var(--color-accent);flex:none"></span>6 reels shot and scheduled<span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.55">Mon</span></div>
+<div style="display:flex;align-items:center;gap:10px;font-size:12.5px;padding:10px 12px;border-radius:var(--radius-md);background:var(--color-surface)"><span style="width:7px;height:7px;border-radius:50%;background:var(--color-accent);flex:none"></span>3 new ad creatives live on Meta<span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.55">Wed</span></div>
+<div style="display:flex;align-items:center;gap:10px;font-size:12.5px;padding:10px 12px;border-radius:var(--radius-md);background:var(--color-accent-100)"><span style="width:7px;height:7px;border-radius:50%;background:var(--color-accent);flex:none"></span>Weekly report and next-week plan<span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.55">Fri</span></div>
+</div>
+</div>
+
+<div style="position:absolute;left:2px;bottom:-34px;display:flex;gap:8px;z-index:7">
+<sc-for list="{{ dots }}" as="d" hint-placeholder-count="3">
+<button onClick="{{ d.pick }}" aria-label="{{ d.label }}" style="border:0;cursor:pointer;padding:0;height:8px;width:{{ d.w }};border-radius:999px;background:{{ d.bg }};transition:width .3s ease, background .3s ease"></button>
+</sc-for>
+</div>
+</div>
+<div class="elev-md" style="position:absolute;right:-10px;bottom:-46px;background:var(--color-bg);border-radius:999px;padding:12px 20px;display:flex;align-items:center;gap:10px;z-index:8">
+<span style="width:9px;height:9px;border-radius:50%;background:var(--color-accent-2)"></span>
+<span style="font-size:13px;white-space:nowrap">₹30L+ ad spend managed each month</span>
+</div>
+</div>
+</section>
+
+<section style="max-width:1240px;margin:0 auto;padding:24px 32px 8px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px">
+<div class="card elev-sm" style="align-items:flex-start"><div style="font-family:var(--font-heading);font-size:38px;line-height:1">50+</div><div class="card-body" style="flex:none">brands served to date</div></div>
+<div class="card elev-sm" style="align-items:flex-start"><div style="font-family:var(--font-heading);font-size:38px;line-height:1;color:var(--color-accent-700)">₹30L+</div><div class="card-body" style="flex:none">monthly ad spend managed</div></div>
+<div class="card elev-sm" style="align-items:flex-start"><div style="font-family:var(--font-heading);font-size:38px;line-height:1">15+</div><div class="card-body" style="flex:none">brands built from scratch</div></div>
+<div class="card elev-sm" style="align-items:flex-start"><div style="font-family:var(--font-heading);font-size:38px;line-height:1;color:var(--color-accent-2-700)">3x</div><div class="card-body" style="flex:none">avg. reach growth in 90 days</div></div>
+</div>
+</section>
+
+<section style="padding:52px 0 44px;overflow:hidden">
+<p style="text-align:center;font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 50%, transparent);margin-bottom:26px">Platforms we run every day for 50+ Indian brands</p>
+<div style="display:flex;width:max-content;animation:bm-marquee 34s linear infinite">
+<div style="display:flex;gap:18px;padding-right:18px">
+<sc-for list="{{ logos }}" as="l" hint-placeholder-count="8">
+<div style="width:206px;height:64px;display:flex;align-items:center;justify-content:center;gap:11px;border-radius:999px;background:var(--color-surface);transition:transform .25s ease, box-shadow .25s ease" style-hover="transform:translateY(-3px);box-shadow:var(--shadow-sm)"><span style="width:24px;height:24px;display:block;flex:none;background-image:{{ l.bg }};background-size:cover;background-position:center"></span><span style="font-size:13.5px;font-weight:600;white-space:nowrap">{{ l.name }}</span></div>
+</sc-for>
+</div>
+<div style="display:flex;gap:18px;padding-right:18px" aria-hidden="true">
+<sc-for list="{{ logos }}" as="l" hint-placeholder-count="8">
+<div style="width:206px;height:64px;display:flex;align-items:center;justify-content:center;gap:11px;border-radius:999px;background:var(--color-surface)"><span style="width:24px;height:24px;display:block;flex:none;background-image:{{ l.bg }};background-size:cover;background-position:center"></span><span style="font-size:13.5px;font-weight:600;white-space:nowrap">{{ l.name }}</span></div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section style="max-width:1240px;margin:0 auto;padding:56px 32px 40px">
+<div style="display:grid;grid-template-columns:minmax(260px,.72fr) 2.28fr;gap:40px;align-items:start">
+<div style="position:sticky;top:96px">
+<span style="display:inline-block;font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Our services</span>
+<h2 style="font-size:44px;margin:16px 0 0;line-height:1.05"><span data-cms="servicesTitle">Meet your </span><span style="color:var(--color-accent)" data-cms="servicesTitleAccent">growth engine</span></h2>
+<p style="font-size:16px;line-height:1.6;margin-top:16px;color:color-mix(in srgb, var(--color-text) 72%, transparent)" data-cms="servicesSub">One team instead of four vendors. Pick a single pillar or let us run all three together, tuned for how India actually buys: mobile-first, vernacular, festive, WhatsApp-led.</p>
+<a class="btn btn-primary" href="contact.html" style="margin-top:24px;padding:12px 26px">Book a free audit</a>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px">
+<sc-for list="{{ pillars }}" as="p" hint-placeholder-count="3">
+<article style="position:relative;border-radius:22px;overflow:hidden;min-height:520px;display:flex;flex-direction:column;justify-content:flex-end;background-color:{{ p.base }};background-image:{{ p.bgImage }};background-size:cover;background-position:center;transition:transform .35s cubic-bezier(.22,.9,.28,1), box-shadow .35s ease" style-hover="transform:translateY(-8px);box-shadow:var(--shadow-lg)">
+<div style="position:absolute;inset:0;background:{{ p.scrim }}"></div>
+<div style="position:absolute;left:18px;top:18px;display:flex;gap:7px">
+<sc-for list="{{ p.icons }}" as="ic" hint-placeholder-count="3">
+<span style="width:34px;height:34px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:var(--shadow-sm)"><span style="width:17px;height:17px;display:block;background-image:{{ ic.bg }};background-size:cover;background-position:center"></span></span>
+</sc-for>
+</div>
+<div style="position:absolute;right:16px;top:18px;background:{{ p.chip }};color:#fff;border-radius:999px;padding:7px 13px;font-weight:700;font-size:11.5px;animation:bm-float 5.5s ease-in-out infinite">{{ p.metric }}</div>
+<div style="position:relative;padding:22px 20px 20px;display:flex;flex-direction:column;gap:11px">
+<div style="font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.72)">{{ p.kicker }}</div>
+<h3 style="margin:0;font-size:27px;color:#fff;line-height:1.08">{{ p.title }}</h3>
+<p style="margin:0;font-size:14px;line-height:1.55;color:rgba(255,255,255,.86)">{{ p.body }}</p>
+<ul style="list-style:none;margin:2px 0 0;padding:0;display:grid;gap:7px;font-size:13px;color:rgba(255,255,255,.88)">
+<sc-for list="{{ p.items }}" as="it" hint-placeholder-count="4">
+<li style="display:flex;gap:9px;align-items:flex-start"><span style="flex:none;color:#fff">→</span><span style="flex:1;min-width:0">{{ it }}</span></li>
+</sc-for>
+</ul>
+<a href="services.html" style="margin-top:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;background:{{ p.chip }};color:#fff;border-radius:999px;padding:12px 18px;font-weight:700;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;transition:filter .25s ease" style-hover="filter:brightness(1.12)">{{ p.cta }}<span>→</span></a>
+</div>
+</article>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section style="max-width:1240px;margin:0 auto;padding:20px 32px 56px">
+<span class="tag tag-accent-2" style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase">Who we work with</span>
+<h2 style="font-size:46px;margin:18px 0 10px;max-width:18ch" data-cms="buyersTitle">Two very different buyers. Two different playbooks.</h2>
+<p style="max-width:58ch;font-size:16px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Half our accounts sell to consumers, half sell to businesses. We do not run the same plan for both, the funnel, the creative and the metric all change.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:22px;margin-top:34px">
+<article class="card elev-sm" style="padding:var(--space-6)">
+<dc-import name="Media" src="{{ mood.d2cSrc }}" label="{{ mood.d2cLabel }}" tone="orange" stat="31%" stat-label="repeat revenue" lock="14" hint-size="100%,170px" style="width:100%;height:170px"></dc-import>
+<span class="tag tag-accent" style="align-self:flex-start;font-size:10px">D2C &amp; consumer</span>
+<h3 style="font-size:28px;margin:0">Sell more, without discounting</h3>
+<p class="card-body" style="font-size:14.5px;flex:none">Reels and creator content at the top, catalogue ads in the middle, WhatsApp and email retention at the bottom, judged on contribution margin, not vanity ROAS.</p>
+<ul style="list-style:none;margin:2px 0 0;padding:0;display:grid;gap:9px;font-size:13.5px">
+<li style="display:flex;gap:9px;align-items:flex-start"><span style="flex:none;color:var(--color-accent-700)">✦</span><span style="flex:1;min-width:0">Meta + Google catalogue &amp; dynamic ads</span></li>
+<li style="display:flex;gap:9px;align-items:flex-start"><span style="flex:none;color:var(--color-accent-700)">✦</span><span style="flex:1;min-width:0">Store CRO and festive campaign calendars</span></li>
+<li style="display:flex;gap:9px;align-items:flex-start"><span style="flex:none;color:var(--color-accent-700)">✦</span><span style="flex:1;min-width:0">Creator seeding and reel production</span></li>
+</ul>
+<div style="display:flex;gap:26px;margin-top:10px">
+<div><div style="font-family:var(--font-heading);font-size:26px;line-height:1;color:var(--color-accent-700)">4.1</div><div style="font-size:11.5px;opacity:.6">blended ROAS</div></div>
+<div><div style="font-family:var(--font-heading);font-size:26px;line-height:1">31%</div><div style="font-size:11.5px;opacity:.6">revenue from repeats</div></div>
+</div>
+<a class="btn btn-secondary" href="industries.html" style="align-self:flex-start;margin-top:8px">See the D2C playbook →</a>
+</article>
+<article class="card elev-sm" style="padding:var(--space-6);background:var(--color-accent-100)">
+<dc-import name="Media" src="{{ mood.b2bSrc }}" label="{{ mood.b2bLabel }}" tone="cobalt" stat="11 / wk" stat-label="qualified leads" lock="15" hint-size="100%,170px" style="width:100%;height:170px"></dc-import>
+<span class="tag tag-accent" style="align-self:flex-start;font-size:10px;background:var(--color-accent);color:var(--color-bg)">B2B &amp; enterprise</span>
+<h3 style="font-size:28px;margin:0">Pipeline your sales team believes in</h3>
+<p class="card-body" style="font-size:14.5px;flex:none">Long cycles, many stakeholders, one decision. We build demand with search and content, capture it with intent campaigns, and report to closed-won, not to form fills.</p>
+<ul style="list-style:none;margin:2px 0 0;padding:0;display:grid;gap:9px;font-size:13.5px">
+<li style="display:flex;gap:9px;align-items:flex-start"><span style="flex:none;color:var(--color-accent-700)">✦</span><span style="flex:1;min-width:0">LinkedIn + Google intent campaigns</span></li>
+<li style="display:flex;gap:9px;align-items:flex-start"><span style="flex:none;color:var(--color-accent-700)">✦</span><span style="flex:1;min-width:0">SEO content clusters mapped to revenue pages</span></li>
+<li style="display:flex;gap:9px;align-items:flex-start"><span style="flex:none;color:var(--color-accent-700)">✦</span><span style="flex:1;min-width:0">Lead scoring, CRM routing and sales collateral</span></li>
+</ul>
+<div style="display:flex;gap:26px;margin-top:10px">
+<div><div style="font-family:var(--font-heading);font-size:26px;line-height:1;color:var(--color-accent-700)">38%</div><div style="font-size:11.5px;opacity:.6">pipeline from content</div></div>
+<div><div style="font-family:var(--font-heading);font-size:26px;line-height:1">₹4–8K</div><div style="font-size:11.5px;opacity:.6">cost per demo</div></div>
+</div>
+<a class="btn btn-secondary" href="industries.html" style="align-self:flex-start;margin-top:8px">See the B2B playbook →</a>
+</article>
+</div>
+</section>
+
+<sc-if value="{{ showJourney }}" hint-placeholder-val="{{ true }}">
+<section style="background:var(--bm-ink);color:#fff;margin-top:32px">
+<div style="max-width:1240px;margin:0 auto;padding:76px 32px 84px">
+<div style="display:flex;align-items:center;gap:26px;flex-wrap:wrap">
+<img src="logo.jpg" alt="Brand Marketian" style="width:132px;height:132px;border-radius:50%;display:block;box-shadow:0 18px 44px rgba(0,0,0,.45)">
+<div>
+<span style="display:inline-block;font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-300)">The mark, and what it means</span>
+<h2 style="font-size:46px;margin:14px 0 0;max-width:22ch;color:#fff" data-cms="journeyTitle">The B lies flat until marketing joins it</h2>
+</div>
+</div>
+<p style="max-width:64ch;font-size:16.5px;line-height:1.65;margin-top:20px;color:rgba(255,255,255,.72)">Look at the mark. The B is your brand, resting on its side, doing nothing on its own. The m is what we do. The moment they lock together the shape stands up, and so does the business behind it. That is the whole journey we run with you.</p>
+
+<div style="position:relative;margin-top:52px">
+<div style="position:absolute;left:0;right:0;top:26px;height:3px;background:linear-gradient(90deg, rgba(255,255,255,.16), var(--color-accent))"></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:26px;position:relative">
+<sc-for list="{{ journey }}" as="j" hint-placeholder-count="4">
+<div style="display:flex;flex-direction:column;gap:14px;transition:transform .3s ease" style-hover="transform:translateY(-6px)">
+<div style="width:56px;height:56px;border-radius:50%;background:{{ j.dot }};color:{{ j.dotText }};display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;font-size:18px;box-shadow:0 0 0 6px var(--bm-ink)">{{ j.step }}</div>
+<div style="background:{{ j.bg }};border-radius:var(--radius-lg);padding:22px 20px 24px;min-height:200px;display:flex;flex-direction:column;gap:10px">
+<div style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:{{ j.kicker }}">{{ j.stage }}</div>
+<h3 style="margin:0;font-size:23px;color:{{ j.title }}">{{ j.heading }}</h3>
+<p style="margin:0;font-size:14px;line-height:1.55;color:{{ j.bodyColor }}">{{ j.body }}</p>
+<div style="margin-top:auto;font-weight:700;font-size:13px;color:{{ j.metricColor }}">{{ j.metric }}</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</section>
+</sc-if>
+
+<section style="max-width:1240px;margin:0 auto;padding:72px 0 48px">
+<div style="max-width:1240px;margin:0 auto;padding:0 32px">
+<span style="display:inline-block;font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-accent-700)">Clients</span>
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:14px">
+<h2 style="font-size:44px;margin:0;max-width:24ch" data-cms="clientsTitle">Brands that trust us with their growth</h2>
+<a class="btn btn-secondary" href="case-studies.html" style="white-space:nowrap">See the work →</a>
+</div>
+</div>
+<div class="bm-marquee" style="margin-top:34px;display:grid;gap:16px;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)">
+<div class="bm-marquee-row" style="gap:16px">
+<div style="display:flex;gap:16px;padding-right:16px">
+<sc-for list="{{ clientsA }}" as="c" hint-placeholder-count="5"><div style="width:280px;flex:none;border-radius:18px;background:{{ c.bg }};border:1px solid var(--color-divider);padding:20px;display:flex;flex-direction:column;gap:8px;transition:transform .3s ease, box-shadow .3s ease" style-hover="transform:translateY(-6px);box-shadow:var(--shadow-md)">
+<div style="display:flex;align-items:center;gap:10px">
+<span style="width:36px;height:36px;border-radius:10px;background:{{ c.chip }};color:#fff;display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;font-size:14px">{{ c.initials }}</span>
+<span style="font-family:var(--font-heading);font-weight:800;font-size:17px;letter-spacing:-.02em;line-height:1.15">{{ c.name }}</span>
+</div>
+<div style="font-size:12.5px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">{{ c.sector }}</div>
+<div style="margin-top:2px;display:inline-flex;align-self:flex-start;align-items:center;gap:7px;background:{{ c.badgeBg }};color:{{ c.badgeColor }};border-radius:999px;padding:5px 11px;font-weight:700;font-size:11px;letter-spacing:.04em">{{ c.work }}</div>
+</div></sc-for>
+</div>
+<div style="display:flex;gap:16px;padding-right:16px" aria-hidden="true">
+<sc-for list="{{ clientsA }}" as="c" hint-placeholder-count="5"><div style="width:280px;flex:none;border-radius:18px;background:{{ c.bg }};border:1px solid var(--color-divider);padding:20px;display:flex;flex-direction:column;gap:8px;transition:transform .3s ease, box-shadow .3s ease" style-hover="transform:translateY(-6px);box-shadow:var(--shadow-md)">
+<div style="display:flex;align-items:center;gap:10px">
+<span style="width:36px;height:36px;border-radius:10px;background:{{ c.chip }};color:#fff;display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;font-size:14px">{{ c.initials }}</span>
+<span style="font-family:var(--font-heading);font-weight:800;font-size:17px;letter-spacing:-.02em;line-height:1.15">{{ c.name }}</span>
+</div>
+<div style="font-size:12.5px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">{{ c.sector }}</div>
+<div style="margin-top:2px;display:inline-flex;align-self:flex-start;align-items:center;gap:7px;background:{{ c.badgeBg }};color:{{ c.badgeColor }};border-radius:999px;padding:5px 11px;font-weight:700;font-size:11px;letter-spacing:.04em">{{ c.work }}</div>
+</div></sc-for>
+</div>
+</div>
+<div class="bm-marquee-row rev" style="gap:16px">
+<div style="display:flex;gap:16px;padding-right:16px">
+<sc-for list="{{ clientsB }}" as="c" hint-placeholder-count="5"><div style="width:280px;flex:none;border-radius:18px;background:{{ c.bg }};border:1px solid var(--color-divider);padding:20px;display:flex;flex-direction:column;gap:8px;transition:transform .3s ease, box-shadow .3s ease" style-hover="transform:translateY(-6px);box-shadow:var(--shadow-md)">
+<div style="display:flex;align-items:center;gap:10px">
+<span style="width:36px;height:36px;border-radius:10px;background:{{ c.chip }};color:#fff;display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;font-size:14px">{{ c.initials }}</span>
+<span style="font-family:var(--font-heading);font-weight:800;font-size:17px;letter-spacing:-.02em;line-height:1.15">{{ c.name }}</span>
+</div>
+<div style="font-size:12.5px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">{{ c.sector }}</div>
+<div style="margin-top:2px;display:inline-flex;align-self:flex-start;align-items:center;gap:7px;background:{{ c.badgeBg }};color:{{ c.badgeColor }};border-radius:999px;padding:5px 11px;font-weight:700;font-size:11px;letter-spacing:.04em">{{ c.work }}</div>
+</div></sc-for>
+</div>
+<div style="display:flex;gap:16px;padding-right:16px" aria-hidden="true">
+<sc-for list="{{ clientsB }}" as="c" hint-placeholder-count="5"><div style="width:280px;flex:none;border-radius:18px;background:{{ c.bg }};border:1px solid var(--color-divider);padding:20px;display:flex;flex-direction:column;gap:8px;transition:transform .3s ease, box-shadow .3s ease" style-hover="transform:translateY(-6px);box-shadow:var(--shadow-md)">
+<div style="display:flex;align-items:center;gap:10px">
+<span style="width:36px;height:36px;border-radius:10px;background:{{ c.chip }};color:#fff;display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;font-size:14px">{{ c.initials }}</span>
+<span style="font-family:var(--font-heading);font-weight:800;font-size:17px;letter-spacing:-.02em;line-height:1.15">{{ c.name }}</span>
+</div>
+<div style="font-size:12.5px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">{{ c.sector }}</div>
+<div style="margin-top:2px;display:inline-flex;align-self:flex-start;align-items:center;gap:7px;background:{{ c.badgeBg }};color:{{ c.badgeColor }};border-radius:999px;padding:5px 11px;font-weight:700;font-size:11px;letter-spacing:.04em">{{ c.work }}</div>
+</div></sc-for>
+</div>
+</div>
+</div>
+<div style="max-width:1240px;margin:26px auto 0;padding:0 32px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+<a href="contact.html" style="display:inline-flex;align-items:center;gap:10px;background:var(--color-accent);color:#fff;border-radius:999px;padding:13px 22px;font-weight:700;font-size:14px">Your brand next →</a>
+<span style="font-size:13px;color:color-mix(in srgb, var(--color-text) 60%, transparent)">Hover to pause the wall.</span>
+</div>
+</section>
+
+<section style="background:var(--color-surface);margin-top:24px">
+<div style="max-width:1240px;margin:0 auto;padding:64px 32px">
+<span class="tag tag-neutral" style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase">How we compare</span>
+<h2 style="font-size:44px;margin:18px 0 26px;max-width:18ch" data-cms="compareTitle">Why brands pick us over a freelancer or a big agency</h2>
+<div style="background:var(--color-bg);border-radius:calc(var(--radius-lg) * 1.2);padding:var(--space-4) var(--space-6);box-shadow:var(--shadow-sm);overflow-x:auto">
+<table class="table" style="min-width:720px">
+<thead><tr><th style="width:26%">Differentiator</th><th style="color:var(--color-accent-700)">Brand Marketian</th><th>Freelancers</th><th>Big agencies</th></tr></thead>
+<tbody>
+<sc-for list="{{ compare }}" as="r" hint-placeholder-count="6">
+<tr>
+<td style="font-weight:600">{{ r.label }}</td>
+<td style="background:var(--color-accent-100)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;background:var(--color-accent-2)"></span>{{ r.us }}</td>
+<td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;background:var(--color-accent-400)"></span>{{ r.freelance }}</td>
+<td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;background:var(--color-neutral-400)"></span>{{ r.agency }}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+<section style="max-width:1240px;margin:0 auto;padding:64px 32px">
+<span class="tag tag-accent-2" style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase">How we work</span>
+<h2 style="font-size:44px;margin:18px 0 30px" data-cms="processTitle">A simple, proven process</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+<sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
+<div class="card elev-sm" style="padding:var(--space-4);background:{{ s.bg }};border:1px solid var(--color-divider);transition:transform .3s ease" style-hover="transform:translateY(-5px)">
+<div style="width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:{{ s.chip }};color:#fff;font-family:var(--font-heading);font-weight:800;font-size:16px">{{ s.n }}</div>
+<h4 style="margin:4px 0 0;font-size:20px">{{ s.title }}</h4>
+<p class="card-body" style="font-size:13.5px">{{ s.note }}</p>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section style="max-width:1240px;margin:0 auto;padding:20px 32px 64px">
+<div style="border-radius:calc(var(--radius-lg) * 1.4);background:var(--color-accent-2-100);padding:52px 44px">
+<span class="tag tag-accent-2" style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase">Made for India</span>
+<h2 style="font-size:44px;margin:18px 0 10px;max-width:20ch" data-cms="indiaTitle">Marketing that speaks your market</h2>
+<p style="max-width:56ch;font-size:16px;color:color-mix(in srgb, var(--color-text) 74%, transparent)">We build campaigns around how India actually buys, mobile-first, vernacular, festival-driven and WhatsApp-led.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:32px">
+<div class="card" style="background:var(--color-bg)"><h4 style="margin:0;font-size:19px">Regional &amp; Hinglish</h4><p class="card-body" style="font-size:13.5px">Content in English, Hindi and regional languages that connects locally.</p></div>
+<div class="card" style="background:var(--color-bg)"><h4 style="margin:0;font-size:19px">Festive campaigns</h4><p class="card-body" style="font-size:13.5px">Diwali, Holi, Raksha Bandhan and sale-season pushes planned ahead.</p></div>
+<div class="card" style="background:var(--color-bg)"><h4 style="margin:0;font-size:19px">WhatsApp funnels</h4><p class="card-body" style="font-size:13.5px">Lead capture and nurturing where your customers actually reply.</p></div>
+<div class="card" style="background:var(--color-bg)"><h4 style="margin:0;font-size:19px">Budget-smart ads</h4><p class="card-body" style="font-size:13.5px">Every rupee optimized for CPL and ROAS on Indian ad rates.</p></div>
+</div>
+</div>
+</section>
+
+<section style="max-width:1240px;margin:0 auto;padding:8px 32px 64px">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+<div>
+<span class="tag tag-accent" style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase">Pricing</span>
+<h2 style="font-size:44px;margin:18px 0 6px" data-cms="pricingTitle">Three plans. One that fits.</h2>
+<p style="font-size:16px;color:color-mix(in srgb, var(--color-text) 72%, transparent);max-width:52ch">Transparent monthly pricing in INR. Start where you are, scale up any month, no long lock-ins.</p>
+</div>
+<a class="btn btn-secondary" href="pricing.html" style="white-space:nowrap">Compare everything →</a>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;margin-top:34px;align-items:stretch">
+<sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+<div class="card elev-sm" style="padding:var(--space-6);background:{{ p.bg }};outline:{{ p.outline }};height:100%;display:flex;flex-direction:column;gap:8px">
+<span class="tag tag-accent" style="align-self:flex-start;font-size:10px;background:{{ p.badgeBg }};color:{{ p.badgeColor }}">{{ p.badge }}</span>
+<h3 style="margin:0;font-size:28px">{{ p.name }}</h3>
+<p style="margin:0;font-size:13.5px;opacity:.75">{{ p.blurb }}</p>
+<div style="font-family:var(--font-heading);font-size:38px;line-height:1.1;margin-top:6px">{{ p.price }}<span style="font-family:var(--font-body);font-size:14px;opacity:.6"> /month</span></div>
+<p style="margin:0 0 4px;font-size:12.5px;opacity:.6">Best for {{ p.for }}</p>
+<div style="font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.55;margin-top:4px">{{ p.groupLabel }}</div>
+<ul style="list-style:none;margin:6px 0 0;padding:0;display:grid;gap:9px;font-size:13.5px">
+<sc-for list="{{ p.items }}" as="it" hint-placeholder-count="5">
+<li style="display:flex;gap:9px;align-items:flex-start"><span style="flex:none;color:var(--color-accent-700)">✦</span><span style="flex:1;min-width:0">{{ it }}</span></li>
+</sc-for>
+</ul>
+<a class="btn btn-primary btn-block" href="contact.html" style="margin-top:auto">{{ p.cta }}</a>
+</div>
+</sc-for>
+</div>
+<p style="margin-top:18px;font-size:12.5px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">All prices exclusive of 18% GST. Ad spend and website development billed separately. Month-to-month, cancel anytime with 30 days' notice.</p>
+</section>
+
+<section style="background:var(--color-surface)">
+<div style="max-width:1240px;margin:0 auto;padding:64px 32px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+<div>
+<span class="tag tag-neutral" style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase">Client stories</span>
+<h2 style="font-size:44px;margin:16px 0 0" data-cms="storiesTitle">Results, not screenshots</h2>
+</div>
+<div style="display:flex;gap:10px">
+<button class="btn btn-secondary btn-icon" onClick="{{ prevQuote }}" aria-label="Previous story">←</button>
+<button class="btn btn-secondary btn-icon" onClick="{{ nextQuote }}" aria-label="Next story">→</button>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-top:30px">
+<div class="card elev-sm" style="background:var(--color-bg);padding:var(--space-6);justify-content:space-between;grid-column:span 2">
+<p style="font-family:var(--font-heading);font-size:25px;line-height:1.32;margin:0">“{{ quote.text }}”</p>
+<div style="display:flex;align-items:center;gap:14px;margin-top:22px">
+<div style="width:46px;height:46px;border-radius:50%;background:var(--color-surface);display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-size:9px;opacity:.6">PHOTO</div>
+<div><div style="font-size:14.5px;font-weight:600">{{ quote.name }}</div><div style="font-size:13px;opacity:.65">{{ quote.role }} · {{ quote.co }}</div></div>
+</div>
+</div>
+<div class="card elev-sm" style="background:var(--color-accent-2-100);padding:var(--space-6);justify-content:center">
+<div style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.6">Headline result</div>
+<div style="font-family:var(--font-heading);font-size:32px;line-height:1.15">{{ quote.metric }}</div>
+<a class="btn btn-secondary" href="case-studies.html" style="align-self:flex-start;margin-top:10px">Read the case study →</a>
+</div>
+</div>
+</div>
+</section>
+
+<section style="max-width:1240px;margin:0 auto;padding:64px 32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:28px;align-items:start">
+<div class="card elev-sm" style="background:var(--color-accent-100);padding:var(--space-6)">
+<div class="card-kicker">Newsletter</div>
+<h3 style="font-size:26px;margin:0">The Growth Note</h3>
+<p class="card-body" style="font-size:14px;flex:none">One practical Indian-market playbook a fortnight, ad benchmarks, creative teardowns, festive calendars.</p>
+<div class="field" style="margin-top:6px"><input class="input" type="email" placeholder="you@company.com"></div>
+<button class="btn btn-primary btn-block">Subscribe</button>
+</div>
+<div>
+<div style="display:flex;align-items:baseline;justify-content:space-between"><h3 style="font-size:26px;margin:0">Latest from the blog</h3><a href="blog.html" style="font-size:14px;white-space:nowrap">All posts →</a></div>
+<div style="display:grid;gap:14px;margin-top:18px">
+<sc-for list="{{ posts }}" as="p" hint-placeholder-count="3">
+<a href="blog.html" class="card elev-sm" style="flex-direction:row;align-items:center;gap:18px;padding:var(--space-3) var(--space-4);color:var(--color-text)">
+<div style="width:96px;height:68px;flex:none;border-radius:var(--radius-md);overflow:hidden;background:var(--color-surface);background-image:{{ p.thumb }};background-size:cover;background-position:center"></div>
+<div><span class="tag tag-accent-2" style="font-size:10px">{{ p.tag }}</span><div style="font-family:var(--font-heading);font-size:18px;margin-top:7px">{{ p.title }}</div></div>
+<span style="margin-left:auto;font-size:12px;opacity:.55;white-space:nowrap">{{ p.read }}</span>
+</a>
+</sc-for>
+</div>
+</div>
+</section>
+
+<dc-import name="Site Footer" hint-size="100%,520px"></dc-import>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280},&quot;imageMood&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Marketing data&quot;,&quot;People at work&quot;,&quot;Product and retail&quot;],&quot;default&quot;:&quot;Marketing data&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Feel&quot;,&quot;label&quot;:&quot;Imagery mood&quot;},&quot;energy&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Calm&quot;,&quot;Balanced&quot;,&quot;High energy&quot;],&quot;default&quot;:&quot;Balanced&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Feel&quot;,&quot;label&quot;:&quot;Motion energy&quot;},&quot;palette&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;JBL orange&quot;,&quot;Electric cobalt&quot;,&quot;Deep teal&quot;],&quot;default&quot;:&quot;JBL orange&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Feel&quot;,&quot;label&quot;:&quot;Accent palette&quot;},&quot;showJourney&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;,&quot;label&quot;:&quot;Show the logo journey band&quot;}}">
+class Component extends DCLogic {
+  state = { q: 0, slide: 0, paused: false };
+  energyMap() {
+    return {
+      Calm: { rotate: 7000, marq: '72s', lift: '-3px', dur: '.55s', pulse: 1 },
+      Balanced: { rotate: 4200, marq: '42s', lift: '-6px', dur: '.35s', pulse: 1 },
+      'High energy': { rotate: 2600, marq: '24s', lift: '-10px', dur: '.22s', pulse: 1.35 }
+    };
+  }
+  paletteMap() {
+    return {
+      'JBL orange': { a: '#ff6600', a6: '#e05600', a7: '#b34300', a1: '#fff2e8', a2: '#ffdcc2', a3: '#ffb680' },
+      'Electric cobalt': { a: '#1b3bd8', a6: '#152fac', a7: '#102386', a1: '#eef1ff', a2: '#d6ddff', a3: '#adbaff' },
+      'Deep teal': { a: '#0e7c86', a6: '#0a626a', a7: '#084c52', a1: '#e6f4f5', a2: '#c7e7e9', a3: '#8fd2d7' }
+    };
+  }
+  applyTheme() {
+    const r = document.documentElement.style;
+    const p = this.paletteMap()[this.props.palette] || this.paletteMap()['JBL orange'];
+    r.setProperty('--color-accent', p.a);
+    r.setProperty('--color-accent-500', p.a);
+    r.setProperty('--color-accent-600', p.a6);
+    r.setProperty('--color-accent-700', p.a7);
+    r.setProperty('--color-accent-100', p.a1);
+    r.setProperty('--color-accent-200', p.a2);
+    r.setProperty('--color-accent-300', p.a3);
+    const e = this.energyMap()[this.props.energy] || this.energyMap().Balanced;
+    r.setProperty('--bm-marq', e.marq);
+    document.body.style.setProperty('--bm-lift', e.lift);
+  }
+  restartRotator() {
+    clearInterval(this.timer);
+    const e = this.energyMap()[this.props.energy] || this.energyMap().Balanced;
+    this.timer = setInterval(() => {
+      if (!this.state.paused) this.setState(s => ({ slide: (s.slide + 1) % 3 }));
+    }, e.rotate);
+  }
+  componentDidMount() { this.applyTheme(); this.restartRotator(); }
+  componentDidUpdate(prev) {
+    this.applyTheme();
+    if (prev.energy !== this.props.energy) this.restartRotator();
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  slideStyle(i) {
+    const cur = this.state.slide;
+    const on = i === cur;
+    const offset = (i - cur + 3) % 3;
+    return {
+      opacity: on ? 1 : 0,
+      transform: on ? 'translateY(0) scale(1)' : 'translateY(' + (offset === 1 ? 18 : -18) + 'px) scale(.97)',
+      pointer: on ? 'auto' : 'none',
+      z: on ? 3 : 1
+    };
+  }
+  imagery() {
+    const sets = {
+      'Marketing data': {
+        d2c: 'marketing,analytics,chart', d2cLabel: 'Store performance', b2b: 'marketing,report,data', b2bLabel: 'CRM pipeline',
+        pillars: ['marketing-social-analytics-71', 'marketing-ads-dashboard-72', 'marketing-growth-report-73'] },
+      'People at work': {
+        d2c: 'people,shop,owner', d2cLabel: 'On the shop floor', b2b: 'people,meeting,office', b2bLabel: 'In the room',
+        pillars: ['people-creators-81', 'people-marketers-82', 'people-team-83'] },
+      'Product and retail': {
+        d2c: 'product,packaging,retail', d2cLabel: 'Catalogue and cart', b2b: 'warehouse,industry,supply', b2bLabel: 'Supply and trade',
+        pillars: ['product-shelf-91', 'product-adset-92', 'product-store-93'] }
+    };
+    const set = sets[this.props.imageMood] || sets['Marketing data'];
+    return { ...set, d2cSrc: this.res('mediaD2c', 'd2c.png'), b2bSrc: this.res('mediaB2b', 'b2b.png') };
+  }
+  res(id, path) {
+    const r = (typeof window !== 'undefined' && window.__resources) || {};
+    return r[id] || path;
+  }
+  bg(src) { return "url('" + src + "')"; }
+  pillarImage(i) {
+    return "url('" + this.res('pillar' + (i + 1), 'pillar' + (i + 1) + '.png') + "')";
+  }
+  renderVals() {
+    const mood = this.imagery();
+    const scratch = { work: 'Built from scratch', badgeBg: 'var(--color-accent)', badgeColor: '#fff' };
+    const grown = { badgeBg: 'rgba(17,18,20,.07)', badgeColor: 'var(--bm-ink)' };
+    const clients = [
+      { name: 'The Pet Foundry', sector: 'Pet care D2C', initials: 'PF', bg: 'var(--bm-amber-100)', chip: 'var(--bm-amber)', ...scratch },
+      { name: 'Divine Home India', sector: 'Home and decor', initials: 'DH', bg: 'var(--bm-teal-100)', chip: 'var(--bm-teal)', ...scratch },
+      { name: 'Avighna Steel', sector: 'Steel trading', initials: 'AS', bg: 'var(--color-accent-2-100)', chip: 'var(--color-accent-2)', work: 'B2B lead generation', ...grown },
+      { name: 'Nakul Associates', sector: 'Professional services', initials: 'NA', bg: 'var(--bm-teal-100)', chip: 'var(--bm-teal)', work: 'Website and SEO', ...grown },
+      { name: 'Franchise Business Solution', sector: 'Franchise consulting', initials: 'FB', bg: 'var(--color-accent-100)', chip: 'var(--color-accent)', work: 'Paid ads and funnels', ...grown },
+      { name: 'Restaurant Franchise', sector: 'Food and beverage', initials: 'RF', bg: 'var(--bm-amber-100)', chip: 'var(--bm-amber)', work: 'Social and reels', ...grown },
+      { name: 'Libas', sector: 'Fashion D2C', initials: 'LB', bg: 'var(--bm-plum-100)', chip: 'var(--bm-plum)', work: 'Performance ads', ...grown },
+      { name: 'Fabindia', sector: 'Retail', initials: 'FI', bg: 'var(--color-surface)', chip: 'var(--bm-ink)', work: 'Content and creative', ...grown },
+      { name: 'Om Books International', sector: 'Publishing', initials: 'OB', bg: 'var(--color-accent-2-100)', chip: 'var(--color-accent-2)', work: 'E-commerce growth', ...grown }
+    ];
+    const quotes = [
+      { text: 'They rebuilt our whole Instagram in six weeks and the reels started doing what our ads never could. Enquiries tripled before we raised a single rupee of budget.', name: 'Client name', role: 'Founder', co: 'D2C skincare brand', metric: '3.4x reach in 90 days' },
+      { text: 'The reporting is the part I did not expect. Every rupee of spend maps to a lead, and we cut cost per lead by more than half in the first quarter.', name: 'Client name', role: 'Marketing Head', co: 'Multi-city clinic chain', metric: 'CPL down 54%' },
+      { text: 'One team for brand, content, ads and the website meant we stopped chasing four vendors. It feels like an in-house team that just sits somewhere else.', name: 'Client name', role: 'Co-founder', co: 'B2B SaaS', metric: '₹1.2L/mo spend at 4.1 ROAS' }
+    ];
+    return {
+      mood,
+      showJourney: this.props.showJourney !== false,
+      pillars: [
+        { kicker: 'Pillar 01', title: 'Social media management', metric: '20 posts / mo', cta: 'Grow your presence',
+          body: 'We own your organic presence: content that stops the scroll and a community that keeps coming back.',
+          items: ['Monthly calendar and content strategy', 'Post, carousel and reel design', 'Copy in English and Hinglish', 'Community and DM management'],
+          bgImage: this.pillarImage(0),
+          base: 'var(--bm-plum)', chip: 'var(--bm-plum)', scrim: 'linear-gradient(180deg, rgba(17,18,20,.18) 0%, rgba(58,15,92,.72) 46%, rgba(43,10,70,.95) 100%)',
+          icons: [{ bg: this.bg(this.res('icInstagram', 'icon-instagram.svg')) }, { bg: this.bg(this.res('icMeta', 'icon-meta.svg')) }, { bg: this.bg(this.res('icYoutube', 'icon-youtube.svg')) }] },
+        { kicker: 'Pillar 02', title: 'Ads and performance', metric: '4.1 ROAS', cta: 'Get more leads',
+          body: 'Paid campaigns engineered for ROI across Meta, Google and YouTube. Every rupee tracked to a result.',
+          items: ['Meta, Google Search and YouTube ads', 'Six creative sets a month, A/B tested', 'Landing pages and lead forms', 'Retargeting and funnel building'],
+          bgImage: this.pillarImage(1),
+          base: 'var(--color-accent-2)', chip: 'var(--color-accent-2)', scrim: 'linear-gradient(180deg, rgba(17,18,20,.18) 0%, rgba(10,25,120,.72) 46%, rgba(6,16,84,.95) 100%)',
+          icons: [{ bg: this.bg(this.res('icGoogleads', 'icon-googleads.svg')) }, { bg: this.bg(this.res('icMeta', 'icon-meta.svg')) }, { bg: this.bg(this.res('icAnalytics', 'icon-googleanalytics.svg')) }] },
+        { kicker: 'Pillar 03', title: 'End-to-end growth', metric: 'One team', cta: 'Run it all for me',
+          body: 'Your full growth engine: brand, content, ads, web, SEO and automation, run by one dedicated pod.',
+          items: ['Brand and 90-day growth strategy', 'Website, funnel and CRO', 'SEO plus Google Business Profile', 'Email and WhatsApp automation'],
+          bgImage: this.pillarImage(2),
+          base: 'var(--color-accent-700)', chip: 'var(--color-accent)', scrim: 'linear-gradient(180deg, rgba(17,18,20,.18) 0%, rgba(120,45,0,.74) 46%, rgba(80,28,0,.95) 100%)',
+          icons: [{ bg: this.bg(this.res('icWhatsapp', 'icon-whatsapp.svg')) }, { bg: this.bg(this.res('icShopify', 'icon-shopify.svg')) }, { bg: this.bg(this.res('icHubspot', 'icon-hubspot.svg')) }] }
+      ],
+      journey: [
+        { step: 'B', stage: 'Where most brands sit', heading: 'Flat on its side', body: 'A decent product, a logo, a page nobody visits. Word of mouth carries you and then stops.',
+          metric: 'Enquiries: whatever walks in', dot: 'rgba(255,255,255,.14)', dotText: '#fff', bg: 'rgba(255,255,255,.06)', kicker: 'rgba(255,255,255,.5)', title: '#fff', bodyColor: 'rgba(255,255,255,.7)', metricColor: 'rgba(255,255,255,.55)' },
+        { step: '01', stage: 'Weeks 1 to 4', heading: 'We turn on the m', body: 'Audit, positioning, a content system and tracking. The first reels and ad sets go live with numbers attached.',
+          metric: 'First leads inside 10 days', dot: 'var(--bm-teal)', dotText: '#fff', bg: 'var(--bm-teal)', kicker: 'rgba(255,255,255,.7)', title: '#fff', bodyColor: 'rgba(255,255,255,.82)', metricColor: '#fff' },
+        { step: '02', stage: 'Month 2 to 3', heading: 'The shape stands up', body: 'Creative that wins gets more budget. Follow-up moves to WhatsApp. Your feed and your ads finally look like one brand.',
+          metric: 'CPL down, enquiries up', dot: 'var(--bm-amber)', dotText: '#111214', bg: 'var(--bm-amber)', kicker: 'rgba(17,18,20,.6)', title: '#111214', bodyColor: 'rgba(17,18,20,.78)', metricColor: '#111214' },
+        { step: '03', stage: 'Month 4 onward', heading: 'The brand gets bigger', body: 'Same business, taller silhouette. Search, social and paid compound, and people arrive already knowing your name.',
+          metric: '3x reach, repeat buyers', dot: 'var(--color-accent)', dotText: '#fff', bg: 'var(--color-accent)', kicker: 'rgba(255,255,255,.75)', title: '#fff', bodyColor: 'rgba(255,255,255,.88)', metricColor: '#fff' }
+      ],
+      clientsA: clients.slice(0, 5),
+      clientsB: clients.slice(5),
+      slide0: this.slideStyle(0),
+      slide1: this.slideStyle(1),
+      slide2: this.slideStyle(2),
+      pause: () => this.setState({ paused: true }),
+      resume: () => this.setState({ paused: false }),
+      dots: ['Growth dashboard', 'Brand visibility', 'Channels'].map((label, i) => ({
+        label, pick: () => this.setState({ slide: i }),
+        w: this.state.slide === i ? '26px' : '8px',
+        bg: this.state.slide === i ? 'var(--color-accent)' : 'color-mix(in srgb, var(--color-text) 20%, transparent)'
+      })),
+      bars: (this.state.slide === 0
+        ? ['26%', '38%', '34%', '52%', '61%', '78%', '100%']
+        : ['20%', '30%', '28%', '44%', '52%', '66%', '86%']
+      ).map((h, i) => ({ h, bg: i > 4 ? 'var(--color-accent)' : i > 2 ? 'var(--color-accent-400)' : 'var(--color-accent-300)' })),
+      terms: [
+        { label: 'best skin clinic near me', level: 'High', bg: 'var(--color-accent-100)', color: 'var(--color-accent-800)' },
+        { label: 'bridal makeup price Delhi', level: 'Medium', bg: 'var(--color-accent-2-200)', color: 'var(--color-accent-2-800)' },
+        { label: 'hair spa offers this week', level: 'Rising', bg: 'var(--color-neutral-200)', color: 'var(--color-neutral-800)' }
+      ],
+      channels: [
+        { name: 'Instagram', bg: this.bg(this.res('icInstagram', 'icon-instagram.svg')) },
+        { name: 'Meta Ads', bg: this.bg(this.res('icMeta', 'icon-meta.svg')) },
+        { name: 'Google Ads', bg: this.bg(this.res('icGoogleads', 'icon-googleads.svg')) },
+        { name: 'WhatsApp', bg: this.bg(this.res('icWhatsapp', 'icon-whatsapp.svg')) },
+        { name: 'YouTube', bg: this.bg(this.res('icYoutube', 'icon-youtube.svg')) },
+        { name: 'Google Maps', bg: this.bg(this.res('icGooglemaps', 'icon-googlemaps.svg')) }
+      ],
+      logos: [
+        { name: 'Meta Ads', bg: this.bg(this.res('icMeta', 'icon-meta.svg')) },
+        { name: 'Google Ads', bg: this.bg(this.res('icGoogleads', 'icon-googleads.svg')) },
+        { name: 'Instagram', bg: this.bg(this.res('icInstagram', 'icon-instagram.svg')) },
+        { name: 'YouTube', bg: this.bg(this.res('icYoutube', 'icon-youtube.svg')) },
+        { name: 'WhatsApp Business', bg: this.bg(this.res('icWhatsapp', 'icon-whatsapp.svg')) },
+        { name: 'Google Maps', bg: this.bg(this.res('icGooglemaps', 'icon-googlemaps.svg')) },
+        { name: 'Google Analytics', bg: this.bg(this.res('icAnalytics', 'icon-googleanalytics.svg')) },
+        { name: 'Shopify', bg: this.bg(this.res('icShopify', 'icon-shopify.svg')) },
+        { name: 'HubSpot', bg: this.bg(this.res('icHubspot', 'icon-hubspot.svg')) }
+      ],
+      compare: [
+        { label: 'Strategy', us: 'Senior strategist on every account', freelance: 'Usually execution only', agency: 'Strategy, then juniors execute' },
+        { label: 'Ad ROI ownership', us: 'ROAS and CPL are our number', freelance: 'No accountability for spend', agency: 'Reported, rarely owned' },
+        { label: 'Speed', us: 'Creative live in 48–72 hrs', freelance: 'Depends on availability', agency: 'Weeks of approvals' },
+        { label: 'India-first', us: 'Hinglish, festive, WhatsApp-led', freelance: 'Case by case', agency: 'Global playbooks reused' },
+        { label: 'Team', us: 'One dedicated pod, weekly reviews', freelance: 'One person, one skill', agency: 'Rotating account managers' },
+        { label: 'Pricing', us: 'Flat monthly retainer, no lock-in', freelance: 'Per deliverable', agency: 'Long contracts + % of spend' }
+      ],
+      steps: [
+        { n: '01', title: 'Discover', note: 'We audit your brand, audience and competitors to find the real opportunity.', bg: 'var(--color-accent-2-100)', chip: 'var(--color-accent-2)' },
+        { n: '02', title: 'Strategize', note: 'A clear 90-day roadmap with goals, channels and a content plan.', bg: 'var(--bm-teal-100)', chip: 'var(--bm-teal)' },
+        { n: '03', title: 'Create', note: 'On-brand content and ad creatives designed to convert, not just look good.', bg: 'var(--bm-plum-100)', chip: 'var(--bm-plum)' },
+        { n: '04', title: 'Launch', note: 'We publish, run the ads and manage the community daily.', bg: 'var(--bm-amber-100)', chip: 'var(--bm-amber)' },
+        { n: '05', title: 'Optimize', note: "Weekly data reviews to double down on what works and cut what doesn't.", bg: 'var(--color-accent-100)', chip: 'var(--color-accent)' }
+      ],
+      plans: [
+        { name: 'Launch', badge: 'Starter', price: '₹19,999', for: 'solopreneurs & local businesses', cta: 'Get started',
+          blurb: 'For new brands building a consistent, professional presence.',
+          bg: 'var(--color-surface)', outline: 'none', badgeBg: 'var(--color-accent-100)', badgeColor: 'var(--color-accent-800)',
+          groupLabel: 'Social media management',
+          items: ['2 platforms (Instagram + Facebook)', '12 posts + 4 reels / month', '₹3–5K/month audience-building ads included', 'Monthly content calendar', 'Community and comment management', 'Monthly performance report'] },
+        { name: 'Growth', badge: '★ Most popular', price: '₹39,999', for: 'D2C, startups & growing SMBs', cta: 'Book a free audit',
+          blurb: 'For brands ready to add paid ads and generate real leads.',
+          bg: 'var(--color-accent-100)', outline: '2px solid var(--color-accent)', badgeBg: 'var(--color-accent)', badgeColor: 'var(--color-bg)',
+          groupLabel: 'Everything in Launch, plus',
+          items: ['4 platforms (+ LinkedIn, YouTube)', '20 posts + 8 reels / month', 'Meta + Google Ads management', '6 ad creative sets + copy / month', 'Landing pages and lead forms', 'Ad budget up to ₹1L / month managed'] },
+        { name: 'Dominate', badge: 'Full funnel', price: '₹89,999', for: 'scaling brands & enterprises', cta: 'Talk to us',
+          blurb: 'Full-funnel, end-to-end marketing run as your growth team.',
+          bg: 'var(--color-surface)', outline: 'none', badgeBg: 'var(--color-accent-100)', badgeColor: 'var(--color-accent-800)',
+          groupLabel: 'Everything in Growth, plus',
+          items: ['All platforms + influencer coordination', 'Google + YouTube + programmatic ads', 'SEO + Google Business Profile', 'Email and WhatsApp automation', 'Website management and maintenance', 'Dedicated growth team + weekly reviews'] }
+      ],
+      posts: [
+        { tag: 'Playbook', title: 'The festive ad calendar we run for D2C brands', read: '6 min read', thumb: this.bg(this.res('mediaD2c', 'd2c.png')) },
+        { tag: 'Benchmarks', title: 'What a good CPL actually looks like in India in 2026', read: '4 min read', thumb: this.bg(this.res('pillar2', 'pillar2.png')) },
+        { tag: 'Teardown', title: 'Nine reels that outperformed a ₹2L ad budget', read: '5 min read', thumb: this.bg(this.res('pillar1', 'pillar1.png')) }
+      ],
+      quote: quotes[this.state.q % quotes.length],
+      prevQuote: () => this.setState(s => ({ q: (s.q + quotes.length - 1) % quotes.length })),
+      nextQuote: () => this.setState(s => ({ q: (s.q + 1) % quotes.length }))
+    };
+  }
+}
+</script>
+</body>
+</html>
