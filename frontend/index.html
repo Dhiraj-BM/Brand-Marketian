@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brand Marketian</title>
+  <meta name="description" content="Brand Marketian — brand strategy, marketing and growth." />
+  <!-- Backend API base URL. Set this once your server/ API is deployed. -->
+  <meta name="bm-api" content="" />
+  <style>
+    :root{
+      --bg:#0b0d12; --panel:#12151d; --text:#e7e9ee; --muted:#9aa3b2;
+      --brand:#5b8cff; --brand-2:#8b5cf6; --line:#20242e;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background:radial-gradient(1200px 600px at 70% -10%, #1a2233 0%, var(--bg) 55%);
+      color:var(--text); line-height:1.55; min-height:100vh;
+    }
+    a{color:inherit}
+    .wrap{max-width:960px; margin:0 auto; padding:28px 20px}
+    header{display:flex; align-items:center; justify-content:space-between; gap:16px}
+    .logo{display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.2px}
+    .logo .dot{width:12px;height:12px;border-radius:50%;
+      background:linear-gradient(135deg,var(--brand),var(--brand-2))}
+    nav a{color:var(--muted); text-decoration:none; margin-left:20px; font-size:14px}
+    nav a:hover{color:var(--text)}
+    .hero{padding:88px 0 48px; text-align:center}
+    .badge{display:inline-block; font-size:12px; color:var(--muted);
+      border:1px solid var(--line); border-radius:999px; padding:6px 12px; margin-bottom:22px}
+    h1{font-size:clamp(34px,6vw,56px); line-height:1.05; margin:0 0 16px;
+      background:linear-gradient(180deg,#fff,#b9c2d6); -webkit-background-clip:text;
+      background-clip:text; color:transparent}
+    .sub{color:var(--muted); font-size:clamp(16px,2.4vw,20px); max-width:620px; margin:0 auto 32px}
+    .cta{display:inline-flex; gap:12px; flex-wrap:wrap; justify-content:center}
+    .btn{border:1px solid var(--line); background:var(--panel); color:var(--text);
+      padding:12px 20px; border-radius:10px; text-decoration:none; font-weight:600; font-size:15px}
+    .btn.primary{border:none; background:linear-gradient(135deg,var(--brand),var(--brand-2))}
+    .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:16px; margin:56px 0}
+    .card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:22px}
+    .card h3{margin:0 0 8px; font-size:17px}
+    .card p{margin:0; color:var(--muted); font-size:14px}
+    footer{border-top:1px solid var(--line); margin-top:40px; padding:24px 0;
+      color:var(--muted); font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo"><span class="dot"></span> Brand Marketian</div>
+      <nav>
+        <a href="#services">Services</a>
+        <a href="#work">Work</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <span class="badge">Brand strategy · Marketing · Growth</span>
+      <h1>Brands people remember.</h1>
+      <p class="sub">Brand Marketian builds identities, campaigns and digital experiences
+        that turn attention into lasting growth.</p>
+      <div class="cta">
+        <a class="btn primary" href="#contact">Start a project</a>
+        <a class="btn" href="#services">See what we do</a>
+      </div>
+    </section>
+
+    <section class="grid" id="services">
+      <div class="card"><h3>Brand Strategy</h3><p>Positioning, messaging and identity systems that give your brand a clear voice.</p></div>
+      <div class="card"><h3>Marketing</h3><p>Full-funnel campaigns across search, social and content that actually convert.</p></div>
+      <div class="card"><h3>Web &amp; Product</h3><p>Fast, modern websites and product experiences built to grow with you.</p></div>
+      <div class="card"><h3>Analytics</h3><p>Measurement and insight so every decision is backed by real data.</p></div>
+    </section>
+
+    <section id="contact" class="card" style="text-align:center">
+      <h3 style="font-size:20px">Let's build something.</h3>
+      <p>Tell us about your brand and we'll get back to you.</p>
+      <p style="margin-top:14px">
+        <a class="btn primary" href="mailto:hello@brandmarketian.com">hello@brandmarketian.com</a>
+      </p>
+    </section>
+
+    <footer>
+      <span>© <span id="year"></span> Brand Marketian. All rights reserved.</span>
+      <span>Deployed on Cloudflare</span>
+    </footer>
+  </div>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+    // Expose the backend API base URL to the app once server/ is live.
+    // Set the <meta name="bm-api"> content (or window.BM_API) to your API origin.
+    window.BM_API = document.querySelector('meta[name="bm-api"]').content || '';
+  </script>
+</body>
+</html>
