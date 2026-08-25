@@ -23,3 +23,8 @@ The repository must contain `wrangler.jsonc` at its root.
 ## Backend
 
 The Node/Express backend in `server/` is separate from the static Cloudflare deployment. Copy `server/.env.example` to `.env` on the backend host and set real production credentials there. Never commit `.env` or secrets.
+
+
+---
+
+Live deployment: served by Cloudflare Workers from the frontend/ directory.
