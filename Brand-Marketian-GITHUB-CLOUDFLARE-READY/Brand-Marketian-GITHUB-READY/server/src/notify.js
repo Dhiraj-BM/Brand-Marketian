@@ -40,7 +40,62 @@ export async function notifyLead(lead) {
     console.log('[mail skipped]\n' + lines);
   }
 
-  await notifyWhatsApp('New enquiry from ' + lead.name + '. ' + (lead.phone || lead.email));
+  const waText = [
+    '🟠 New enquiry — Brand Marketian',
+    'Name: ' + lead.name,
+    'Phone: ' + (lead.phone || '-'),
+    'Email: ' + lead.email,
+    'Company: ' + (lead.company || '-'),
+    'Services: ' + (lead.services || []).join(', '),
+    'Budget: ' + (lead.budget || '-')
+  ].join('\n');
+
+  // Fire all configured channels; each is a no-op unless its env vars are set.
+  await Promise.allSettled([
+    notifyWhatsApp(waText),           // WhatsApp Cloud API (Meta)
+    notifyWhatsAppCallMeBot(waText),  // WhatsApp via CallMeBot (simple, free)
+    notifySheet(lead)                 // Google Sheet row (via Apps Script webhook)
+  ]);
+}
+
+// Appends the lead as a row in a Google Sheet through an Apps Script Web App URL.
+export async function notifySheet(lead) {
+  const url = process.env.SHEETS_WEBHOOK_URL;
+  if (!url) return;
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        at: new Date().toISOString(),
+        name: lead.name,
+        phone: lead.phone || '',
+        email: lead.email,
+        company: lead.company || '',
+        services: (lead.services || []).join(', '),
+        budget: lead.budget || '',
+        message: lead.message || '',
+        page: lead.page || '',
+        segment: lead.segment || ''
+      })
+    });
+  } catch (e) {
+    console.error('[sheet]', e.message);
+  }
+}
+
+// Sends a WhatsApp message to yourself via CallMeBot (no Meta setup needed).
+export async function notifyWhatsAppCallMeBot(text) {
+  const phone = process.env.WA_CALLMEBOT_PHONE;
+  const apikey = process.env.WA_CALLMEBOT_APIKEY;
+  if (!phone || !apikey) return;
+  try {
+    const u = 'https://api.callmebot.com/whatsapp.php?phone=' + encodeURIComponent(phone) +
+      '&text=' + encodeURIComponent(text) + '&apikey=' + encodeURIComponent(apikey);
+    await fetch(u);
+  } catch (e) {
+    console.error('[callmebot]', e.message);
+  }
 }
 
 export async function notifyWhatsApp(text) {
