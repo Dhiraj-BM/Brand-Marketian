@@ -52,9 +52,45 @@ const home = {
   processTitle: 'A simple, proven process',
   indiaTitle: 'Marketing that speaks your market',
   pricingTitle: 'Three plans. One that fits.',
-  storiesTitle: 'Results, not screenshots'
+  storiesTitle: 'Results, not screenshots',
+  homeInfEyebrow: 'New · Influencer Marketing',
+  homeInfTitle: 'Creators who sell your product, not just tag it.',
+  homeInfSub: 'The right Indian creators, briefs that convert, and campaigns measured in orders and revenue — not vanity views.',
+  homeInfCta: 'Explore influencer marketing →'
 };
 await SiteContent.updateOne({ key: 'home' }, { $setOnInsert: { data: home, updatedBy: 'seed', status: 'published' } }, { upsert: true });
+
+const influencer = {
+  infHeroEyebrow: 'Influencer & Creator Marketing',
+  infHeroTitle: 'Creators who sell your product, ',
+  infHeroTitleAccent: 'not just tag it.',
+  infHeroSub: 'We match your brand with the right Indian creators, write briefs that actually convert, and run the whole campaign to a number that matters — enquiries, orders and revenue, not vanity views.',
+  infHeroCta: 'Plan my creator campaign',
+  infStat1Num: '1,200+', infStat1Label: 'Vetted creators in our network',
+  infStat2Num: '50+', infStat2Label: 'Brands run and scaled',
+  infStat3Num: '300+', infStat3Label: 'Campaigns shipped',
+  infStat4Num: '4.2x', infStat4Label: 'Median return on creator spend',
+  infHowKicker: 'How we run it', infHowTitle: 'Three moves, one accountable team',
+  infHowSub: 'No random shout-outs. A tight system from creator selection to the sale, with tracking on every rupee.',
+  infStep1Title: 'Match the right creators', infStep1Body: 'We shortlist creators by real audience fit, engagement quality and past sales — not follower counts. Nano to celebrity, across every Indian language and niche.',
+  infStep2Title: 'Build campaigns that convert', infStep2Body: 'Hooks, briefs, scripts, offers and landing pages built to move product. Whitelisting and paid amplification so a winning post keeps selling.',
+  infStep3Title: 'Deliver real brand impact', infStep3Body: 'UTMs, promo codes and a live dashboard tie every creator to enquiries and orders — so you know exactly what worked and what to scale.',
+  infGetTitle: "What's included",
+  infGet1Title: 'Creator sourcing & vetting', infGet1Body: 'Audience checks, rate negotiation and contracts handled for you.',
+  infGet2Title: 'Content & scripting', infGet2Body: 'Hooks and briefs built for reach and conversion, on-brand every time.',
+  infGet3Title: 'Paid amplification', infGet3Body: 'Whitelisting and Spark/partnership ads to scale the posts that work.',
+  infGet4Title: 'Tracking & reporting', infGet4Body: 'Promo codes, UTMs and a dashboard from view to sale.',
+  infNicheTitle: 'Creators for every category',
+  infNicheSub: 'Beauty, fashion, food, fitness, tech, finance, travel, parenting, gaming, regional comedy and more — matched to how your buyers actually shop.',
+  infResultsTitle: 'Results, not screenshots',
+  infRes1Num: '₹58', infRes1Label: 'cost per order via creators, skincare D2C',
+  infRes2Num: '11x', infRes2Label: 'reach vs paid-only, regional food brand',
+  infRes3Num: '3.4x', infRes3Label: 'return on creator spend in 90 days',
+  infCtaTitle: 'Ready to turn creators into customers?',
+  infCtaSub: "Tell us your product and your goal. We'll come back with a creator plan and a number to aim for — within 48 hours.",
+  infCtaBtn: 'Book a free audit'
+};
+await SiteContent.updateOne({ key: 'influencer' }, { $setOnInsert: { data: influencer, updatedBy: 'seed', status: 'published' } }, { upsert: true });
 
 const global = {
   companyName: 'Brand Marketian',

@@ -320,6 +320,19 @@ a:hover{color:var(--color-accent-600)}
 </div>
 </section>
 
+<!-- FEATURED: Influencer Marketing -->
+<section style="max-width:1240px;margin:0 auto;padding:8px 32px 40px">
+  <div style="border-radius:calc(var(--radius-lg) * 1.4);background:var(--color-surface);padding:40px 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:32px;align-items:center">
+    <div>
+      <span class="tag tag-accent" style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase" data-cms="homeInfEyebrow">New · Influencer Marketing</span>
+      <h2 style="font-size:38px;margin:14px 0 8px;max-width:18ch" data-cms="homeInfTitle">Creators who sell your product, not just tag it.</h2>
+      <p style="font-size:16px;line-height:1.6;max-width:52ch;color:color-mix(in srgb, var(--color-text) 76%, transparent)" data-cms="homeInfSub">The right Indian creators, briefs that convert, and campaigns measured in orders and revenue — not vanity views.</p>
+      <a class="btn btn-primary" href="influencer-marketing.html" style="margin-top:22px;padding:12px 26px" data-cms="homeInfCta">Explore influencer marketing →</a>
+    </div>
+    <dc-import name="Media" query="creator,phone,camera" label="Creators" tone="orange" lock="31" hint-size="100%,240px" style="width:100%;height:240px"></dc-import>
+  </div>
+</section>
+
 <section style="max-width:1240px;margin:0 auto;padding:20px 32px 56px">
 <span class="tag tag-accent-2" style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase">Who we work with</span>
 <h2 style="font-size:46px;margin:18px 0 10px;max-width:18ch" data-cms="buyersTitle">Two very different buyers. Two different playbooks.</h2>
@@ -370,7 +383,7 @@ a:hover{color:var(--color-accent-600)}
 <h2 style="font-size:46px;margin:14px 0 0;max-width:22ch;color:#fff" data-cms="journeyTitle">The B lies flat until marketing joins it</h2>
 </div>
 </div>
-<p style="max-width:64ch;font-size:16.5px;line-height:1.65;margin-top:20px;color:rgba(255,255,255,.72)">Look at the mark. The B is your brand, resting on its side, doing nothing on its own. The m is what we do. The moment they lock together the shape stands up, and so does the business behind it. That is the whole journey we run with you.</p>
+<p style="max-width:64ch;font-size:16.5px;line-height:1.65;margin-top:20px;color:rgba(255,255,255,.72)">Look at the mark. The <strong>B</strong> is your brand, resting on its side, doing nothing on its own. The <strong>M</strong> is what we do. The moment they lock together the shape stands up, and so does the business behind it. That is the whole journey we run with you.</p>
 
 <div style="position:relative;margin-top:52px">
 <div style="position:absolute;left:0;right:0;top:26px;height:3px;background:linear-gradient(90deg, rgba(255,255,255,.16), var(--color-accent))"></div>
@@ -712,7 +725,7 @@ class Component extends DCLogic {
       journey: [
         { step: 'B', stage: 'Where most brands sit', heading: 'Flat on its side', body: 'A decent product, a logo, a page nobody visits. Word of mouth carries you and then stops.',
           metric: 'Enquiries: whatever walks in', dot: 'rgba(255,255,255,.14)', dotText: '#fff', bg: 'rgba(255,255,255,.06)', kicker: 'rgba(255,255,255,.5)', title: '#fff', bodyColor: 'rgba(255,255,255,.7)', metricColor: 'rgba(255,255,255,.55)' },
-        { step: '01', stage: 'Weeks 1 to 4', heading: 'We turn on the m', body: 'Audit, positioning, a content system and tracking. The first reels and ad sets go live with numbers attached.',
+        { step: '01', stage: 'Weeks 1 to 4', heading: 'We turn on the M', body: 'Audit, positioning, a content system and tracking. The first reels and ad sets go live with numbers attached.',
           metric: 'First leads inside 10 days', dot: 'var(--bm-teal)', dotText: '#fff', bg: 'var(--bm-teal)', kicker: 'rgba(255,255,255,.7)', title: '#fff', bodyColor: 'rgba(255,255,255,.82)', metricColor: '#fff' },
         { step: '02', stage: 'Month 2 to 3', heading: 'The shape stands up', body: 'Creative that wins gets more budget. Follow-up moves to WhatsApp. Your feed and your ads finally look like one brand.',
           metric: 'CPL down, enquiries up', dot: 'var(--bm-amber)', dotText: '#111214', bg: 'var(--bm-amber)', kicker: 'rgba(17,18,20,.6)', title: '#111214', bodyColor: 'rgba(17,18,20,.78)', metricColor: '#111214' },

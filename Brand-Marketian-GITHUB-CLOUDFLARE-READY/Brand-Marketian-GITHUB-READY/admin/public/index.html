@@ -195,7 +195,7 @@ const CFG = {
 // page key -> published filename (for Preview / links)
 const PAGE_FILE = { home:'index.html', services:'services.html', industries:'industries.html',
   work:'case-studies.html', pricing:'pricing.html', about:'about.html', contact:'contact.html',
-  blog:'blog.html', careers:'careers.html' };
+  influencer:'influencer-marketing.html', blog:'blog.html', careers:'careers.html' };
 const MEDIA_CATS = ['Logos','Icons','Website Images','Service Images','Client Logos','Case Study Images','Team Images','Banners','Videos'];
 
 /* ===================================================== CONTENT SCHEMA
@@ -272,6 +272,11 @@ const SCHEMA = {
         {k:'quote',label:'Quote',type:'textarea'},{k:'name',label:'Name',type:'text'},
         {k:'role',label:'Role / company',type:'text'},{k:'image',label:'Photo',type:'image'},{k:'active',label:'Show',type:'toggle'}]}
     ]},
+    {title:'Featured: Influencer band', fields:[
+      {k:'homeInfEyebrow',label:'Eyebrow',type:'text'},
+      {k:'homeInfTitle',label:'Title',type:'text'},
+      {k:'homeInfSub',label:'Sub',type:'textarea'},
+      {k:'homeInfCta',label:'Button text',type:'text'}]},
     SEO
   ]},
 
@@ -286,6 +291,10 @@ const SCHEMA = {
         {k:'features',label:'Feature list (one per line)',type:'textarea'},
         {k:'ctaText',label:'Button text',type:'text'},{k:'ctaLink',label:'Button link',type:'link'},
         {k:'active',label:'Active',type:'toggle'}]}]},
+    {title:'Featured: Influencer callout', fields:[
+      {k:'svcInfKicker',label:'Kicker',type:'text'},
+      {k:'svcInfTitle',label:'Title',type:'text'},
+      {k:'svcInfSub',label:'Sub',type:'text'}]},
     SEO
   ]},
 
@@ -331,9 +340,44 @@ const SCHEMA = {
       {k:'email',label:'Email shown',type:'text'},{k:'phone',label:'Phone shown',type:'text'},
       {k:'address',label:'Address',type:'textarea'},{k:'hours',label:'Working hours',type:'text'}]},
     SEO
+  ]},
+
+  influencer:{ label:'Influencer Marketing', icon:'📣', desc:'The Influencer Marketing landing page.', sections:[
+    {title:'Hero', fields:[
+      {k:'infHeroEyebrow',label:'Eyebrow',type:'text'},
+      {k:'infHeroTitle',label:'Heading',type:'text'},
+      {k:'infHeroTitleAccent',label:'Heading (accent)',type:'text'},
+      {k:'infHeroSub',label:'Sub / description',type:'textarea'},
+      {k:'infHeroCta',label:'Button text',type:'text'}]},
+    {title:'Stats', fields:[
+      {k:'infStat1Num',label:'Stat 1 number',type:'text'},{k:'infStat1Label',label:'Stat 1 label',type:'text'},
+      {k:'infStat2Num',label:'Stat 2 number',type:'text'},{k:'infStat2Label',label:'Stat 2 label',type:'text'},
+      {k:'infStat3Num',label:'Stat 3 number',type:'text'},{k:'infStat3Label',label:'Stat 3 label',type:'text'},
+      {k:'infStat4Num',label:'Stat 4 number',type:'text'},{k:'infStat4Label',label:'Stat 4 label',type:'text'}]},
+    {title:'How we run it', fields:[
+      {k:'infHowKicker',label:'Kicker',type:'text'},{k:'infHowTitle',label:'Title',type:'text'},{k:'infHowSub',label:'Sub',type:'textarea'},
+      {k:'infStep1Title',label:'Step 1 title',type:'text'},{k:'infStep1Body',label:'Step 1 text',type:'textarea'},
+      {k:'infStep2Title',label:'Step 2 title',type:'text'},{k:'infStep2Body',label:'Step 2 text',type:'textarea'},
+      {k:'infStep3Title',label:'Step 3 title',type:'text'},{k:'infStep3Body',label:'Step 3 text',type:'textarea'}]},
+    {title:"What's included", fields:[
+      {k:'infGetTitle',label:'Title',type:'text'},
+      {k:'infGet1Title',label:'Item 1 title',type:'text'},{k:'infGet1Body',label:'Item 1 text',type:'text'},
+      {k:'infGet2Title',label:'Item 2 title',type:'text'},{k:'infGet2Body',label:'Item 2 text',type:'text'},
+      {k:'infGet3Title',label:'Item 3 title',type:'text'},{k:'infGet3Body',label:'Item 3 text',type:'text'},
+      {k:'infGet4Title',label:'Item 4 title',type:'text'},{k:'infGet4Body',label:'Item 4 text',type:'text'}]},
+    {title:'Creator network', fields:[
+      {k:'infNicheTitle',label:'Title',type:'text'},{k:'infNicheSub',label:'Sub',type:'textarea'}]},
+    {title:'Results', fields:[
+      {k:'infResultsTitle',label:'Title',type:'text'},
+      {k:'infRes1Num',label:'Result 1 number',type:'text'},{k:'infRes1Label',label:'Result 1 label',type:'text'},
+      {k:'infRes2Num',label:'Result 2 number',type:'text'},{k:'infRes2Label',label:'Result 2 label',type:'text'},
+      {k:'infRes3Num',label:'Result 3 number',type:'text'},{k:'infRes3Label',label:'Result 3 label',type:'text'}]},
+    {title:'Call to action', fields:[
+      {k:'infCtaTitle',label:'Title',type:'text'},{k:'infCtaSub',label:'Sub',type:'textarea'},{k:'infCtaBtn',label:'Button text',type:'text'}]},
+    SEO
   ]}
 };
-const PAGE_ORDER = ['home','services','industries','work','pricing','about','contact','global'];
+const PAGE_ORDER = ['home','influencer','services','industries','work','pricing','about','contact','global'];
 
 /* ================================================= PERMISSIONS */
 const CAN = {

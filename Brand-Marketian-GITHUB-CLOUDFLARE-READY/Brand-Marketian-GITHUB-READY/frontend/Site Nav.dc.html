@@ -25,7 +25,7 @@ Brand Marketian
 </sc-for>
 </nav>
 <div style="margin-left:auto;display:flex;align-items:center;gap:10px;flex:none">
-<a class="btn btn-secondary" href="contact.html" style="font-size:13px;white-space:nowrap;display:{{ bar.loginDisplay }}">Client login</a>
+<a class="btn btn-secondary" href="client-login.html" style="font-size:13px;white-space:nowrap;display:{{ bar.loginDisplay }}">Client login</a>
 <a class="btn btn-primary" href="contact.html" style="font-size:13px;white-space:nowrap">Book a free audit</a>
 </div>
 </div>
@@ -73,7 +73,7 @@ class Component extends DCLogic {
   renderVals() {
     const cur = this.props.current || '';
     const s = this.state.scrolled;
-    const items = [['Services', 'services.html'], ['Industries', 'industries.html'], ['Work', 'case-studies.html'], ['Pricing', 'pricing.html'], ['Resources', 'blog.html'], ['About', 'about.html']];
+    const items = [['Services', 'services.html'], ['Influencer', 'influencer-marketing.html'], ['Industries', 'industries.html'], ['Work', 'case-studies.html'], ['Pricing', 'pricing.html'], ['Resources', 'blog.html'], ['About', 'about.html']];
     return {
       headerRef: (el) => { this.node = el; if (el) this.reserveSpace(); },
       progress: this.state.pct.toFixed(1) + '%',
