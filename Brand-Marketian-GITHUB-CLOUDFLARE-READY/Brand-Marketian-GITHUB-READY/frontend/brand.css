@@ -242,3 +242,39 @@ body.bm-menu-open .bm-mobile-menu{ transform:none; opacity:1; pointer-events:aut
   .btn:active{ transform:translateY(-1px) scale(.99); }
 }
 *{ -webkit-tap-highlight-color:transparent; }
+/* ============================================================
+   CARD BACKGROUNDS — added Aug 2026
+   Pure CSS/SVG. Responsive & crisp on every screen; no image files.
+   Direction A is applied to EVERY .card automatically.
+   For B / C / D, add the modifier class in the card's HTML:
+     class="card"                -> A  Soft Tint Wash (default)
+     class="card card--pattern"  -> B  Dot Grid
+     class="card card--dark"     -> C  Dark Premium (use on CTA / feature cards)
+     class="card card--accent"   -> D  Orange Accent
+   ============================================================ */
+.card{
+  background-color:var(--color-surface);
+  background-image:radial-gradient(120% 130% at 100% 0%, rgba(255,102,0,.12), rgba(255,102,0,0) 55%);
+}
+.card--pattern{
+  background-color:#ffffff;
+  background-image:
+    radial-gradient(rgba(17,18,20,.07) 1.2px, transparent 1.2px),
+    radial-gradient(120% 120% at 100% 0%, rgba(255,102,0,.10), transparent 50%);
+  background-size:16px 16px, 100% 100%;
+  border:1px solid var(--color-neutral-200);
+}
+.card--dark{
+  background-color:#141518;
+  background-image:
+    radial-gradient(110% 120% at 0% 100%, rgba(255,102,0,.28), transparent 58%),
+    radial-gradient(90% 90% at 100% 0%, rgba(255,102,0,.10), transparent 55%);
+  color:#ffffff;
+}
+.card--dark .card-title{ color:#ffffff; }
+.card--dark .card-body{ color:#b7b9be; opacity:1; }
+.card--dark .card-kicker{ color:var(--color-accent-400); }
+.card--accent{
+  background-color:var(--color-surface);
+  background-image:radial-gradient(85% 120% at 118% -12%, #ff7a1a 0%, #ff6600 38%, rgba(255,102,0,0) 60%);
+}
