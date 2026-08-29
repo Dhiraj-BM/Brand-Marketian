@@ -72,7 +72,7 @@ class Component extends DCLogic {
   renderVals() {
     const cur = this.props.current || '';
     const s = this.state.scrolled;
-    const items = [['Services', 'services.html'], ['Influencer', 'influencer-marketing.html'], ['Industries', 'industries.html'], ['Work', 'case-studies.html'], ['Pricing', 'pricing.html'], ['Resources', 'blog.html'], ['About', 'about.html']];
+    const items = [['Services', 'services.html'], ['Influencer', 'influencer-marketing.html'], ['Industries', 'industries.html'], ['Work', 'case-studies.html'], ['Pricing', 'pricing.html'], ['Blogs', 'blog.html'], ['About', 'about.html']];
     return {
       headerRef: (el) => { this.node = el; if (el) this.reserveSpace(); },
       progress: this.state.pct.toFixed(1) + '%',
