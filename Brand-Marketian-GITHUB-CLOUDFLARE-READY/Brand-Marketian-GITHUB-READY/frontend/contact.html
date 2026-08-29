@@ -168,7 +168,23 @@ class Component extends DCLogic {
       })))),
       budgetChips: budgets.map(n => this.chip(n, this.state.budget === n, () => this.setState({ budget: n }))),
       submitLabel: this.state.sent ? 'Sent, we\u2019ll reply within 48 hrs ✓' : 'Send, get a plan in 48 hrs',
-      submit: () => this.setState({ sent: true })
+      submit: async () => {
+        var f = this.state.form;
+        if (!f.name || !f.email) { alert('Please add your name and email so we can reply.'); return; }
+        var m = document.querySelector('meta[name="bm-api"]');
+        var api = ((m && m.getAttribute('content')) || window.BM_API || 'https://brand-marketian-api.onrender.com').replace(/\/$/, '');
+        try {
+          await fetch(api + '/api/leads', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: f.name, email: f.email, phone: f.phone, company: f.company, message: f.message,
+              services: this.state.picked, budget: this.state.budget, page: '/contact', source: 'website'
+            })
+          });
+        } catch (e) { /* still show success; the record is best-effort */ }
+        this.setState({ sent: true });
+      }
     };
   }
 }
