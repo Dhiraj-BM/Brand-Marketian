@@ -96,7 +96,7 @@
 <h2 style="font-size:38px;margin:12px 0 10px">What a good cost per lead actually looks like in India in 2026</h2>
 <p style="font-size:15.5px;color:color-mix(in srgb, var(--color-text) 76%, transparent);max-width:52ch">Real CPL ranges from live accounts across D2C, clinics, real estate and SaaS, plus what usually explains a number three times higher than the band.</p>
 <div style="display:flex;align-items:center;gap:14px;margin-top:18px;font-size:12.5px;opacity:.6"><span>4 min read</span><span>·</span><span>Aug 2026</span></div>
-<a class="btn btn-primary" href="contact.html" style="margin-top:18px">Get this benchmark →</a>
+<a class="btn btn-primary" href="blog-cpl-india-2026.html" style="margin-top:18px">Read the benchmark →</a>
 </div>
 </article>
 </section>
@@ -110,13 +110,16 @@
 <section style="max-width:1240px;margin:0 auto;padding:14px 32px 50px">
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px">
 <sc-for list="{{ posts }}" as="p" hint-placeholder-count="6">
+<a href="{{ p.href }}" style="text-decoration:none;color:inherit;display:block">
 <article class="card elev-sm" style="padding:var(--space-4)">
 <dc-import name="Media" query="writing,notebook,desk" label="Playbook" tone="amber" lock="12" hint-size="100%,190px" style="width:100%;height:190px"></dc-import>
 <span class="tag tag-neutral" style="align-self:flex-start;font-size:10px">{{ p.tag }}</span>
 <h3 style="margin:2px 0 0;font-size:22px">{{ p.title }}</h3>
 <p class="card-body" style="font-size:13.5px">{{ p.excerpt }}</p>
 <div class="card-meta">{{ p.read }} · {{ p.date }}</div>
+<div style="margin-top:12px;font-size:13px;font-weight:600;color:var(--color-accent-700)">Read the playbook →</div>
 </article>
+</a>
 </sc-for>
 </div>
 </section>
@@ -141,12 +144,12 @@ class Component extends DCLogic {
   state = { t: 'All', subbed: false };
   renderVals() {
     const all = [
-      { tag: 'Playbook', title: 'The festive ad calendar we run for D2C brands', excerpt: 'Diwali, Holi and end-of-season, mapped backwards from the sale date with creative lead times built in.', read: '6 min read', date: 'Aug 2026' },
-      { tag: 'Benchmarks', title: 'What a good CPL looks like in India in 2026', excerpt: 'Live ranges by category, and the three things that explain almost every outlier.', read: '4 min read', date: 'Aug 2026' },
-      { tag: 'Teardown', title: 'Nine reels that outperformed a ₹2L ad budget', excerpt: 'Hooks, pacing and captions, what the winners had in common, frame by frame.', read: '5 min read', date: 'Jul 2026' },
-      { tag: 'Playbook', title: 'WhatsApp funnels that do not annoy people', excerpt: 'Opt-in, first message, and the follow-up cadence that keeps reply rates above 40%.', read: '7 min read', date: 'Jul 2026' },
-      { tag: 'SEO', title: 'Local SEO for multi-location businesses', excerpt: 'One GMB profile per location, done properly, beats any amount of blog content.', read: '6 min read', date: 'Jun 2026' },
-      { tag: 'Benchmarks', title: 'How much should a growing brand spend on marketing?', excerpt: 'Retainer plus spend, by revenue stage, with the split we recommend at each.', read: '5 min read', date: 'Jun 2026' }
+      { tag: 'Playbook', title: 'The festive ad calendar we run for D2C brands', excerpt: 'Diwali, Holi and end-of-season, mapped backwards from the sale date with creative lead times built in.', read: '6 min read', date: 'Aug 2026', href: 'blog-festive-ad-calendar-d2c.html' },
+      { tag: 'Benchmarks', title: 'What a good CPL looks like in India in 2026', excerpt: 'Live ranges by category, and the three things that explain almost every outlier.', read: '4 min read', date: 'Aug 2026', href: 'blog-cpl-india-2026.html' },
+      { tag: 'Teardown', title: 'Nine reels that outperformed a ₹2L ad budget', excerpt: 'Hooks, pacing and captions, what the winners had in common, frame by frame.', read: '5 min read', date: 'Jul 2026', href: 'blog-nine-reels-beat-2l-budget.html' },
+      { tag: 'Playbook', title: 'WhatsApp funnels that do not annoy people', excerpt: 'Opt-in, first message, and the follow-up cadence that keeps reply rates above 40%.', read: '7 min read', date: 'Jul 2026', href: 'blog-whatsapp-funnels.html' },
+      { tag: 'SEO', title: 'Local SEO for multi-location businesses', excerpt: 'One GMB profile per location, done properly, beats any amount of blog content.', read: '6 min read', date: 'Jun 2026', href: 'blog-local-seo-multi-location.html' },
+      { tag: 'Benchmarks', title: 'How much should a growing brand spend on marketing?', excerpt: 'Retainer plus spend, by revenue stage, with the split we recommend at each.', read: '5 min read', date: 'Jun 2026', href: 'blog-marketing-budget-by-stage.html' }
     ];
     const names = ['All', 'Playbook', 'Benchmarks', 'Teardown', 'SEO'];
     const t = this.state.t;
