@@ -15,7 +15,7 @@
     return el ? el.getAttribute('content') : '';
   };
 
-  var api = (meta('bm-api') || window.BM_API || '').replace(/\/$/, '');
+  var api = (meta('bm-api') || window.BM_API || 'https://brand-marketian-api.onrender.com').replace(/\/$/, '');
   var page = meta('bm-page');
   if (!page) {
     var f = decodeURIComponent(location.pathname.split('/').pop() || 'home');
