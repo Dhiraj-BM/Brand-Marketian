@@ -278,3 +278,18 @@ body.bm-menu-open .bm-mobile-menu{ transform:none; opacity:1; pointer-events:aut
   background-color:var(--color-surface);
   background-image:radial-gradient(85% 120% at 118% -12%, #ff7a1a 0%, #ff6600 38%, rgba(255,102,0,0) 60%);
 }
+/* ---- Optional: photo/image background for a card ----
+   Add class="card card--image" to a card, then set your image path below.
+   Works at any card size (cover crops to fit); overlay keeps text readable. */
+.card--image{
+  background-image:
+    linear-gradient(rgba(17,18,20,.55), rgba(17,18,20,.55)),
+    url('images/your-card-bg.webp');
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  color:#ffffff;
+}
+.card--image .card-title{ color:#ffffff; }
+.card--image .card-body{ color:#e7e7ea; opacity:1; }
+.card--image .card-kicker{ color:var(--color-accent-300); }
