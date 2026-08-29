@@ -132,7 +132,15 @@
 </div>
 <div class="card elev-sm" style="padding:var(--space-6);background:var(--color-accent-2-100)">
 <div class="card-kicker">Or pick a slot</div>
-<div style="border-radius:var(--radius-lg);background:var(--color-bg);height:180px;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.55">calendar embed, 30 min intro call</div>
+<p style="margin:4px 0 14px;font-size:13.5px;color:color-mix(in srgb, var(--color-text) 74%, transparent)">30-minute intro call. Choose a day and time that suits you — we'll confirm on WhatsApp.</p>
+<div class="field"><label style="font-size:12px">Preferred date</label><input class="input" type="date" min="{{ today }}" value="{{ meetingDate }}" onChange="{{ setDate }}"></div>
+<label style="display:block;font-size:12px;margin:14px 0 9px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">Preferred time (IST)</label>
+<div style="display:flex;gap:9px;flex-wrap:wrap">
+<sc-for list="{{ slotChips }}" as="s" hint-placeholder-count="6">
+<button class="btn btn-secondary" onClick="{{ s.pick }}" style="font-size:13px;border-color:{{ s.border }};background:{{ s.bg }}">{{ s.name }}</button>
+</sc-for>
+</div>
+<p style="margin:13px 0 0;font-size:12.5px;color:color-mix(in srgb, var(--color-text) 68%, transparent)">{{ slotNote }}</p>
 </div>
 <div class="card elev-sm" style="padding:var(--space-6)">
 <h4 style="margin:0;font-size:19px">What happens next</h4>
@@ -150,7 +158,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280}}">
 class Component extends DCLogic {
-  state = { form: { name: '', phone: '', email: '', company: '', message: '' }, picked: ['Performance ads'], budget: '₹25K, ₹1L', sent: false };
+  state = { form: { name: '', phone: '', email: '', company: '', message: '' }, picked: ['Performance ads'], budget: '₹25K, ₹1L', meetingDate: '', meetingSlot: '', sent: false };
   field(k) { return e => this.setState(s => ({ form: { ...s.form, [k]: e.target.value } })); }
   chip(name, on, onClick) {
     return { name, onClick, toggle: onClick, pick: onClick,
@@ -160,6 +168,8 @@ class Component extends DCLogic {
   renderVals() {
     const services = ['Social media', 'Performance ads', 'SEO', 'Content', 'Brand design', 'Video / reels', 'Influencer', 'Website', 'E-commerce', 'Lead gen'];
     const budgets = ['Under ₹25K', '₹25K, ₹1L', '₹1L, ₹3L', '₹3L+'];
+    const slots = ['10:00 AM', '11:30 AM', '1:00 PM', '3:00 PM', '4:30 PM', '6:00 PM'];
+    const md = this.state.meetingDate, ms = this.state.meetingSlot;
     return {
       form: this.state.form,
       set: { name: this.field('name'), phone: this.field('phone'), email: this.field('email'), company: this.field('company'), message: this.field('message') },
@@ -167,24 +177,36 @@ class Component extends DCLogic {
         picked: s.picked.includes(n) ? s.picked.filter(x => x !== n) : [...s.picked, n]
       })))),
       budgetChips: budgets.map(n => this.chip(n, this.state.budget === n, () => this.setState({ budget: n }))),
+      today: new Date().toISOString().slice(0, 10),
+      meetingDate: md,
+      setDate: e => this.setState({ meetingDate: e.target.value }),
+      slotChips: slots.map(n => this.chip(n, ms === n, () => this.setState({ meetingSlot: ms === n ? '' : n }))),
+      slotNote: (md || ms)
+        ? ('Requested: ' + (md || 'any day') + (ms ? ' at ' + ms + ' IST' : '') + ' — sent with your message.')
+        : 'Optional — pick a slot to request a specific time.',
       submitLabel: this.state.sent ? 'Sent, we\u2019ll reply within 48 hrs ✓' : 'Send, get a plan in 48 hrs',
-      submit: async () => {
+      submit: () => {
         if (this.state.sending) return;
         var f = this.state.form;
         if (!f.name || !f.email) { alert('Please add your name and email so we can reply.'); return; }
         this.setState({ sending: true, sent: true });
+        var meeting = (this.state.meetingDate || this.state.meetingSlot)
+          ? ('\n\nRequested call: ' + (this.state.meetingDate || 'any day') + (this.state.meetingSlot ? ' at ' + this.state.meetingSlot + ' IST' : ''))
+          : '';
         var m = document.querySelector('meta[name="bm-api"]');
         var api = ((m && m.getAttribute('content')) || window.BM_API || 'https://brand-marketian-api.onrender.com').replace(/\/$/, '');
+        // keepalive lets the request finish even as we navigate away, so we can
+        // redirect instantly (no waiting on the API to wake up).
         try {
-          await fetch(api + '/api/leads', {
-            method: 'POST',
+          fetch(api + '/api/leads', {
+            method: 'POST', keepalive: true,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              name: f.name, email: f.email, phone: f.phone, company: f.company, message: f.message,
+              name: f.name, email: f.email, phone: f.phone, company: f.company, message: (f.message || '') + meeting,
               services: this.state.picked, budget: this.state.budget, page: '/contact', source: 'website'
             })
-          });
-        } catch (e) { /* still confirm; the record is best-effort */ }
+          }).catch(function(){});
+        } catch (e) {}
         window.location.href = 'thank-you.html';
       }
     };

@@ -30,14 +30,14 @@
 </div>
 <div style="background:var(--color-neutral-800);border-radius:calc(var(--radius-lg) * 1.2);padding:var(--space-6)">
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-<div class="field"><label style="color:var(--color-neutral-300)">Name</label><input class="input" placeholder="Your name" style="background:var(--color-neutral-900);color:var(--color-neutral-100);border-color:var(--color-neutral-700)"></div>
-<div class="field"><label style="color:var(--color-neutral-300)">Phone</label><input class="input" placeholder="+91" style="background:var(--color-neutral-900);color:var(--color-neutral-100);border-color:var(--color-neutral-700)"></div>
-<div class="field" style="grid-column:1 / -1"><label style="color:var(--color-neutral-300)">Work email</label><input class="input" placeholder="you@company.com" style="background:var(--color-neutral-900);color:var(--color-neutral-100);border-color:var(--color-neutral-700)"></div>
-<div class="field"><label style="color:var(--color-neutral-300)">Service</label><select class="input" style="background:var(--color-neutral-900);color:var(--color-neutral-100);border-color:var(--color-neutral-700)"><option>Social media</option><option>Performance ads</option><option>End-to-end</option><option>Website</option></select></div>
-<div class="field"><label style="color:var(--color-neutral-300)">Monthly budget</label><select class="input" style="background:var(--color-neutral-900);color:var(--color-neutral-100);border-color:var(--color-neutral-700)"><option>Under ₹25K</option><option>₹25K, ₹1L</option><option>₹1L, ₹3L</option><option>₹3L+</option></select></div>
-<div class="field" style="grid-column:1 / -1"><label style="color:var(--color-neutral-300)">What do you want to grow?</label><textarea class="input" style="min-height:74px;border-radius:var(--radius-lg);background:var(--color-neutral-900);color:var(--color-neutral-100);border-color:var(--color-neutral-700)"></textarea></div>
+<div class="field"><label style="color:var(--color-neutral-300)">Name</label><input id="bmf_name" class="input" placeholder="Your name" style="background:var(--color-neutral-900);color:var(--color-neutral-100);border-color:var(--color-neutral-700)"></div>
+<div class="field"><label style="color:var(--color-neutral-300)">Phone</label><input id="bmf_phone" class="input" placeholder="+91" style="background:var(--color-neutral-900);color:var(--color-neutral-100);border-color:var(--color-neutral-700)"></div>
+<div class="field" style="grid-column:1 / -1"><label style="color:var(--color-neutral-300)">Work email</label><input id="bmf_email" class="input" type="email" placeholder="you@company.com" style="background:var(--color-neutral-900);color:var(--color-neutral-100);border-color:var(--color-neutral-700)"></div>
+<div class="field"><label style="color:var(--color-neutral-300)">Service</label><select id="bmf_service" class="input" style="background:var(--color-neutral-900);color:var(--color-neutral-100);border-color:var(--color-neutral-700)"><option>Social media</option><option>Performance ads</option><option>End-to-end</option><option>Website</option></select></div>
+<div class="field"><label style="color:var(--color-neutral-300)">Monthly budget</label><select id="bmf_budget" class="input" style="background:var(--color-neutral-900);color:var(--color-neutral-100);border-color:var(--color-neutral-700)"><option>Under ₹25K</option><option>₹25K, ₹1L</option><option>₹1L, ₹3L</option><option>₹3L+</option></select></div>
+<div class="field" style="grid-column:1 / -1"><label style="color:var(--color-neutral-300)">What do you want to grow?</label><textarea id="bmf_grow" class="input" style="min-height:74px;border-radius:var(--radius-lg);background:var(--color-neutral-900);color:var(--color-neutral-100);border-color:var(--color-neutral-700)"></textarea></div>
 </div>
-<button class="btn btn-primary btn-block" style="margin-top:14px">Send, get a plan in 48 hrs</button>
+<button class="btn btn-primary btn-block" style="margin-top:14px" onClick="{{ submit }}">{{ submitLabel }}</button>
 </div>
 </div>
 <div style="max-width:1240px;margin:0 auto;padding:0 32px 40px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:12.5px;color:color-mix(in srgb, var(--color-neutral-100) 55%, transparent)">
@@ -48,7 +48,35 @@
 
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280}}">class Component extends DCLogic {
-  renderVals() { return {}; }
+  state = { sent: false };
+  renderVals() {
+    return {
+      submitLabel: this.state.sent ? 'Sent, we’ll reply within 48 hrs ✓' : 'Send, get a plan in 48 hrs',
+      submit: () => {
+        if (this.state.sending) return;
+        var g = function (id) { var el = document.getElementById(id); return el ? String(el.value || '').trim() : ''; };
+        var name = g('bmf_name'), email = g('bmf_email');
+        if (!name || !email) { alert('Please add your name and email so we can reply.'); return; }
+        this.setState({ sending: true, sent: true });
+        var m = document.querySelector('meta[name="bm-api"]');
+        var api = ((m && m.getAttribute('content')) || window.BM_API || 'https://brand-marketian-api.onrender.com').replace(/\/$/, '');
+        // keepalive lets the request finish even as we navigate away, so we can
+        // redirect instantly without waiting on the API to wake up.
+        try {
+          fetch(api + '/api/leads', {
+            method: 'POST', keepalive: true,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: name, email: email, phone: g('bmf_phone'),
+              services: [g('bmf_service')].filter(Boolean), budget: g('bmf_budget'),
+              message: g('bmf_grow'), page: (location.pathname || '/'), source: 'footer'
+            })
+          }).catch(function () {});
+        } catch (e) {}
+        window.location.href = 'thank-you.html';
+      }
+    };
+  }
 }</script>
 </body>
 </html>
