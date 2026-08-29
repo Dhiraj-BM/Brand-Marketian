@@ -43,10 +43,30 @@
     mo.observe(document.documentElement, { childList: true, subtree: true });
   }
 
+  // Preview mode: the admin panel opens this page with ?bmPreview=1 and pushes
+  // the unsaved DRAFT content in via postMessage. Nothing here is persisted;
+  // it only re-renders the page so an editor can see changes before publishing.
+  var preview = /[?&]bmPreview=1/.test(location.search);
+  if (preview) {
+    window.addEventListener('message', function (ev) {
+      var m = ev.data;
+      if (!m || m.type !== 'bm-preview' || !m.data || typeof m.data !== 'object') return;
+      data = m.data;
+      // force re-apply even if a value was applied before
+      var nodes = document.querySelectorAll('[data-cms-applied]');
+      for (var i = 0; i < nodes.length; i++) nodes[i].removeAttribute('data-cms-applied');
+      apply(document);
+      if (!window.__bmPvWatch) { window.__bmPvWatch = true; watch(); }
+    });
+    try { if (window.opener) window.opener.postMessage({ type: 'bm-preview-ready' }, '*'); } catch (e) {}
+    // still load published content as the baseline underneath the preview
+  }
+
   fetch(api + '/api/content/' + page, { headers: { Accept: 'application/json' } })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (json) {
       if (!json || typeof json !== 'object') return;
+      if (preview && data) return; // a preview payload already arrived; keep it
       data = json;
       apply(document);
       watch();

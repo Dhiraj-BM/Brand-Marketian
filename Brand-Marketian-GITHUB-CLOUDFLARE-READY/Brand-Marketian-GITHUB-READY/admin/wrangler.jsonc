@@ -1,0 +1,13 @@
+{
+  // Separate Cloudflare Worker that serves ONLY the admin panel (admin/public).
+  // It is completely independent from the public website worker.
+  // Deploy from this folder:   npx wrangler deploy
+  // Then add the custom domain admin.brandmarketian.com in the Worker's
+  // Settings -> Domains & Routes.
+  "$schema": "https://json.schemastore.org/wrangler.json",
+  "name": "brand-marketian-admin",
+  "compatibility_date": "2026-08-25",
+  "assets": {
+    "directory": "./public"
+  }
+}

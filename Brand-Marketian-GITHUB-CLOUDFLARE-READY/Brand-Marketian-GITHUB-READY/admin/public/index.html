@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brand Marketian — Content Studio</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%9F%A0</text></svg>">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#fff; --ink:#1a1d21; --muted:#6b7280; --line:#e6e8eb;
+  --brand:#ff6600; --brand-ink:#b34700; --brand-soft:#fff3ea;
+  --ok:#0e9f6e; --ok-soft:#e6f6ef; --warn:#b45309; --warn-soft:#fef3c7;
+  --info:#2563eb; --info-soft:#e8effe; --danger:#dc2626; --danger-soft:#fdeaea;
+  --radius:12px; --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.1);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+button{font:inherit;cursor:pointer}
+input,textarea,select{font:inherit}
+a{color:var(--info)}
+.hidden{display:none!important}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 14px;border-radius:9px;font-weight:600;display:inline-flex;align-items:center;gap:6px;transition:.12s}
+.btn:hover{background:#f3f4f6}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn.primary:hover{background:#e85d00}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--muted)}
+.btn.ghost:hover{background:#eef0f2;color:var(--ink)}
+.btn.danger{color:var(--danger);border-color:#f3c9c9;background:#fff}
+.btn.danger:hover{background:var(--danger-soft)}
+.btn.sm{padding:5px 10px;font-size:13px}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:700}
+.badge.published{background:var(--ok-soft);color:var(--ok)}
+.badge.draft{background:var(--warn-soft);color:var(--warn)}
+.badge.in_review{background:var(--info-soft);color:var(--info)}
+.badge.approved{background:#efe7fe;color:#7c3aed}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:600;margin-bottom:6px}
+.field .hint{color:var(--muted);font-weight:400;font-size:12.5px}
+.field input[type=text],.field textarea,.field select,.picker input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.field textarea{min-height:84px;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{outline:2px solid var(--brand-soft);border-color:var(--brand)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:11px 18px;border-radius:10px;box-shadow:var(--shadow);z-index:9999;opacity:0;transition:.2s;font-weight:600}
+.toast.show{opacity:1}
+.toast.err{background:var(--danger)}
+
+/* ---------- Login ---------- */
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(1200px 600px at 50% -10%,#fff3ea,transparent),var(--bg)}
+.login-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);width:100%;max-width:400px;padding:32px}
+.login-card h1{font-size:20px;margin:14px 0 2px}
+.login-card p.sub{color:var(--muted);margin:0 0 22px}
+.brandmark{width:44px;height:44px;border-radius:12px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px}
+.adv{margin-top:14px;font-size:12.5px;color:var(--muted)}
+.adv summary{cursor:pointer}
+
+/* ---------- App shell ---------- */
+#app{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
+#side{background:#12151a;color:#c9ced6;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+#side .brand{display:flex;align-items:center;gap:10px;padding:18px 18px 14px;font-weight:800;color:#fff}
+#side nav{padding:8px;flex:1;overflow:auto}
+#side nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;color:#c9ced6;text-decoration:none;font-weight:600;margin-bottom:2px}
+#side nav a:hover{background:#1e232b;color:#fff}
+#side nav a.active{background:var(--brand);color:#fff}
+#side nav .grp{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#6b7280;padding:14px 12px 6px}
+#side .me{border-top:1px solid #232830;padding:12px 16px;font-size:13px}
+#side .me .role{color:#8b93a1;text-transform:capitalize}
+#main{min-width:0;display:flex;flex-direction:column}
+.topbar{background:var(--panel);border-bottom:1px solid var(--line);padding:14px 24px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:20}
+.topbar h2{margin:0;font-size:17px;flex:1}
+.wrap{padding:24px;max-width:1080px;width:100%;margin:0 auto}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.muted{color:var(--muted)}
+
+/* pages list */
+.page-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.page-tile{padding:16px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+.page-tile:hover{border-color:var(--brand);transform:translateY(-1px)}
+.page-tile .nm{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px}
+.page-tile .mt{font-size:12px;color:var(--muted)}
+
+/* editor */
+.editor{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}
+@media(max-width:920px){.editor{grid-template-columns:1fr}#app{grid-template-columns:1fr}#side{position:fixed;z-index:50;left:-260px;transition:.2s;width:236px}#side.open{left:0}}
+.section{margin-bottom:14px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;overflow:hidden}
+.section>summary{padding:14px 16px;font-weight:700;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between}
+.section>summary::-webkit-details-marker{display:none}
+.section>summary .chev{color:var(--muted);transition:.15s}
+.section[open]>summary .chev{transform:rotate(90deg)}
+.section .body{padding:4px 16px 16px}
+.wf{position:sticky;top:64px}
+.wf .steps{display:flex;flex-direction:column;gap:2px;margin:10px 0 16px}
+.wf .step{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-weight:600;color:var(--muted)}
+.wf .step .n{width:22px;height:22px;border-radius:50%;background:#eef0f2;color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.wf .step.done{color:var(--ink)}.wf .step.done .n{background:var(--ok);color:#fff}
+.wf .step.current{color:var(--brand-ink)}.wf .step.current .n{background:var(--brand);color:#fff}
+.wf .acts{display:flex;flex-direction:column;gap:8px}
+.wf .acts .btn{justify-content:center;width:100%}
+
+/* list/cards */
+.items{display:flex;flex-direction:column;gap:10px}
+.item{border:1px solid var(--line);border-radius:10px;background:#fbfcfd}
+.item>.hd{display:flex;align-items:center;gap:8px;padding:8px 10px;cursor:pointer}
+.item>.hd .t{flex:1;font-weight:600}
+.item>.bd{padding:6px 12px 12px;border-top:1px solid var(--line)}
+.reorder{display:flex;flex-direction:column}
+.reorder button{border:none;background:none;color:var(--muted);line-height:1;padding:0 4px}
+.reorder button:hover{color:var(--ink)}
+
+/* media */
+.media-tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.media-cell{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;box-shadow:var(--shadow)}
+.media-cell .thumb{height:110px;background:#f1f3f5 center/cover no-repeat;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:26px}
+.media-cell .meta{padding:8px}
+.media-cell .meta .nm{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.media-cell .meta .sub{font-size:11px;color:var(--muted)}
+.chip{padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:12.5px;font-weight:600;color:var(--muted)}
+.chip.on{background:var(--brand-soft);border-color:var(--brand);color:var(--brand-ink)}
+
+/* modal */
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.5);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:760px;max-height:88vh;overflow:auto;box-shadow:0 20px 40px rgba(0,0,0,.2)}
+.modal .mh{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;position:sticky;top:0;background:#fff}
+.modal .mh h3{margin:0;flex:1;font-size:16px}
+.modal .mb{padding:20px}
+
+/* table */
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.thumb-in-field{display:flex;align-items:center;gap:10px}
+.thumb-in-field .tv{width:52px;height:52px;border-radius:8px;border:1px solid var(--line);background:#f1f3f5 center/cover no-repeat;flex-shrink:0}
+.switch{position:relative;display:inline-block;width:42px;height:24px}
+.switch input{display:none}
+.switch .sl{position:absolute;inset:0;background:#cbd5e1;border-radius:999px;transition:.15s}
+.switch .sl:before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s}
+.switch input:checked+.sl{background:var(--ok)}
+.switch input:checked+.sl:before{transform:translateX(18px)}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="login">
+  <form class="login-card" id="loginForm">
+    <div class="brandmark">B</div>
+    <h1>Content Studio</h1>
+    <p class="sub">Sign in to manage the Brand Marketian website.</p>
+    <div class="field"><label>Email</label><input type="text" id="li_email" autocomplete="username" placeholder="you@brandmarketian.com"></div>
+    <div class="field"><label>Password</label><input type="password" id="li_pass" autocomplete="current-password" placeholder="••••••••"></div>
+    <button class="btn primary" style="width:100%;justify-content:center" type="submit" id="li_btn">Sign in</button>
+    <div id="li_err" class="muted" style="color:var(--danger);margin-top:10px;min-height:18px"></div>
+    <details class="adv">
+      <summary>Advanced: API address</summary>
+      <div class="field" style="margin-top:8px">
+        <input type="text" id="li_api" placeholder="https://api.brandmarketian.com">
+        <div class="hint">Set the address of your Content API. Saved on this device only.</div>
+      </div>
+    </details>
+  </form>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" class="hidden">
+  <aside id="side">
+    <div class="brand"><span class="brandmark" style="width:30px;height:30px;font-size:15px">B</span> Brand Marketian</div>
+    <nav id="nav"></nav>
+    <div class="me" id="me"></div>
+  </aside>
+  <div id="main">
+    <div class="topbar">
+      <button class="btn ghost sm" id="menuBtn" style="display:none">☰</button>
+      <h2 id="viewTitle">Pages</h2>
+      <span id="topActions"></span>
+    </div>
+    <div class="wrap" id="view"></div>
+  </div>
+</div>
+
+<div id="modalRoot"></div>
+<div class="toast" id="toast"></div>
+
+<!-- Optional one-time config (edit config.js). The API address can also be set
+     on the login screen under "Advanced". -->
+<script src="config.js"></script>
+<script>
+/* ============================================================= CONFIG */
+const CFG = {
+  api: (localStorage.getItem('bm_admin_api') || (window.BM_CONFIG&&window.BM_CONFIG.api) || '').replace(/\/$/,''),
+  siteOrigin: (localStorage.getItem('bm_admin_site') || (window.BM_CONFIG&&window.BM_CONFIG.siteOrigin) || 'https://brandmarketian.com').replace(/\/$/,'')
+};
+// page key -> published filename (for Preview / links)
+const PAGE_FILE = { home:'index.html', services:'services.html', industries:'industries.html',
+  work:'case-studies.html', pricing:'pricing.html', about:'about.html', contact:'contact.html',
+  blog:'blog.html', careers:'careers.html' };
+const MEDIA_CATS = ['Logos','Icons','Website Images','Service Images','Client Logos','Case Study Images','Team Images','Banners','Videos'];
+
+/* ===================================================== CONTENT SCHEMA
+   Friendly, labelled fields per page. Keys that also appear as
+   data-cms="key" in the website HTML are swapped live on publish.        */
+const SEO = { title:'Search & Social (SEO)', fields:[
+  {k:'seo.title',label:'SEO title',type:'text',hint:'Shown in Google results and the browser tab.'},
+  {k:'seo.description',label:'Meta description',type:'textarea',hint:'~150 characters summarising the page.'},
+  {k:'seo.slug',label:'URL slug',type:'text',hint:'The page address, e.g. /services'},
+  {k:'seo.ogTitle',label:'Social share title',type:'text'},
+  {k:'seo.ogDescription',label:'Social share description',type:'textarea'},
+  {k:'seo.ogImage',label:'Social share image',type:'image'},
+  {k:'seo.canonical',label:'Canonical URL',type:'link'},
+  {k:'seo.noindex',label:'Hide from search engines (noindex)',type:'toggle'}
+]};
+
+const SCHEMA = {
+  global:{ label:'Global Settings', icon:'⚙', desc:'Brand-wide details used across every page.', sections:[
+    {title:'Brand', fields:[
+      {k:'companyName',label:'Company name',type:'text'},
+      {k:'tagline',label:'Tagline',type:'text'},
+      {k:'logo',label:'Main logo',type:'image'},
+      {k:'favicon',label:'Favicon',type:'image'}
+    ]},
+    {title:'Contact', fields:[
+      {k:'contactEmail',label:'Contact email',type:'text'},
+      {k:'contactPhone',label:'Contact number',type:'text'}
+    ]},
+    {title:'Social links', fields:[
+      {k:'instagram',label:'Instagram URL',type:'link'},
+      {k:'whatsapp',label:'WhatsApp URL',type:'link'},
+      {k:'linkedin',label:'LinkedIn URL',type:'link'}
+    ]},
+    {title:'Navigation & footer', fields:[
+      {k:'nav',label:'Navigation links',type:'list',itemLabel:'label',item:[
+        {k:'label',label:'Label',type:'text'},{k:'href',label:'Link',type:'link'}]},
+      {k:'footerText',label:'Footer text',type:'textarea'}
+    ]},
+    {title:'Default SEO', fields:[
+      {k:'seoTitle',label:'Default SEO title',type:'text'},
+      {k:'seoDescription',label:'Default meta description',type:'textarea'},
+      {k:'ogImage',label:'Default social share image',type:'image'}
+    ]}
+  ]},
+
+  home:{ label:'Home', icon:'🏠', desc:'The main landing page.', sections:[
+    {title:'Hero', fields:[
+      {k:'heroEyebrow',label:'Eyebrow',type:'text'},
+      {k:'heroTitle',label:'Heading',type:'text'},
+      {k:'heroTitleAccent',label:'Heading (accent word)',type:'text'},
+      {k:'heroSub',label:'Sub / description',type:'textarea'},
+      {k:'heroCta',label:'Button text',type:'text'},
+      {k:'heroCtaLink',label:'Button link',type:'link'}
+    ]},
+    {title:'Section headings', fields:[
+      {k:'servicesTitle',label:'Services title',type:'text'},
+      {k:'servicesTitleAccent',label:'Services title (accent)',type:'text'},
+      {k:'servicesSub',label:'Services sub',type:'textarea'},
+      {k:'buyersTitle',label:'Buyers title',type:'text'},
+      {k:'journeyTitle',label:'Journey title',type:'text'},
+      {k:'clientsTitle',label:'Clients title',type:'text'},
+      {k:'compareTitle',label:'Comparison title',type:'text'},
+      {k:'processTitle',label:'Process title',type:'text'},
+      {k:'indiaTitle',label:'India section title',type:'text'},
+      {k:'pricingTitle',label:'Pricing title',type:'text'},
+      {k:'storiesTitle',label:'Stories title',type:'text'}
+    ]},
+    {title:'Client logos', fields:[
+      {k:'clientLogos',label:'Client logos',type:'list',itemLabel:'name',item:[
+        {k:'name',label:'Client name',type:'text'},{k:'image',label:'Logo',type:'image'},{k:'active',label:'Show',type:'toggle'}]}
+    ]},
+    {title:'Testimonials', fields:[
+      {k:'testimonials',label:'Testimonials',type:'list',itemLabel:'name',item:[
+        {k:'quote',label:'Quote',type:'textarea'},{k:'name',label:'Name',type:'text'},
+        {k:'role',label:'Role / company',type:'text'},{k:'image',label:'Photo',type:'image'},{k:'active',label:'Show',type:'toggle'}]}
+    ]},
+    SEO
+  ]},
+
+  services:{ label:'Services', icon:'🧩', desc:'Services overview page.', sections:[
+    {title:'Hero', fields:[
+      {k:'heroTitle',label:'Heading',type:'text'},{k:'heroSub',label:'Sub / description',type:'textarea'},
+      {k:'heroCta',label:'Button text',type:'text'},{k:'heroCtaLink',label:'Button link',type:'link'}]},
+    {title:'Service cards', fields:[
+      {k:'cards',label:'Service cards',type:'list',itemLabel:'title',item:[
+        {k:'title',label:'Title',type:'text'},{k:'description',label:'Description',type:'textarea'},
+        {k:'badge',label:'Badge',type:'text'},{k:'icon',label:'Icon',type:'image'},
+        {k:'features',label:'Feature list (one per line)',type:'textarea'},
+        {k:'ctaText',label:'Button text',type:'text'},{k:'ctaLink',label:'Button link',type:'link'},
+        {k:'active',label:'Active',type:'toggle'}]}]},
+    SEO
+  ]},
+
+  industries:{ label:'Industries', icon:'🏭', desc:'Industries you serve.', sections:[
+    {title:'Hero', fields:[{k:'heroTitle',label:'Heading',type:'text'},{k:'heroSub',label:'Sub',type:'textarea'}]},
+    {title:'Industry cards', fields:[
+      {k:'cards',label:'Industry cards',type:'list',itemLabel:'title',item:[
+        {k:'title',label:'Title',type:'text'},{k:'description',label:'Description',type:'textarea'},
+        {k:'icon',label:'Icon',type:'image'},{k:'active',label:'Active',type:'toggle'}]}]},
+    SEO
+  ]},
+
+  work:{ label:'Work', icon:'📈', desc:'Case studies / results page.', sections:[
+    {title:'Hero', fields:[{k:'heroTitle',label:'Heading',type:'text'},{k:'heroSub',label:'Sub',type:'textarea'}]},
+    {title:'Intro', fields:[{k:'introText',label:'Intro text',type:'textarea'}]},
+    SEO
+  ]},
+
+  pricing:{ label:'Pricing', icon:'💳', desc:'Plans and pricing.', sections:[
+    {title:'Hero', fields:[{k:'heroTitle',label:'Heading',type:'text'},{k:'heroSub',label:'Sub',type:'textarea'}]},
+    {title:'Plans', fields:[
+      {k:'plans',label:'Pricing plans',type:'list',itemLabel:'name',item:[
+        {k:'name',label:'Plan name',type:'text'},{k:'price',label:'Price',type:'text'},
+        {k:'blurb',label:'Short line',type:'text'},{k:'features',label:'Features (one per line)',type:'textarea'},
+        {k:'ctaText',label:'Button text',type:'text'},{k:'ctaLink',label:'Button link',type:'link'},
+        {k:'highlight',label:'Highlight this plan',type:'toggle'},{k:'active',label:'Active',type:'toggle'}]}]},
+    SEO
+  ]},
+
+  about:{ label:'About', icon:'👥', desc:'About the company.', sections:[
+    {title:'Hero', fields:[{k:'heroTitle',label:'Heading',type:'text'},{k:'heroSub',label:'Sub',type:'textarea'}]},
+    {title:'Story', fields:[{k:'storyTitle',label:'Story title',type:'text'},{k:'storyBody',label:'Story body',type:'textarea'}]},
+    {title:'Team', fields:[
+      {k:'team',label:'Team members',type:'list',itemLabel:'name',item:[
+        {k:'name',label:'Name',type:'text'},{k:'role',label:'Role',type:'text'},
+        {k:'image',label:'Photo',type:'image'},{k:'active',label:'Show',type:'toggle'}]}]},
+    SEO
+  ]},
+
+  contact:{ label:'Contact', icon:'✉️', desc:'Contact page.', sections:[
+    {title:'Hero', fields:[{k:'heroTitle',label:'Heading',type:'text'},{k:'heroSub',label:'Sub',type:'textarea'}]},
+    {title:'Details', fields:[
+      {k:'email',label:'Email shown',type:'text'},{k:'phone',label:'Phone shown',type:'text'},
+      {k:'address',label:'Address',type:'textarea'},{k:'hours',label:'Working hours',type:'text'}]},
+    SEO
+  ]}
+};
+const PAGE_ORDER = ['home','services','industries','work','pricing','about','contact','global'];
+
+/* ================================================= PERMISSIONS */
+const CAN = {
+  edit: r => ['super_admin','admin','editor','designer'].includes(r),
+  publish: r => ['super_admin','admin'].includes(r),
+  users: r => r==='super_admin'
+};
+
+/* ================================================= STATE + API */
+let S = { token:localStorage.getItem('bm_admin_token')||'', user:null, view:'pages', pageKey:null, doc:null, draft:null, dirty:false };
+
+async function api(path, opts={}){
+  const headers = Object.assign({}, opts.headers||{});
+  if(!(opts.body instanceof FormData)) headers['Content-Type']='application/json';
+  if(S.token) headers['Authorization']='Bearer '+S.token;
+  const res = await fetch(CFG.api+path, Object.assign({}, opts, { headers }));
+  if(res.status===401){ logout(); throw new Error('Session expired'); }
+  const ct = res.headers.get('content-type')||'';
+  const data = ct.includes('json') ? await res.json() : await res.text();
+  if(!res.ok) throw new Error((data&&data.error)||('Request failed ('+res.status+')'));
+  return data;
+}
+function toast(msg,err){ const t=document.getElementById('toast'); t.textContent=msg; t.className='toast show'+(err?' err':''); setTimeout(()=>t.className='toast',2600); }
+
+/* value get/set with dot-path support */
+function getVal(obj,path){ return path.split('.').reduce((o,k)=> (o==null?undefined:o[k]), obj); }
+function setVal(obj,path,val){ const ks=path.split('.'); let o=obj; for(let i=0;i<ks.length-1;i++){ if(typeof o[ks[i]]!=='object'||o[ks[i]]==null) o[ks[i]]={}; o=o[ks[i]]; } o[ks[ks.length-1]]=val; }
+
+/* ================================================= AUTH */
+document.getElementById('li_api').value = CFG.api;
+document.getElementById('loginForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const api_ = document.getElementById('li_api').value.trim().replace(/\/$/,'');
+  if(api_!==CFG.api){ localStorage.setItem('bm_admin_api',api_); CFG.api=api_; }
+  const btn=document.getElementById('li_btn'), err=document.getElementById('li_err');
+  btn.disabled=true; btn.textContent='Signing in…'; err.textContent='';
+  try{
+    const r = await api('/api/admin/auth/login',{method:'POST',body:JSON.stringify({
+      email:document.getElementById('li_email').value.trim(), password:document.getElementById('li_pass').value })});
+    S.token=r.token; S.user=r.user; localStorage.setItem('bm_admin_token',r.token);
+    startApp();
+  }catch(ex){ err.textContent=ex.message; }
+  btn.disabled=false; btn.textContent='Sign in';
+});
+function logout(){ S.token=''; S.user=null; localStorage.removeItem('bm_admin_token');
+  document.getElementById('app').classList.add('hidden'); document.getElementById('login').classList.remove('hidden'); }
+
+async function boot(){
+  if(!S.token || !CFG.api){ return; }
+  try{ S.user = await api('/api/admin/auth/me'); startApp(); }
+  catch{ logout(); }
+}
+function startApp(){
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('me').innerHTML =
+    `<div><strong>${esc(S.user.name||S.user.email)}</strong></div><div class="role">${(S.user.role||'').replace('_',' ')}</div>
+     <button class="btn ghost sm" style="margin-top:8px;padding-left:0" onclick="logout()">Sign out →</button>`;
+  buildNav(); go('pages');
+  const mb=document.getElementById('menuBtn'); if(window.innerWidth<=920){ mb.style.display='inline-flex'; mb.onclick=()=>document.getElementById('side').classList.toggle('open'); }
+}
+function buildNav(){
+  const r=S.user.role, n=document.getElementById('nav'); let h='';
+  h+=`<div class="grp">Content</div>`;
+  h+=navlink('pages','📄','Pages');
+  h+=navlink('media','🖼️','Media Library');
+  if(CAN.users(r)){ h+=`<div class="grp">Team</div>`+navlink('users','👤','Users & Roles'); }
+  n.innerHTML=h;
+}
+function navlink(v,ic,label){ return `<a href="#${v}" data-v="${v}" onclick="go('${v}');return false" class="${S.view===v?'active':''}"><span>${ic}</span> ${label}</a>`; }
+
+/* ================================================= ROUTER */
+function go(view,arg){
+  S.view=view;
+  document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('active',a.dataset.v===view));
+  document.getElementById('side').classList.remove('open');
+  document.getElementById('topActions').innerHTML='';
+  if(view==='pages') renderPages();
+  else if(view==='editor') openEditor(arg);
+  else if(view==='media') renderMedia();
+  else if(view==='users') renderUsers();
+}
+function setTitle(t){ document.getElementById('viewTitle').textContent=t; }
+
+/* ================================================= PAGES LIST */
+async function renderPages(){
+  setTitle('Pages'); const v=document.getElementById('view');
+  v.innerHTML=`<p class="muted" style="margin-top:0">Choose a page to edit its content. Changes are saved as a draft and only go live when published.</p><div class="page-grid" id="pg">Loading…</div>`;
+  let overview={};
+  try{ (await api('/api/admin/content')).forEach(d=>overview[d.key]=d); }catch(e){ toast(e.message,1); }
+  const tiles = PAGE_ORDER.filter(k=>SCHEMA[k]).map(k=>{
+    const sc=SCHEMA[k], o=overview[k]||{status:'published',hasDraft:false};
+    const badge = o.hasDraft && o.status!=='published' ? o.status : (o.hasDraft?'draft':'published');
+    return `<button class="page-tile" onclick="go('editor','${k}')">
+      <span class="nm">${sc.icon} ${esc(sc.label)}</span>
+      <span class="mt">${esc(sc.desc||'')}</span>
+      <span>${statusBadge(badge)}</span></button>`;
+  }).join('');
+  document.getElementById('pg').innerHTML=tiles;
+}
+function statusBadge(s){ const lbl={published:'Published',draft:'Draft',in_review:'In review',approved:'Approved'}[s]||s;
+  return `<span class="badge ${s}"><span class="dot"></span>${lbl}</span>`; }
+
+/* ================================================= EDITOR */
+async function openEditor(key){
+  const sc=SCHEMA[key]; if(!sc){ go('pages'); return; }
+  S.pageKey=key; setTitle(sc.label);
+  const v=document.getElementById('view'); v.innerHTML='Loading…';
+  try{ S.doc = await api('/api/admin/content/'+key); }
+  catch(e){ v.innerHTML=''; toast(e.message,1); return; }
+  S.draft = JSON.parse(JSON.stringify(S.doc.draft||{})); S.dirty=false;
+  renderEditor();
+}
+function renderEditor(){
+  const sc=SCHEMA[S.pageKey], v=document.getElementById('view');
+  const secHtml = sc.sections.map((sec,si)=>`
+    <details class="section" ${si<2?'open':''}>
+      <summary>${esc(sec.title)} <span class="chev">▸</span></summary>
+      <div class="body">${sec.fields.map(f=>fieldHtml(f)).join('')}</div>
+    </details>`).join('');
+  v.innerHTML=`
+    <button class="btn ghost sm" onclick="leaveEditor()" style="margin-bottom:12px">← All pages</button>
+    <div class="editor">
+      <div><h3 style="margin:0 0 4px">${sc.icon} ${esc(sc.label)}</h3>
+        <p class="muted" style="margin:0 0 16px">${esc(sc.desc||'')}</p>${secHtml}</div>
+      <div>${workflowPanel()}</div>
+    </div>`;
+  wireFields();
+}
+function leaveEditor(){ if(S.dirty && !confirm('You have unsaved changes. Leave without saving the draft?')) return; go('pages'); }
+
+/* --- field rendering --- */
+function fieldHtml(f){
+  const val = getVal(S.draft,f.k);
+  const ro = !CAN.edit(S.user.role);
+  const id='f_'+f.k.replace(/\W/g,'_');
+  if(f.type==='list') return listField(f,ro);
+  let inner='';
+  if(f.type==='textarea') inner=`<textarea id="${id}" data-k="${f.k}" ${ro?'readonly':''}>${esc(val||'')}</textarea>`;
+  else if(f.type==='toggle') inner=`<label class="switch"><input type="checkbox" id="${id}" data-k="${f.k}" ${val?'checked':''} ${ro?'disabled':''}><span class="sl"></span></label>`;
+  else if(f.type==='image') inner=imageField(f,val,ro);
+  else inner=`<input type="text" id="${id}" data-k="${f.k}" value="${esc(val||'')}" ${ro?'readonly':''}>`;
+  return `<div class="field"><label>${esc(f.label)}${f.type==='toggle'?' ':''}</label>${f.hint?`<div class="hint">${esc(f.hint)}</div>`:''}${inner}</div>`;
+}
+function imageField(f,val,ro){
+  const id='f_'+f.k.replace(/\W/g,'_');
+  return `<div class="thumb-in-field">
+    <span class="tv" style="${val?`background-image:url('${mediaUrl(val)}')`:''}"></span>
+    <input type="text" id="${id}" data-k="${f.k}" value="${esc(val||'')}" placeholder="/uploads/… or pick" ${ro?'readonly':''} style="flex:1">
+    ${ro?'':`<button type="button" class="btn sm" onclick="pickImage('${f.k}')">Pick</button>`}
+  </div>`;
+}
+function listField(f,ro){
+  const arr = getVal(S.draft,f.k)||[];
+  const rows = arr.map((it,idx)=>listItem(f,it,idx,ro)).join('');
+  return `<div class="field"><label>${esc(f.label)}</label>
+    <div class="items" id="list_${f.k}">${rows||'<p class="muted" style="margin:4px 0">No items yet.</p>'}</div>
+    ${ro?'':`<button type="button" class="btn sm" style="margin-top:8px" onclick="addItem('${f.k}')">+ Add</button>`}</div>`;
+}
+function listItem(f,it,idx,ro){
+  const title = esc(it[f.itemLabel]||('Item '+(idx+1)));
+  const body = f.item.map(sf=>{
+    const v=it[sf.k]; const sid=`li_${f.k}_${idx}_${sf.k}`;
+    if(sf.type==='textarea') return fieldWrap(sf,`<textarea data-li="${f.k}" data-idx="${idx}" data-sk="${sf.k}" ${ro?'readonly':''}>${esc(v||'')}</textarea>`);
+    if(sf.type==='toggle') return fieldWrap(sf,`<label class="switch"><input type="checkbox" data-li="${f.k}" data-idx="${idx}" data-sk="${sf.k}" ${v?'checked':''} ${ro?'disabled':''}><span class="sl"></span></label>`);
+    if(sf.type==='image') return fieldWrap(sf,`<div class="thumb-in-field"><span class="tv" style="${v?`background-image:url('${mediaUrl(v)}')`:''}"></span><input type="text" data-li="${f.k}" data-idx="${idx}" data-sk="${sf.k}" value="${esc(v||'')}" ${ro?'readonly':''} style="flex:1">${ro?'':`<button type="button" class="btn sm" onclick="pickImageList('${f.k}',${idx},'${sf.k}')">Pick</button>`}</div>`);
+    return fieldWrap(sf,`<input type="text" data-li="${f.k}" data-idx="${idx}" data-sk="${sf.k}" value="${esc(v||'')}" ${ro?'readonly':''}>`);
+  }).join('');
+  return `<div class="item"><div class="hd" onclick="this.parentNode.querySelector('.bd').classList.toggle('hidden')">
+      ${ro?'':`<span class="reorder"><button type="button" onclick="event.stopPropagation();moveItem('${f.k}',${idx},-1)">▲</button><button type="button" onclick="event.stopPropagation();moveItem('${f.k}',${idx},1)">▼</button></span>`}
+      <span class="t">${title}</span>
+      ${ro?'':`<button type="button" class="btn ghost sm" onclick="event.stopPropagation();delItem('${f.k}',${idx})">Delete</button>`}
+    </div><div class="bd">${body}</div></div>`;
+}
+function fieldWrap(sf,inner){ return `<div class="field"><label>${esc(sf.label)}</label>${inner}</div>`; }
+
+function wireFields(){
+  document.querySelectorAll('[data-k]').forEach(el=>{
+    const ev = el.type==='checkbox'?'change':'input';
+    el.addEventListener(ev,()=>{ setVal(S.draft, el.dataset.k, el.type==='checkbox'?el.checked:el.value); markDirty(); });
+  });
+  document.querySelectorAll('[data-li]').forEach(el=>{
+    const ev = el.type==='checkbox'?'change':'input';
+    el.addEventListener(ev,()=>{ const arr=getVal(S.draft,el.dataset.li); if(arr&&arr[el.dataset.idx]) arr[el.dataset.idx][el.dataset.sk]= el.type==='checkbox'?el.checked:el.value; markDirty(); });
+  });
+}
+function markDirty(){ S.dirty=true; const b=document.getElementById('wf_save'); if(b){ b.disabled=false; } const s=document.getElementById('wf_dirty'); if(s) s.textContent='Unsaved changes'; }
+
+/* list ops */
+function addItem(k){ const f=findField(k); const arr=getVal(S.draft,k)||[]; const blank={}; f.item.forEach(sf=>blank[sf.k]= sf.type==='toggle'?true:''); arr.push(blank); setVal(S.draft,k,arr); markDirty(); renderEditor(); }
+function delItem(k,i){ const arr=getVal(S.draft,k)||[]; arr.splice(i,1); setVal(S.draft,k,arr); markDirty(); renderEditor(); }
+function moveItem(k,i,d){ const arr=getVal(S.draft,k)||[]; const j=i+d; if(j<0||j>=arr.length) return; [arr[i],arr[j]]=[arr[j],arr[i]]; setVal(S.draft,k,arr); markDirty(); renderEditor(); }
+function findField(k){ for(const sec of SCHEMA[S.pageKey].sections) for(const f of sec.fields) if(f.k===k) return f; }
+
+/* --- workflow panel --- */
+function workflowPanel(){
+  const r=S.user.role, d=S.doc, st=d.status, hasDraft=d.hasDraft;
+  const steps=[['draft','Draft'],['in_review','In review'],['approved','Approved'],['published','Published']];
+  const order={draft:0,in_review:1,approved:2,published:3};
+  const cur = hasDraft? order[st] : 3;
+  const stepHtml = steps.map((s,i)=>`<div class="step ${i<cur?'done':''} ${i===cur&&hasDraft?'current':''}"><span class="n">${i<cur?'✓':i+1}</span>${s[1]}</div>`).join('');
+  let acts='';
+  const canE=CAN.edit(r), canP=CAN.publish(r);
+  if(canE){ acts+=`<button class="btn primary" id="wf_save" onclick="saveDraft()" ${S.dirty?'':'disabled'}>Save draft</button>`; }
+  acts+=`<button class="btn" onclick="preview()">Preview</button>`;
+  if(canE && (st==='draft') && hasDraft){ acts+=`<button class="btn" onclick="submitReview()">Submit for review</button>`; }
+  if(canP && st==='in_review'){ acts+=`<button class="btn" onclick="approve()">Approve</button>`; }
+  if(canP && hasDraft){ acts+=`<button class="btn primary" onclick="publish()">Publish live</button>`; }
+  if(canE && hasDraft){ acts+=`<button class="btn ghost sm" onclick="revertDraft()">Discard draft</button>`; }
+  const meta = d.publishedAt?`Last published ${fmt(d.publishedAt)}${d.publishedBy?' by '+esc(d.publishedBy):''}`:'Not published yet';
+  return `<div class="card wf" style="padding:16px">
+    <div style="font-weight:700;margin-bottom:2px">Status: ${statusBadge(hasDraft?st:'published')}</div>
+    <div class="muted" id="wf_dirty" style="font-size:12.5px;min-height:16px">${S.dirty?'Unsaved changes':''}</div>
+    <div class="steps">${stepHtml}</div>
+    <div class="acts">${acts}</div>
+    <div class="muted" style="font-size:12px;margin-top:14px">${meta}</div>
+    <button class="btn ghost sm" style="margin-top:10px;padding-left:0" onclick="showVersions()">🕑 Version history (${(d.versions||[]).length})</button>
+    ${!canE?'<div class="muted" style="font-size:12px;margin-top:8px">You have read-only access.</div>':''}
+  </div>`;
+}
+
+async function saveDraft(){
+  try{ S.doc = await api('/api/admin/content/'+S.pageKey+'/draft',{method:'PUT',body:JSON.stringify(S.draft)});
+    S.dirty=false; toast('Draft saved'); renderEditor(); }
+  catch(e){ toast(e.message,1); }
+}
+async function submitReview(){
+  if(S.dirty) await saveDraft();
+  try{ S.doc=await api('/api/admin/content/'+S.pageKey+'/submit',{method:'POST',body:'{}'}); toast('Submitted for review'); renderEditor(); }
+  catch(e){ toast(e.message,1); }
+}
+async function approve(){ try{ S.doc=await api('/api/admin/content/'+S.pageKey+'/approve',{method:'POST',body:'{}'}); toast('Approved'); renderEditor(); }catch(e){ toast(e.message,1); } }
+async function publish(){
+  if(!confirm('Publish this content to the live website now?')) return;
+  if(S.dirty) await saveDraft();
+  try{ S.doc=await api('/api/admin/content/'+S.pageKey+'/publish',{method:'POST',body:'{}'}); toast('Published live ✓'); renderEditor(); }
+  catch(e){ toast(e.message,1); }
+}
+async function revertDraft(){ if(!confirm('Discard the current draft and go back to the published content?')) return;
+  try{ S.doc=await api('/api/admin/content/'+S.pageKey+'/revert-draft',{method:'POST',body:'{}'}); S.draft=JSON.parse(JSON.stringify(S.doc.draft||{})); S.dirty=false; toast('Draft discarded'); renderEditor(); }catch(e){ toast(e.message,1); } }
+
+/* --- preview (opens live page, injects draft over postMessage) --- */
+function preview(){
+  const file = PAGE_FILE[S.pageKey];
+  if(!file){ toast('Preview isn\'t available for this page yet.'); return; }
+  const url = CFG.siteOrigin+'/'+file+'?bmPreview=1';
+  const w = window.open(url,'bmPreview');
+  if(!w){ toast('Allow pop-ups to preview.',1); return; }
+  const payload={ type:'bm-preview', key:S.pageKey, data:S.draft };
+  let tries=0; const iv=setInterval(()=>{ try{ w.postMessage(payload, CFG.siteOrigin);}catch(e){} if(++tries>40) clearInterval(iv); },250);
+  window.addEventListener('message',function onr(ev){ if(ev.data&&ev.data.type==='bm-preview-ready'){ w.postMessage(payload,CFG.siteOrigin); } });
+  toast('Opening preview…');
+}
+
+/* --- version history --- */
+async function showVersions(){
+  let list=[]; try{ list=await api('/api/admin/content/'+S.pageKey+'/versions'); }catch(e){ toast(e.message,1); return; }
+  const canE=CAN.edit(S.user.role);
+  const rows = list.length? list.map(v=>`<tr>
+      <td>${fmt(v.at)}</td><td>${esc(v.savedBy||'—')}</td>
+      <td>${canE?`<button class="btn sm" onclick="restoreVersion('${v.id}')">Restore to draft</button>`:'<span class="muted">read-only</span>'}</td>
+    </tr>`).join('') : '<tr><td colspan="3" class="muted">No previous versions yet. A version is saved each time you publish.</td></tr>';
+  modal('Version history', `<p class="muted" style="margin-top:0">Every publish snapshots the previous live content. Restoring loads it back into your draft — it won't go live until you publish again.</p>
+    <table><thead><tr><th>When</th><th>By</th><th></th></tr></thead><tbody>${rows}</tbody></table>`);
+}
+async function restoreVersion(id){
+  try{ S.doc=await api('/api/admin/content/'+S.pageKey+'/restore/'+id,{method:'POST',body:'{}'}); S.draft=JSON.parse(JSON.stringify(S.doc.draft||{})); closeModal(); toast('Restored into draft'); renderEditor(); }
+  catch(e){ toast(e.message,1); }
+}
+
+/* ================================================= MEDIA LIBRARY */
+let mediaState={cat:'All',q:''};
+async function renderMedia(){
+  setTitle('Media Library'); const v=document.getElementById('view');
+  const cats=['All',...MEDIA_CATS];
+  v.innerHTML=`<div class="media-tools">
+      <div id="catChips" style="display:flex;gap:6px;flex-wrap:wrap">${cats.map(c=>`<button class="chip ${mediaState.cat===c?'on':''}" onclick="setCat('${c}')">${c}</button>`).join('')}</div>
+      <input class="picker" style="max-width:200px;padding:8px 10px;border:1px solid var(--line);border-radius:9px" placeholder="Search…" value="${esc(mediaState.q)}" oninput="mediaState.q=this.value;debounceMedia()">
+      ${CAN.edit(S.user.role)?`<label class="btn primary sm" style="margin-left:auto"><input type="file" multiple style="display:none" onchange="uploadMedia(this.files)">⬆ Upload</label>`:''}
+    </div><div class="media-grid" id="mgrid">Loading…</div>`;
+  loadMedia();
+}
+function setCat(c){ mediaState.cat=c; renderMedia(); }
+let mdb; function debounceMedia(){ clearTimeout(mdb); mdb=setTimeout(loadMedia,300); }
+async function loadMedia(){
+  const g=document.getElementById('mgrid'); if(!g) return;
+  const qp=new URLSearchParams(); if(mediaState.cat!=='All') qp.set('tag',mediaState.cat); if(mediaState.q) qp.set('q',mediaState.q);
+  let items=[]; try{ items=await api('/api/admin/media?'+qp.toString()); }catch(e){ toast(e.message,1); }
+  if(!items.length){ g.innerHTML='<p class="muted">No media yet. Upload images, logos and icons to reuse across the site.</p>'; return; }
+  g.innerHTML=items.map(m=>{
+    const isImg=(m.mime||'').startsWith('image/');
+    return `<div class="media-cell">
+      <div class="thumb" style="${isImg?`background-image:url('${mediaUrl(m.path)}')`:''}">${isImg?'':fileIcon(m.mime)}</div>
+      <div class="meta"><div class="nm" title="${esc(m.name)}">${esc(m.name)}</div>
+        <div class="sub">${esc(m.tag||'')} · ${fmtSize(m.size)}</div>
+        <div style="display:flex;gap:6px;margin-top:6px">
+          <button class="btn ghost sm" onclick='editMedia(${JSON.stringify(JSON.stringify(m))})'>Edit</button>
+          ${CAN.publish(S.user.role)?`<button class="btn ghost sm" style="color:var(--danger)" onclick="delMedia('${m._id}')">Delete</button>`:''}
+        </div></div></div>`;
+  }).join('');
+}
+async function uploadMedia(files){
+  if(!files.length) return; const fd=new FormData();
+  for(const f of files) fd.append('file',f); fd.append('tag',mediaState.cat==='All'?'Website Images':mediaState.cat);
+  try{ await api('/api/admin/media',{method:'POST',body:fd}); toast('Uploaded'); loadMedia(); }catch(e){ toast(e.message,1); }
+}
+function editMedia(json){ const m=JSON.parse(json);
+  modal('Edit media',`<div class="field"><label>Name</label><input type="text" id="em_name" value="${esc(m.name||'')}"></div>
+    <div class="field"><label>Category</label><select id="em_tag">${MEDIA_CATS.map(c=>`<option ${m.tag===c?'selected':''}>${c}</option>`).join('')}</select></div>
+    <div class="field"><label>Alt text (for accessibility & SEO)</label><input type="text" id="em_alt" value="${esc(m.alt||'')}"></div>
+    <div class="muted" style="font-size:12px">Path: ${esc(m.path)}</div>`,
+    [{label:'Save',cls:'primary',fn:async()=>{ try{ await api('/api/admin/media/'+m._id,{method:'PATCH',body:JSON.stringify({name:document.getElementById('em_name').value,tag:document.getElementById('em_tag').value,alt:document.getElementById('em_alt').value})}); closeModal(); toast('Saved'); loadMedia(); }catch(e){ toast(e.message,1);} }}]);
+}
+async function delMedia(id){ if(!confirm('Delete this file? This cannot be undone.')) return;
+  try{ await api('/api/admin/media/'+id,{method:'DELETE'}); toast('Deleted'); loadMedia(); }catch(e){ toast(e.message,1); } }
+
+/* --- image picker (for fields) --- */
+async function pickImage(fieldKey){ openPicker(url=>{ setVal(S.draft,fieldKey,url); markDirty(); renderEditor(); }); }
+async function pickImageList(k,idx,sk){ openPicker(url=>{ const arr=getVal(S.draft,k); if(arr&&arr[idx]){ arr[idx][sk]=url; markDirty(); renderEditor(); } }); }
+async function openPicker(cb){
+  let items=[]; try{ items=await api('/api/admin/media'); }catch(e){ toast(e.message,1); }
+  const grid=items.map(m=>{ const isImg=(m.mime||'').startsWith('image/');
+    return `<button type="button" class="media-cell" style="text-align:left;border:none;padding:0" onclick="__pick('${esc(m.path)}')">
+      <div class="thumb" style="${isImg?`background-image:url('${mediaUrl(m.path)}')`:''}">${isImg?'':fileIcon(m.mime)}</div>
+      <div class="meta"><div class="nm">${esc(m.name)}</div></div></button>`;}).join('');
+  window.__pick=(u)=>{ cb(u); closeModal(); delete window.__pick; };
+  modal('Choose an image', `<label class="btn primary sm" style="margin-bottom:12px"><input type="file" style="display:none" onchange="__pickUpload(this.files)">⬆ Upload new</label>
+    <div class="media-grid">${grid||'<p class="muted">No media yet — upload one.</p>'}</div>`);
+  window.__pickUpload=async(files)=>{ const fd=new FormData(); fd.append('file',files[0]); fd.append('tag','Website Images'); try{ const r=await api('/api/admin/media',{method:'POST',body:fd}); cb(r[0].path); closeModal(); }catch(e){ toast(e.message,1);} };
+}
+
+/* ================================================= USERS */
+async function renderUsers(){
+  setTitle('Users & Roles'); const v=document.getElementById('view');
+  v.innerHTML=`<div style="display:flex;align-items:center;margin-bottom:14px"><p class="muted" style="margin:0;flex:1">Add team members and set what they can do.</p><button class="btn primary" onclick="userForm()">+ Add user</button></div><div class="card" id="ut">Loading…</div>`;
+  let users=[]; try{ users=await api('/api/admin/users'); }catch(e){ toast(e.message,1); }
+  const roleNames={super_admin:'Super Admin',admin:'Admin',editor:'Content Editor',designer:'Designer',viewer:'Viewer',client:'Viewer (legacy)'};
+  document.getElementById('ut').innerHTML=`<table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>${
+    users.map(u=>`<tr><td>${esc(u.name||'—')}</td><td>${esc(u.email)}</td><td>${roleNames[u.role]||u.role}</td>
+      <td>${u.active===false?'<span class="badge draft"><span class="dot"></span>Disabled</span>':'<span class="badge published"><span class="dot"></span>Active</span>'}</td>
+      <td style="text-align:right"><button class="btn ghost sm" onclick='userForm(${JSON.stringify(JSON.stringify(u))})'>Edit</button>
+      <button class="btn ghost sm" style="color:var(--danger)" onclick="delUser('${u._id}')">Delete</button></td></tr>`).join('')
+    }</tbody></table>`;
+}
+function userForm(json){ const u=json?JSON.parse(json):null; const roles=[['editor','Content Editor — edit & submit'],['designer','Designer — media & visuals'],['admin','Admin — edit, review & publish'],['super_admin','Super Admin — full control'],['viewer','Viewer — read only']];
+  modal(u?'Edit user':'Add user',
+    `<div class="field"><label>Name</label><input type="text" id="u_name" value="${u?esc(u.name||''):''}"></div>
+     <div class="field"><label>Email</label><input type="text" id="u_email" value="${u?esc(u.email):''}" ${u?'readonly':''}></div>
+     <div class="field"><label>Role</label><select id="u_role">${roles.map(r=>`<option value="${r[0]}" ${u&&u.role===r[0]?'selected':''}>${r[1]}</option>`).join('')}</select></div>
+     <div class="field"><label>${u?'Reset password (leave blank to keep)':'Password'}</label><input type="text" id="u_pass" placeholder="${u?'unchanged':'set a password'}"></div>
+     ${u?`<div class="field"><label>Active</label><label class="switch"><input type="checkbox" id="u_active" ${u.active!==false?'checked':''}><span class="sl"></span></label></div>`:''}`,
+    [{label:'Save',cls:'primary',fn:async()=>{
+      const body={ name:val('u_name'), role:val('u_role') };
+      if(val('u_pass')) body.password=val('u_pass');
+      try{
+        if(u){ if(document.getElementById('u_active')) body.active=document.getElementById('u_active').checked; await api('/api/admin/users/'+u._id,{method:'PATCH',body:JSON.stringify(body)}); }
+        else { body.email=val('u_email'); if(!body.password){ toast('Set a password',1); return; } await api('/api/admin/users',{method:'POST',body:JSON.stringify(body)}); }
+        closeModal(); toast('Saved'); renderUsers();
+      }catch(e){ toast(e.message,1); }
+    }}]);
+}
+async function delUser(id){ if(!confirm('Delete this user?')) return; try{ await api('/api/admin/users/'+id,{method:'DELETE'}); toast('Deleted'); renderUsers(); }catch(e){ toast(e.message,1); } }
+
+/* ================================================= MODAL + HELPERS */
+function modal(title,bodyHtml,actions){
+  const acts=(actions||[]).map((a,i)=>`<button class="btn ${a.cls||''}" id="ma_${i}">${a.label}</button>`).join('');
+  document.getElementById('modalRoot').innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">
+    <div class="mh"><h3>${esc(title)}</h3><button class="btn ghost sm" onclick="closeModal()">✕</button></div>
+    <div class="mb">${bodyHtml}<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:18px">${acts||''}</div></div></div></div>`;
+  (actions||[]).forEach((a,i)=>document.getElementById('ma_'+i).onclick=a.fn);
+}
+function closeModal(){ document.getElementById('modalRoot').innerHTML=''; }
+function val(id){ const e=document.getElementById(id); return e?e.value.trim():''; }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function mediaUrl(p){ if(!p) return ''; if(/^https?:|^data:/.test(p)) return p; if(p.startsWith('/uploads/')) return CFG.api+p; return CFG.siteOrigin+p; }
+function fileIcon(m){ if((m||'').startsWith('video/')) return '🎞️'; if((m||'').includes('pdf')) return '📄'; return '🗎'; }
+function fmt(d){ if(!d) return '—'; const dt=new Date(d); return dt.toLocaleDateString()+' '+dt.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); }
+function fmtSize(b){ if(!b) return ''; if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(0)+' KB'; return (b/1048576).toFixed(1)+' MB'; }
+
+/* go! */
+boot();
+</script>
+</body>
+</html>

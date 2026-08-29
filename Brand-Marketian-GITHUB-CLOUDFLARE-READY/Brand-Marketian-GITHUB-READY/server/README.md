@@ -33,9 +33,36 @@ Node + Express + MongoDB backend for the Brand Marketian website.
 | CRUD | /api/admin/posts, /api/admin/case-studies, /api/admin/jobs |
 | GET | /api/admin/applications, /api/admin/subscribers |
 
+### CMS content workflow (draft → review → publish)
+
+| Method | Path | Who |
+|---|---|---|
+| GET | /api/admin/content | all signed-in |
+| GET | /api/admin/content/:key | all signed-in |
+| PUT | /api/admin/content/:key/draft | editor+ |
+| POST | /api/admin/content/:key/submit | editor+ |
+| POST | /api/admin/content/:key/revert-draft | editor+ |
+| POST | /api/admin/content/:key/approve | admin+ |
+| POST | /api/admin/content/:key/publish | admin+ |
+| GET | /api/admin/content/:key/versions | all signed-in |
+| POST | /api/admin/content/:key/restore/:versionId | editor+ |
+
+`data` = the published content the public site reads via `GET /api/content/:key`
+(unchanged). `draft` never reaches the public site until someone publishes.
+
+### Media & users
+
+| Method | Path | Who |
+|---|---|---|
+| GET / POST / PATCH | /api/admin/media | editor+ (delete: admin+) |
+| GET / POST / PATCH / DELETE | /api/admin/users | super_admin |
+
+Roles: `super_admin`, `admin`, `editor`, `designer`, `viewer`
+(`client` is legacy, treated as viewer). Only super_admin and admin can publish.
+
 ## Collections
 
-leads, subscribers, posts, caseStudies, jobs, applications, users.
+leads, subscribers, posts, caseStudies, jobs, applications, users, siteContents, media.
 
 ## Wiring the frontend
 

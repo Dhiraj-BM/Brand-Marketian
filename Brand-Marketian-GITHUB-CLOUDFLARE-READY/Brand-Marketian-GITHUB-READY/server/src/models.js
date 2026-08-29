@@ -83,12 +83,39 @@ const UserSchema = new Schema({
   email: { type: String, required: true, unique: true, lowercase: true },
   passwordHash: { type: String, required: true },
   name: String,
-  role: { type: String, enum: ['admin', 'editor', 'client'], default: 'admin' }
+  // super_admin/admin/editor/designer/viewer are the CMS roles.
+  // 'client' is kept for backwards compatibility (treated as viewer).
+  role: { type: String, enum: ['super_admin', 'admin', 'editor', 'designer', 'viewer', 'client'], default: 'editor' },
+  active: { type: Boolean, default: true }
 }, { timestamps: true });
 
+// A snapshot of content, kept for version history / restore.
+const ContentVersionSchema = new Schema({
+  data: { type: Schema.Types.Mixed, default: {} },
+  savedBy: String,
+  note: String,
+  kind: { type: String, enum: ['published', 'draft'], default: 'published' },
+  at: { type: Date, default: Date.now }
+}, { _id: true });
+
+// One document per website page (key = 'home', 'services', ...) plus 'global'.
+// `data` is the PUBLISHED content the public site reads (unchanged, backwards
+// compatible). `draft` is the in-progress edit. Nothing reaches the public
+// site until an authorized user publishes, which copies draft -> data and
+// snapshots a version.
 const SiteContentSchema = new Schema({
   key: { type: String, required: true, unique: true, index: true }, // 'home', 'pricing', ...
-  data: { type: Schema.Types.Mixed, default: {} },
+  data: { type: Schema.Types.Mixed, default: {} },   // published (live)
+  draft: { type: Schema.Types.Mixed, default: {} },  // working draft
+  status: { type: String, enum: ['draft', 'in_review', 'approved', 'published'], default: 'published', index: true },
+  hasDraft: { type: Boolean, default: false },
+  submittedBy: String,
+  submittedAt: Date,
+  reviewedBy: String,
+  reviewedAt: Date,
+  publishedBy: String,
+  publishedAt: Date,
+  versions: { type: [ContentVersionSchema], default: [] },
   updatedBy: String
 }, { timestamps: true });
 
@@ -97,7 +124,9 @@ const MediaSchema = new Schema({
   path: String,
   mime: String,
   size: Number,
-  tag: String
+  tag: String,        // category: Logos, Icons, Website Images, ...
+  alt: String,
+  uploadedBy: String
 }, { timestamps: true });
 
 export const SiteContent = model('SiteContent', SiteContentSchema);

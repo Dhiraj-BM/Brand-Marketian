@@ -8,7 +8,7 @@ await connectDb();
 const hash = await bcrypt.hash(config.admin.password, 10);
 await User.updateOne(
   { email: config.admin.email },
-  { $set: { passwordHash: hash, name: 'Brand Marketian Admin', role: 'admin' } },
+  { $set: { passwordHash: hash, name: 'Brand Marketian Admin', role: 'super_admin', active: true } },
   { upsert: true }
 );
 
@@ -54,7 +54,23 @@ const home = {
   pricingTitle: 'Three plans. One that fits.',
   storiesTitle: 'Results, not screenshots'
 };
-await SiteContent.updateOne({ key: 'home' }, { $set: { data: home, updatedBy: 'seed' } }, { upsert: true });
+await SiteContent.updateOne({ key: 'home' }, { $setOnInsert: { data: home, updatedBy: 'seed', status: 'published' } }, { upsert: true });
+
+const global = {
+  companyName: 'Brand Marketian',
+  tagline: 'Marketing & Growth Agency for Indian Brands',
+  contactEmail: 'growth@brandmarketian.com',
+  contactPhone: '+91 96506 18193',
+  logo: '/logo.jpg',
+  favicon: '/favicon.ico',
+  instagram: 'https://www.instagram.com/brand.marketian/',
+  whatsapp: 'https://wa.me/919650618193',
+  linkedin: '',
+  footerText: '© Brand Marketian. Marketing that turns spend into countable enquiries.',
+  seoTitle: 'Brand Marketian | Marketing & Growth Agency for Indian Brands',
+  seoDescription: 'Brand Marketian runs your social media, paid ads and follow-up as one system — turning ad spend into countable enquiries for 50+ Indian brands.'
+};
+await SiteContent.updateOne({ key: 'global' }, { $setOnInsert: { data: global, updatedBy: 'seed', status: 'published' } }, { upsert: true });
 
 console.log('[seed] done. Admin:', config.admin.email);
 process.exit(0);
