@@ -20,5 +20,12 @@ export const config = {
   admin: {
     email: process.env.ADMIN_EMAIL || 'growth@brandmarketian.com',
     password: process.env.ADMIN_PASSWORD || 'changeme123'
+  },
+  creator: {
+    provider: process.env.CREATOR_PROVIDER || 'sample', // 'sample' | 'modash' | 'rapidapi'
+    modashKey: process.env.MODASH_API_KEY || '',
+    rapidapiKey: process.env.RAPIDAPI_KEY || '',
+    rapidapiHost: process.env.RAPIDAPI_HOST || '',
+    cacheTtlMs: Number(process.env.CREATOR_CACHE_TTL_MS || 24 * 60 * 60 * 1000)
   }
 };
