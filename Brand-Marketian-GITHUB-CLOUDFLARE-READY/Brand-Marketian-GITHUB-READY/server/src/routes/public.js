@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { Lead, Subscriber, Post, CaseStudy, Job, Application, SiteContent } from '../models.js';
 import { notifyLead } from '../notify.js';
 import { upload } from '../upload.js';
+import { getCreatorInsights } from '../creator.js';
 
 const router = Router();
 
@@ -75,6 +76,17 @@ router.get('/case-studies/:slug', async (req, res) => {
 router.get('/content/:key', async (req, res) => {
   const doc = await SiteContent.findOne({ key: req.params.key });
   res.json(doc ? doc.data : {});
+});
+
+// Instagram creator insights for the influencer-page lookup tool.
+// Returns the exact shape the website renders. Never throws to the client:
+// on any provider error it serves realistic sample data instead.
+router.get('/creator/:handle', async (req, res) => {
+  try {
+    res.json(await getCreatorInsights(req.params.handle));
+  } catch (e) {
+    res.status(200).json({ error: 'lookup_failed' });
+  }
 });
 
 router.get('/jobs', async (_req, res) => {
