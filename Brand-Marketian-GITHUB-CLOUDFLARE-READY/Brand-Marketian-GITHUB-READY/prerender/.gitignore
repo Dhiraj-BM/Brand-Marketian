@@ -1,0 +1,4 @@
+node_modules/
+_out/
+_shots/
+build-report.json
