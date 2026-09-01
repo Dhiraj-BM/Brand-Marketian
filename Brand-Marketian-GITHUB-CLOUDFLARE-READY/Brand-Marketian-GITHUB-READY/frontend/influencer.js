@@ -96,6 +96,8 @@
     var s = t.closest('.im-samples button');
     if (s) { var i2 = $('im-handle'); if (i2) i2.value = '@' + s.getAttribute('data-h'); analyze(s.getAttribute('data-h')); return; }
     var q = t.closest('.im-q-btn'); if (q) { toggleFaq(q); return; }
+    var sc = t.closest('[data-scroll]');
+    if (sc) { e.preventDefault(); var el = document.getElementById(sc.getAttribute('data-scroll')); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
   });
   document.addEventListener('keydown', function (e) {
     if (e.target && e.target.id === 'im-handle' && e.key === 'Enter') { e.preventDefault(); analyze(e.target.value || 'ananya.eats'); }
@@ -110,4 +112,39 @@
     var inp = $('im-handle');
     if (inp && document.activeElement !== inp && !inp.value) { pi = (pi + 1) % phs.length; inp.placeholder = 'paste an Instagram handle   ' + phs[pi]; }
   }, 2600);
+
+  /* ---- count-up numbers (animate to their real value on scroll) ---- */
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+  function fmtNum(n, decimals, grouped) {
+    if (decimals > 0) return n.toFixed(decimals);
+    var v = Math.round(n); return grouped ? v.toLocaleString('en-IN') : String(v);
+  }
+  function countUp(el) {
+    if (el.__cu) return; el.__cu = 1;
+    var target = (el.textContent || '').trim();
+    var m = target.match(/^(\D*?)([\d,]+(?:\.\d+)?)(.*)$/);
+    if (!m) return;                                   // no number to animate
+    var prefix = m[1], numStr = m[2], suffix = m[3];
+    var grouped = numStr.indexOf(',') > -1;
+    var decimals = (numStr.split('.')[1] || '').length;
+    var end = parseFloat(numStr.replace(/,/g, '')); if (isNaN(end)) return;
+    var dur = 1200, start = null;
+    function step(ts) {
+      if (start === null) start = ts;
+      var p = Math.min(1, (ts - start) / dur);
+      el.textContent = prefix + fmtNum(end * easeOut(p), decimals, grouped) + suffix;
+      if (p < 1) { requestAnimationFrame(step); }
+      else { var applied = el.getAttribute('data-cms-applied'); el.textContent = (applied && applied.length) ? applied : target; }
+    }
+    requestAnimationFrame(step);
+  }
+  var cObs = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) {
+    es.forEach(function (en) { if (en.isIntersecting) { countUp(en.target); cObs.unobserve(en.target); } });
+  }, { threshold: 0.4 }) : null;
+  function armCount() {
+    document.querySelectorAll('[data-countup]').forEach(function (el) {
+      if (cObs) cObs.observe(el); else countUp(el);
+    });
+  }
+  armCount(); setTimeout(armCount, 800); setTimeout(armCount, 2200);  // re-arm for late-injected content
 })();
