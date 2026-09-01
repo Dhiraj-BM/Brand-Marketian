@@ -166,6 +166,30 @@ a:hover{color:var(--color-accent-600)}
 .md-stat .n{font-family:var(--font-heading);font-weight:800;font-size:40px;line-height:1;color:var(--c);letter-spacing:-.02em}
 .md-stat .t{font-weight:700;font-size:14.5px;margin-top:6px;color:var(--color-text)}
 .md-stat .s{font-size:12.5px;color:color-mix(in srgb,var(--color-text) 55%,transparent);margin-top:2px}
+/* ── colourful pricing cards ── */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;align-items:stretch;margin-top:34px}
+.pcard{--pc:var(--color-accent);--pct:var(--color-accent-100);position:relative;display:flex;flex-direction:column;gap:11px;border-radius:22px;padding:26px 24px;background:linear-gradient(180deg,var(--pct),#fff 44%);border:1.5px solid color-mix(in srgb,var(--pc) 32%,transparent);transition:transform .3s cubic-bezier(.2,.9,.3,1),box-shadow .3s ease}
+.pcard:hover{transform:translateY(-8px);box-shadow:0 22px 48px color-mix(in srgb,var(--pc) 26%,transparent)}
+.pcard.feat{background:linear-gradient(165deg,var(--pc),color-mix(in srgb,var(--pc) 74%,#101014));color:#fff;border-color:transparent;box-shadow:0 20px 46px color-mix(in srgb,var(--pc) 42%,transparent)}
+.pcard.feat h3,.pcard.feat .pcard-price,.pcard.feat .pcard-price span,.pcard.feat .pcard-blurb,.pcard.feat .pcard-for,.pcard.feat .pcard-grp{color:#fff}
+.pcard-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pcard-ic{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:20px;font-weight:800;background:color-mix(in srgb,var(--pc) 16%,#fff);color:var(--pc)}
+.pcard.feat .pcard-ic{background:rgba(255,255,255,.18);color:#fff}
+.pcard-badge{font-weight:800;font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;padding:6px 11px;border-radius:999px;background:var(--pc);color:#fff;white-space:nowrap}
+.pcard.feat .pcard-badge{background:#fff;color:var(--pc)}
+.pcard h3{font-family:var(--font-heading);font-size:25px;margin:2px 0 0}
+.pcard-blurb{font-size:13px;line-height:1.5;opacity:.82;margin:0}
+.pcard-price{font-family:var(--font-heading);font-weight:900;font-size:36px;line-height:1;letter-spacing:-.02em;color:var(--pc);margin-top:2px}
+.pcard-price span{font-family:var(--font-body);font-weight:600;font-size:12.5px;opacity:.6}
+.pcard-for{font-size:11.5px;opacity:.6;margin:0}
+.pcard-cta{width:100%;justify-content:center;margin:8px 0 2px}
+.pcard.feat .pcard-cta.btn-primary{background:#fff;color:var(--pc);border-color:#fff;box-shadow:none}
+.pcard.feat .pcard-cta.btn-primary:hover{background:rgba(255,255,255,.9)}
+.pcard-grp{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.55;margin-top:2px}
+.pcard-list{list-style:none;margin:0;padding:0;display:grid;gap:9px;font-size:12.8px}
+.pcard-list li{display:flex;gap:9px;align-items:flex-start}
+.pcard-list li::before{content:"✓";flex:none;font-weight:800;color:var(--pc)}
+.pcard.feat .pcard-list li::before{color:#fff}
 </style>
 </helmet>
 
@@ -541,26 +565,24 @@ a:hover{color:var(--color-accent-600)}
 <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
 <div>
 <span class="tag tag-accent" style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase">Pricing</span>
-<h2 style="font-size:44px;margin:18px 0 6px" data-cms="pricingTitle">Three plans. One that fits.</h2>
+<h2 style="font-size:44px;margin:18px 0 6px" data-cms="pricingTitle">Plans that scale with you.</h2>
 <p style="font-size:16px;color:color-mix(in srgb, var(--color-text) 72%, transparent);max-width:52ch">Transparent monthly pricing in INR. Start where you are, scale up any month, no long lock-ins.</p>
 </div>
 <a class="btn btn-secondary" href="pricing.html" style="white-space:nowrap">Compare everything →</a>
 </div>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px;margin-top:34px;align-items:stretch">
-<sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
-<div class="card elev-sm" style="padding:var(--space-6);background:{{ p.bg }};outline:{{ p.outline }};height:100%;display:flex;flex-direction:column;gap:8px">
-<span class="tag tag-accent" style="align-self:flex-start;font-size:10px;background:{{ p.badgeBg }};color:{{ p.badgeColor }}">{{ p.badge }}</span>
-<h3 style="margin:0;font-size:28px">{{ p.name }}</h3>
-<p style="margin:0;font-size:13.5px;opacity:.75">{{ p.blurb }}</p>
-<div style="font-family:var(--font-heading);font-size:38px;line-height:1.1;margin-top:6px">{{ p.price }}<span style="font-family:var(--font-body);font-size:14px;opacity:.6"> /month</span></div>
-<p style="margin:0 0 4px;font-size:12.5px;opacity:.6">Best for {{ p.for }}</p>
-<div style="font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.55;margin-top:4px">{{ p.groupLabel }}</div>
-<ul style="list-style:none;margin:6px 0 0;padding:0;display:grid;gap:9px;font-size:13.5px">
-<sc-for list="{{ p.items }}" as="it" hint-placeholder-count="5">
-<li style="display:flex;gap:9px;align-items:flex-start"><span style="flex:none;color:var(--color-accent-700)">✦</span><span style="flex:1;min-width:0">{{ it }}</span></li>
-</sc-for>
+<div class="pgrid">
+<sc-for list="{{ plans }}" as="p" hint-placeholder-count="4">
+<div class="pcard {{ p.feat }}" style="--pc:{{ p.pc }};--pct:{{ p.pct }}">
+<div class="pcard-head"><span class="pcard-ic">{{ p.glyph }}</span><span class="pcard-badge">{{ p.badge }}</span></div>
+<h3>{{ p.name }}</h3>
+<p class="pcard-blurb">{{ p.blurb }}</p>
+<div class="pcard-price">{{ p.price }}<span>{{ p.unit }}</span></div>
+<p class="pcard-for">Best for {{ p.for }}</p>
+<a class="btn btn-primary pcard-cta" href="contact.html">{{ p.cta }}</a>
+<div class="pcard-grp">{{ p.groupLabel }}</div>
+<ul class="pcard-list">
+<sc-for list="{{ p.items }}" as="it" hint-placeholder-count="8"><li>{{ it }}</li></sc-for>
 </ul>
-<a class="btn btn-primary btn-block" href="contact.html" style="margin-top:auto">{{ p.cta }}</a>
 </div>
 </sc-for>
 </div>
@@ -815,22 +837,27 @@ class Component extends DCLogic {
         { n: '05', title: 'Optimize', note: "Weekly data reviews to double down on what works and cut what doesn't.", bg: 'var(--color-accent-100)', chip: 'var(--color-accent)' }
       ],
       plans: [
-        { name: 'Launch', badge: 'Starter', price: '₹19,999', for: 'solopreneurs & local businesses', cta: 'Get started',
-          blurb: 'For new brands building a consistent, professional presence.',
-          bg: 'var(--color-surface)', outline: 'none', badgeBg: 'var(--color-accent-100)', badgeColor: 'var(--color-accent-800)',
-          groupLabel: 'Social media management',
-          items: ['2 platforms (Instagram + Facebook)', '12 posts + 4 reels / month', '₹3–5K/month audience-building ads included', 'Monthly content calendar', 'Community and comment management', 'Monthly performance report'] },
-        { name: 'Growth', badge: '★ Most popular', price: '₹39,999', for: 'D2C, startups & growing SMBs', cta: 'Book a free audit',
-          blurb: 'For brands ready to add paid ads and generate real leads.',
-          bg: 'var(--color-accent-100)', outline: '2px solid var(--color-accent)', badgeBg: 'var(--color-accent)', badgeColor: 'var(--color-bg)',
-          groupLabel: 'Everything in Launch, plus',
-          items: ['4 platforms (+ LinkedIn, YouTube)', '20 posts + 8 reels / month', 'Meta + Google Ads management', '6 ad creative sets + copy / month', 'Landing pages and lead forms', 'Ad budget up to ₹1L / month managed'] },
-        { name: 'Dominate', badge: 'Full funnel', price: '₹89,999', for: 'scaling brands & enterprises', cta: 'Talk to us',
-          blurb: 'Full-funnel, end-to-end marketing run as your growth team.',
-          bg: 'var(--color-surface)', outline: 'none', badgeBg: 'var(--color-accent-100)', badgeColor: 'var(--color-accent-800)',
-          groupLabel: 'Everything in Growth, plus',
-          items: ['All platforms + influencer coordination', 'Google + YouTube + programmatic ads', 'SEO + Google Business Profile', 'Email and WhatsApp automation', 'Website management and maintenance', 'Dedicated growth team + weekly reviews'] }
-      ],
+      { name: 'Launch', badge: 'Starter', glyph: '\u2726', price: '\u20b924,900', unit: ' /mo', feat: '',
+        pc: 'var(--bm-teal)', pct: 'var(--bm-teal-100)',
+        for: 'solopreneurs & local businesses', cta: 'Get started',
+        blurb: 'For new brands building a consistent, professional presence.', groupLabel: 'Social media management',
+        items: ['2 platforms (Instagram + Facebook)', '12 posts + 4 reels / month', '\u20b93\u20135K/month audience-building ads included', 'Monthly content calendar', 'Page setup & optimization', 'Community & comment management', 'Monthly performance report', 'Dedicated account manager'] },
+      { name: 'Growth', badge: '\u2605 Most popular', glyph: '\u2605', price: '\u20b949,999', unit: ' /mo', feat: 'feat',
+        pc: 'var(--color-accent)', pct: 'var(--color-accent-100)',
+        for: 'D2C, startups & growing SMBs', cta: 'Book a free audit',
+        blurb: 'For brands ready to add paid ads and generate real leads.', groupLabel: 'Everything in Launch, plus',
+        items: ['4 platforms (+ LinkedIn, YouTube)', '20 posts + 8 reels / month', 'Meta + Google Ads management', '6 ad creative sets + copy / month', 'Landing page & lead forms', 'WhatsApp lead nurturing setup', 'Bi-weekly strategy call + reports', 'Ad budget up to \u20b91L / month managed'] },
+      { name: 'Dominate', badge: 'Full funnel', glyph: '\u2b22', price: '\u20b989,999', unit: ' /mo', feat: '',
+        pc: 'var(--bm-plum)', pct: 'var(--bm-plum-100)',
+        for: 'scaling brands & enterprises', cta: 'Talk to us',
+        blurb: 'Full-funnel, end-to-end marketing run as your growth team.', groupLabel: 'Everything in Growth, plus',
+        items: ['All platforms + influencer coordination', 'Posts, reels & stories as per requirement', 'Google + YouTube + programmatic ads', 'SEO + Google My Business', 'Email & WhatsApp automation', 'Website management & maintenance', 'Website development available (extra)', 'Dedicated growth team + weekly reviews'] },
+      { name: 'Custom', badge: 'Bespoke', glyph: '\u221e', price: 'Custom', unit: '', feat: '',
+        pc: 'var(--color-accent-2)', pct: 'var(--color-accent-2-100)',
+        for: 'brands that want it all done for them', cta: 'Request a proposal',
+        blurb: 'We become your full marketing and growth engine, built entirely around your goals.', groupLabel: 'Everything in Dominate, plus',
+        items: ['End-to-end marketing across every channel', 'Business development from scratch', 'Brand, website & funnel built for you', 'Dedicated strategy + growth team', 'Scales with your business, month on month'] }
+    ],
       posts: [
         { tag: 'Playbook', title: 'The festive ad calendar we run for D2C brands', read: '6 min read', thumb: this.bg(this.res('mediaD2c', 'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=400&q=70')) },
         { tag: 'Benchmarks', title: 'What a good CPL actually looks like in India in 2026', read: '4 min read', thumb: this.bg(this.res('pillar2', 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=400&q=70')) },
