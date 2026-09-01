@@ -351,7 +351,7 @@ a:hover{color:var(--color-accent-600)}
       <p style="font-size:16px;line-height:1.6;max-width:52ch;color:color-mix(in srgb, var(--color-text) 76%, transparent)" data-cms="homeInfSub">The right Indian creators, briefs that convert, and campaigns measured in orders and revenue — not vanity views.</p>
       <a class="btn btn-primary" href="influencer-marketing.html" style="margin-top:22px;padding:12px 26px" data-cms="homeInfCta">Explore influencer marketing →</a>
     </div>
-    <dc-import name="Media" query="creator,phone,camera" label="Creators" tone="orange" lock="31" hint-size="100%,240px" style="width:100%;height:240px"></dc-import>
+    <dc-import name="Media" src="https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=1200&q=70" label="Creators" tone="orange" lock="31" hint-size="100%,240px" style="width:100%;height:240px"></dc-import>
   </div>
 </section>
 
@@ -361,7 +361,7 @@ a:hover{color:var(--color-accent-600)}
 <p style="max-width:58ch;font-size:16px;color:color-mix(in srgb, var(--color-text) 72%, transparent)">Half our accounts sell to consumers, half sell to businesses. We do not run the same plan for both, the funnel, the creative and the metric all change.</p>
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:22px;margin-top:34px">
 <article class="card elev-sm" style="padding:var(--space-6)">
-<dc-import name="Media" src="{{ mood.d2cSrc }}" label="{{ mood.d2cLabel }}" tone="orange" stat="31%" stat-label="repeat revenue" lock="14" hint-size="100%,170px" style="width:100%;height:170px"></dc-import>
+<dc-import name="Media" src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=70" label="{{ mood.d2cLabel }}" tone="orange" stat="31%" stat-label="repeat revenue" lock="14" hint-size="100%,170px" style="width:100%;height:170px"></dc-import>
 <span class="tag tag-accent" style="align-self:flex-start;font-size:10px">D2C &amp; consumer</span>
 <h3 style="font-size:28px;margin:0">Sell more, without discounting</h3>
 <p class="card-body" style="font-size:14.5px;flex:none">Reels and creator content at the top, catalogue ads in the middle, WhatsApp and email retention at the bottom, judged on contribution margin, not vanity ROAS.</p>
@@ -377,7 +377,7 @@ a:hover{color:var(--color-accent-600)}
 <a class="btn btn-secondary" href="industries.html" style="align-self:flex-start;margin-top:8px">See the D2C playbook →</a>
 </article>
 <article class="card elev-sm" style="padding:var(--space-6);background:var(--color-accent-100)">
-<dc-import name="Media" src="{{ mood.b2bSrc }}" label="{{ mood.b2bLabel }}" tone="cobalt" stat="11 / wk" stat-label="qualified leads" lock="15" hint-size="100%,170px" style="width:100%;height:170px"></dc-import>
+<dc-import name="Media" src="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1200&q=70" label="{{ mood.b2bLabel }}" tone="cobalt" stat="11 / wk" stat-label="qualified leads" lock="15" hint-size="100%,170px" style="width:100%;height:170px"></dc-import>
 <span class="tag tag-accent" style="align-self:flex-start;font-size:10px;background:var(--color-accent);color:var(--color-bg)">B2B &amp; enterprise</span>
 <h3 style="font-size:28px;margin:0">Pipeline your sales team believes in</h3>
 <p class="card-body" style="font-size:14.5px;flex:none">Long cycles, many stakeholders, one decision. We build demand with search and content, capture it with intent campaigns, and report to closed-won, not to form fills.</p>
@@ -583,7 +583,7 @@ a:hover{color:var(--color-accent-600)}
 <div class="card elev-sm" style="background:var(--color-bg);padding:var(--space-6);justify-content:space-between;grid-column:span 2">
 <p style="font-family:var(--font-heading);font-size:25px;line-height:1.32;margin:0">“{{ quote.text }}”</p>
 <div style="display:flex;align-items:center;gap:14px;margin-top:22px">
-<div style="width:46px;height:46px;border-radius:50%;background:var(--color-surface);display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-size:9px;opacity:.6">PHOTO</div>
+<div style="width:46px;height:46px;border-radius:50%;background:var(--color-surface);display:grid;place-items:center;color:color-mix(in srgb, var(--color-text) 45%, transparent)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
 <div><div style="font-size:14.5px;font-weight:600">{{ quote.name }}</div><div style="font-size:13px;opacity:.65">{{ quote.role }} · {{ quote.co }}</div></div>
 </div>
 </div>
@@ -699,7 +699,12 @@ class Component extends DCLogic {
   }
   bg(src) { return "url('" + src + "')"; }
   pillarImage(i) {
-    return "url('" + this.res('pillar' + (i + 1), 'assets/pillar' + (i + 1) + '.png') + "')";
+    const stock = [
+      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=70',
+      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=70',
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=70'
+    ][i] || ('assets/pillar' + (i + 1) + '.png');
+    return "url('" + this.res('pillar' + (i + 1), stock) + "')";
   }
   renderVals() {
     const mood = this.imagery();
@@ -827,9 +832,9 @@ class Component extends DCLogic {
           items: ['All platforms + influencer coordination', 'Google + YouTube + programmatic ads', 'SEO + Google Business Profile', 'Email and WhatsApp automation', 'Website management and maintenance', 'Dedicated growth team + weekly reviews'] }
       ],
       posts: [
-        { tag: 'Playbook', title: 'The festive ad calendar we run for D2C brands', read: '6 min read', thumb: this.bg(this.res('mediaD2c', 'assets/d2c.png')) },
-        { tag: 'Benchmarks', title: 'What a good CPL actually looks like in India in 2026', read: '4 min read', thumb: this.bg(this.res('pillar2', 'assets/pillar2.png')) },
-        { tag: 'Teardown', title: 'Nine reels that outperformed a ₹2L ad budget', read: '5 min read', thumb: this.bg(this.res('pillar1', 'assets/pillar1.png')) }
+        { tag: 'Playbook', title: 'The festive ad calendar we run for D2C brands', read: '6 min read', thumb: this.bg(this.res('mediaD2c', 'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=400&q=70')) },
+        { tag: 'Benchmarks', title: 'What a good CPL actually looks like in India in 2026', read: '4 min read', thumb: this.bg(this.res('pillar2', 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=400&q=70')) },
+        { tag: 'Teardown', title: 'Nine reels that outperformed a ₹2L ad budget', read: '5 min read', thumb: this.bg(this.res('pillar1', 'https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=400&q=70')) }
       ],
       quote: quotes[this.state.q % quotes.length],
       prevQuote: () => this.setState(s => ({ q: (s.q + quotes.length - 1) % quotes.length })),
