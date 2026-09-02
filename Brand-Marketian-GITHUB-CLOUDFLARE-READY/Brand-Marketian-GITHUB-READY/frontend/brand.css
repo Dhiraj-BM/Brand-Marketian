@@ -293,3 +293,72 @@ body.bm-menu-open .bm-mobile-menu{ transform:none; opacity:1; pointer-events:aut
 .card--image .card-title{ color:#ffffff; }
 .card--image .card-body{ color:#e7e7ea; opacity:1; }
 .card--image .card-kicker{ color:var(--color-accent-300); }
+
+/* ============================================================
+   MOBILE LAYER v3 — added after the site was pre-rendered to
+   static HTML. The runtime that used to reflow the fixed grids
+   is gone, so this forces a clean phone layout with structural
+   selectors that do not depend on inline-style string matching.
+   Desktop (>820px) is untouched.
+   ============================================================ */
+@media (max-width: 820px){
+  /* every explicit multi-column grid collapses to one column */
+  [style*="grid-template-columns"]{ grid-template-columns: 1fr !important; }
+  /* side rails release once the layout stacks */
+  [style*="position: sticky"], [style*="position:sticky"]{ position: static !important; top: auto !important; }
+  /* the wide testimonial card stops spanning two tracks */
+  [style*="grid-column: span 2"], [style*="grid-column:span 2"]{ grid-column: auto !important; }
+}
+
+@media (max-width: 640px){
+  html, body{ overflow-x: hidden; }
+
+  /* comfortable gutters on the 1240px section wrappers */
+  [style*="max-width: 1240px"], [style*="max-width:1240px"]{
+    padding-left: 16px !important; padding-right: 16px !important;
+  }
+  /* trim the tall desktop vertical rhythm */
+  [style*="padding: 72px"], [style*="padding: 76px"], [style*="padding: 64px"],
+  [style*="padding: 56px"], [style*="padding: 52px"], [style*="padding:72px"], [style*="padding:64px"]{
+    padding-top: 40px !important; padding-bottom: 32px !important;
+  }
+
+  /* fluid headings */
+  h1{ font-size: clamp(27px, 8vw, 38px) !important; line-height: 1.08 !important; }
+  h2{ font-size: clamp(23px, 6.2vw, 32px) !important; line-height: 1.14 !important; }
+  h3{ font-size: clamp(19px, 5vw, 25px) !important; }
+
+  /* cards feel oversized on a phone — tighten them (.pcard tuned in its own block) */
+  .card{ padding: 18px !important; border-radius: 16px !important; }
+  .card > *{ max-width: 100%; }
+
+  /* the pillar cards use a 520px min-height that towers on a phone */
+  [style*="min-height: 520px"], [style*="min-height:520px"]{ min-height: 340px !important; }
+  /* the hero mock panel keeps its height (its 3 layers are absolutely positioned
+     and clip if shortened) — just let it breathe below the copy */
+  [style*="height: 432px"], [style*="height:432px"]{ margin-top: 12px; }
+
+  /* images never push the page wide */
+  img{ max-width: 100% !important; height: auto; }
+
+  /* any inline-scroll wrapper must contain its child, not grow the page */
+  [style*="overflow-x: auto"], [style*="overflow-x:auto"], [style*="overflow: auto"]{
+    max-width: 100% !important; -webkit-overflow-scrolling: touch;
+  }
+
+  /* wide comparison tables: smaller type + scroll inside their own box */
+  table{ font-size: 11.5px; }
+  table.table, table.bm-table{ display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table.table > *, table.bm-table > *{ min-width: 560px; }
+
+  /* circular avatar rows (About "the pod", etc.) — force an explicit square so
+     they don't collapse to 0 when their grid/flex parent reflows */
+  [style*="aspect-ratio: 1"], [style*="aspect-ratio:1"]{
+    width: 180px !important; height: 180px !important; aspect-ratio: auto !important;
+    flex: none !important; margin-inline: auto;
+  }
+  /* portrait media tiles (case studies "Reel / Ad set / Before / After") */
+  [style*="aspect-ratio: 4/5"], [style*="aspect-ratio:4/5"], [style*="aspect-ratio: 4 / 5"]{
+    max-width: 260px; margin-inline: auto;
+  }
+}

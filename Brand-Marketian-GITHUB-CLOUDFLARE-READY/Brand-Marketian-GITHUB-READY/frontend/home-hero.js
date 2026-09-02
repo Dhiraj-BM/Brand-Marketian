@@ -50,7 +50,7 @@
     function start() {
       if (reduce) return;
       stop();
-      timer = setInterval(function () { if (!paused) go(cur + 1); }, 4200);
+      timer = setInterval(function () { if (!paused) go(cur + 1); }, 2500);
     }
     function stop() { if (timer) { clearInterval(timer); timer = null; } }
 

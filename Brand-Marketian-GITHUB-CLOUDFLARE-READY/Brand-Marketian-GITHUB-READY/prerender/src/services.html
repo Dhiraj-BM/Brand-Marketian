@@ -148,7 +148,7 @@
 <div style="max-width:1240px;margin:0 auto;padding:56px 32px;display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:center">
 <div class="card elev-sm" style="background:var(--color-bg);padding:var(--space-6)">
 <p style="font-family:var(--font-heading);font-size:25px;line-height:1.32;margin:0">“{{ active.quote }}”</p>
-<div style="display:flex;align-items:center;gap:14px;margin-top:20px"><div style="width:44px;height:44px;border-radius:50%;background:var(--color-surface);display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-size:9px;opacity:.6">PHOTO</div><div><div style="font-size:14.5px;font-weight:600">Client name</div><div style="font-size:13px;opacity:.65">Founder · {{ active.quoteCo }}</div></div></div>
+<div style="display:flex;align-items:center;gap:14px;margin-top:20px"><div style="width:44px;height:44px;border-radius:50%;background:var(--color-surface);display:grid;place-items:center;color:color-mix(in srgb, var(--color-text) 45%, transparent)"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><div style="font-size:14.5px;font-weight:600">Client name</div><div style="font-size:13px;opacity:.65">Founder · {{ active.quoteCo }}</div></div></div>
 </div>
 <div class="card elev-sm" style="background:var(--color-accent-2-100);padding:var(--space-6)">
 <div style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.6">Headline result</div>
@@ -177,7 +177,7 @@ class Component extends DCLogic {
     return [
       { name: 'Performance / paid ads', kicker: 'Service · Performance ads', headline: 'Every rupee tracked to a result.',
         sub: 'Meta, Google and YouTube campaigns engineered for ROI, creative, structure, bidding and retargeting, reviewed weekly against your CPL and ROAS targets.',
-        priceNote: 'Included in Growth · ₹39,999/mo', imageNote: 'ads dashboard + creative set',
+        priceNote: 'Included in Growth · ₹49,999/mo', imageNote: 'ads dashboard + creative set',
         pains: ['Boosting posts instead of running structured campaigns', 'No tracking, so no idea which ad brought the lead', 'Creative fatigue after two weeks', 'Agency reports reach, not revenue'],
         gains: ['Full-funnel campaign structure from day one', 'Server-side tracking and a single source of truth', '6 fresh creative sets a month, A/B tested', 'One number we own: cost per qualified lead'],
         included: ['Meta (Instagram + Facebook) ads', 'Google Search, Display & YouTube', 'Ad creatives & A/B testing', 'Landing pages & lead forms', 'Retargeting & funnel building', 'ROAS-focused optimization'],
