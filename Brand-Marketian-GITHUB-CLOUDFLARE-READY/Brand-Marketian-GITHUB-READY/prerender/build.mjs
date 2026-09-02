@@ -56,6 +56,11 @@ const strip = () => {
   document.querySelectorAll('[data-dc-tpl]').forEach((el) => el.removeAttribute('data-dc-tpl'));
   document.querySelectorAll('[data-dc-scope]').forEach((el) => el.removeAttribute('data-dc-scope'));
 
+  // belt & braces: never ship enhance.js's injected markup — it must be rebuilt live
+  document.querySelectorAll('.bm-hamburger, .bm-mobile-menu').forEach((el) => el.remove());
+  document.querySelectorAll('.bm-bar-actions').forEach((el) => el.classList.remove('bm-bar-actions'));
+  document.body.classList.remove('bm-menu-open');
+
   return {
     text: (document.body.innerText || '').trim().length,
     links: document.querySelectorAll('a[href]').length,
@@ -71,7 +76,12 @@ for (const file of pages) {
   await page.setRequestInterception(true);
   page.on('request', (r) => {
     const u = r.url();
+    // block the slow CMS API so authored copy is baked in
     if (u.includes('brand-marketian-api.onrender.com') || /brandmarketian\.com\/api\//.test(u)) return r.abort();
+    // block the progressive-enhancement scripts during the build so they do NOT
+    // inject their markup (hamburger, mobile menu, swipe hooks) into the snapshot.
+    // They stay referenced in <head> and run fresh on the live static page.
+    if (/\/(enhance|cms|home-hero|hero-flow|influencer)\.js(\?|$)/.test(u)) return r.abort();
     r.continue();
   });
   const warnings = [];
