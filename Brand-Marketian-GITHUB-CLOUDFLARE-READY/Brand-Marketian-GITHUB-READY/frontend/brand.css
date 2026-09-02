@@ -334,9 +334,11 @@ body.bm-menu-open .bm-mobile-menu{ transform:none; opacity:1; pointer-events:aut
 
   /* the pillar cards use a 520px min-height that towers on a phone */
   [style*="min-height: 520px"], [style*="min-height:520px"]{ min-height: 340px !important; }
-  /* the hero mock panel keeps its height (its 3 layers are absolutely positioned
-     and clip if shortened) — just let it breathe below the copy */
-  [style*="height: 432px"], [style*="height:432px"]{ margin-top: 12px; }
+  /* hide the busy hero "dashboard" mock on phones — its 3 absolutely-positioned
+     layers overflow a narrow screen and overlap the section below. The hero copy
+     and CTAs carry the page on mobile. */
+  [style*="height: 432px"], [style*="height:432px"]{ display: none !important; }
+  .bm-hero-bg{ padding-bottom: 8px; }
 
   /* images never push the page wide */
   img{ max-width: 100% !important; height: auto; }

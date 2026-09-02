@@ -17,6 +17,9 @@
     if (!stage || stage.__bmHeroRotator) return;
     stage.__bmHeroRotator = true;
 
+    // hidden on mobile (display:none) — nothing to rotate
+    if (!stage.offsetParent && getComputedStyle(stage).display === 'none') return;
+
     var slides = Array.prototype.slice.call(stage.children).filter(function (el) {
       return el !== dotWrap;
     });
