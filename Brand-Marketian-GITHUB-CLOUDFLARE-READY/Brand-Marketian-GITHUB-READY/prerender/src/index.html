@@ -200,8 +200,15 @@ a:hover{color:var(--color-accent-600)}
 .pcard-price{font-size:40px}
 .pcard-list{font-size:13.5px;gap:8px}
 }
-/* hero background wash — cooler tone so the section reads calm, not busy */
-.bm-hero-bg{background:radial-gradient(120% 78% at 84% 6%,color-mix(in srgb,var(--color-accent-2) 13%,transparent),transparent 58%),linear-gradient(180deg,var(--color-accent-2-100) 0%,#eef3fb 40%,var(--color-bg) 82%);border-bottom:1px solid var(--color-divider)}
+/* hero background — cool wash with two slow-drifting colour blobs */
+.bm-hero-bg{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--color-accent-2-100) 0%,#eef3fb 44%,var(--color-bg) 86%);border-bottom:1px solid var(--color-divider)}
+.bm-hero-bg::before,.bm-hero-bg::after{content:"";position:absolute;border-radius:50%;filter:blur(64px);pointer-events:none;z-index:0;will-change:transform}
+.bm-hero-bg::before{width:480px;height:480px;left:-130px;top:-150px;opacity:.55;background:radial-gradient(circle at 35% 35%,color-mix(in srgb,var(--color-accent-2) 46%,transparent),transparent 70%);animation:bm-blob1 28s ease-in-out infinite}
+.bm-hero-bg::after{width:520px;height:520px;right:-150px;top:-60px;opacity:.4;background:radial-gradient(circle at 60% 45%,color-mix(in srgb,var(--bm-teal) 40%,transparent),transparent 70%);animation:bm-blob2 36s ease-in-out infinite}
+.bm-hero-bg>*{position:relative;z-index:1}
+@keyframes bm-blob1{0%,100%{transform:translate(0,0)}50%{transform:translate(120px,80px)}}
+@keyframes bm-blob2{0%,100%{transform:translate(0,0)}50%{transform:translate(-100px,70px)}}
+@media (prefers-reduced-motion:reduce){.bm-hero-bg::before,.bm-hero-bg::after{animation:none}}
 </style>
 </helmet>
 
