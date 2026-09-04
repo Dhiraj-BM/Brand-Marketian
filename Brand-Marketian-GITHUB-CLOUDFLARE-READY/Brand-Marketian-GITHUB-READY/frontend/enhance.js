@@ -115,7 +115,51 @@
     });
   }
 
-  function boot() { initNav(); initHeroSwipe(); initStorySwipe(); }
+  /* ---------- 4. Footer lead-capture form ----------
+     The static build strips the design-canvas runtime that used to own this
+     form's submit handler (see prerender/build.mjs: it deletes every
+     <script type="text/x-dc"> block). This form appears on every page, so
+     re-wire it here rather than per-page. No-ops if the fields aren't on
+     the page, or if it's already wired (fires once per page load). */
+  function apiBase() {
+    var m = document.querySelector('meta[name="bm-api"]');
+    return ((m && m.getAttribute('content')) || window.BM_API || 'https://brand-marketian-api.onrender.com').replace(/\/$/, '');
+  }
+  function initFooterForm() {
+    var nameEl = document.getElementById('bmf_name');
+    if (!nameEl || nameEl.__bmWired) return;
+    var card = nameEl.closest('div[style*="neutral-800"]');
+    var btn = card && card.querySelector('button.btn-primary');
+    if (!btn) return;
+    nameEl.__bmWired = true;
+
+    var g = function (id) { var el = document.getElementById(id); return el ? String(el.value || '').trim() : ''; };
+    var sending = false;
+    var label = btn.querySelector('span') || btn;
+    btn.addEventListener('click', function () {
+      if (sending) return;
+      var name = g('bmf_name'), email = g('bmf_email');
+      if (!name || !email) { alert('Please add your name and email so we can reply.'); return; }
+      sending = true;
+      label.textContent = 'Sent, we’ll reply within 48 hrs ✓';
+      // keepalive lets the request finish even as we navigate away, so we can
+      // redirect instantly without waiting on the API to wake up.
+      try {
+        fetch(apiBase() + '/api/leads', {
+          method: 'POST', keepalive: true,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name, email: email, phone: g('bmf_phone'),
+            services: [g('bmf_service')].filter(Boolean), budget: g('bmf_budget'),
+            message: g('bmf_grow'), page: (location.pathname || '/'), source: 'footer'
+          })
+        }).catch(function () {});
+      } catch (e) {}
+      window.location.href = 'thank-you.html';
+    });
+  }
+
+  function boot() { initNav(); initHeroSwipe(); initStorySwipe(); initFooterForm(); }
   if (document.readyState === 'complete') setTimeout(boot, 300);
   else window.addEventListener('load', function () { setTimeout(boot, 300); });
 })();
