@@ -130,36 +130,52 @@ async function fromModash(handle) {
   };
 }
 
-/* ---------- provider: RapidAPI (generic Instagram scraper) ----------
-   RapidAPI has many Instagram endpoints with DIFFERENT response shapes.
-   This reads the most common field names; adjust the paths marked ADJUST
-   to match the exact endpoint you subscribe to. */
+/* ---------- provider: RapidAPI (Instagram Looter, free tier) ----------
+   Wired against "Instagram Looter" (instagram-looter2.p.rapidapi.com) —
+   confirmed working on its $0/mo Basic plan (150 requests/month, no card
+   required). Two calls per lookup, both cached for CREATOR_CACHE_TTL_MS:
+     1. GET /profile?username=<handle>     -> followers, name, avatar, bio
+     2. GET /user-feeds?id=<id>&count=12   -> recent posts for engagement
+   If you switch to a different RapidAPI Instagram listing, its response
+   shape will differ — adjust the field names marked ADJUST below to match. */
 async function fromRapidApi(handle) {
   const host = config.creator.rapidapiHost;
   const H = { 'x-rapidapi-key': config.creator.rapidapiKey, 'x-rapidapi-host': host };
   const user = handle.replace(/^@/, '');
-  // ADJUST: path/query to match your chosen RapidAPI endpoint.
-  const url = 'https://' + host + '/v1/info?username_or_id_or_url=' + encodeURIComponent(user);
-  const res = await fetch(url, { headers: H });
-  if (!res.ok) throw new Error('rapidapi ' + res.status);
-  const j = await res.json();
-  const d = j.data || j.user || j.result || j;                 // ADJUST: unwrap
-  const followers = d.follower_count ?? d.followers ?? d.edge_followed_by?.count ?? 0;
-  const media = d.recent_media || d.edge_owner_to_timeline_media?.edges || [];
-  let likes = 0, comments = 0, best = null, n = 0;
-  for (const m of media.slice(0, 12)) {
-    const node = m.node || m;
-    const l = node.like_count ?? node.edge_liked_by?.count ?? 0;
-    const c = node.comment_count ?? node.edge_media_to_comment?.count ?? 0;
-    likes += l; comments += c; n++;
-    const views = node.play_count ?? node.video_view_count ?? 0;
-    if (!best || views > (best.views || 0)) best = { views, likes: l, comments: c, text: (node.caption?.text || node.edge_media_to_caption?.edges?.[0]?.node?.text || ''), thumbnail: node.thumbnail_url || node.display_url };
-  }
-  const avgLikes = n ? likes / n : 0, avgComments = n ? comments / n : 0;
+
+  const pRes = await fetch('https://' + host + '/profile?username=' + encodeURIComponent(user), { headers: H });
+  if (!pRes.ok) throw new Error('rapidapi profile ' + pRes.status);
+  const p = await pRes.json();                                    // ADJUST if not Instagram Looter
+  if (p.status === false) throw new Error('rapidapi: ' + (p.errorMessage || 'profile not found'));
+  const followers = p.edge_followed_by?.count ?? p.follower_count ?? 0;
+
+  let avgLikes, avgComments, best = null, bestScore = -1;
+  try {
+    const mRes = await fetch('https://' + host + '/user-feeds?id=' + encodeURIComponent(p.id) + '&count=12&allow_restricted_media=false', { headers: H });
+    if (mRes.ok) {
+      const m = await mRes.json();
+      const items = Array.isArray(m.items) ? m.items : [];
+      let likes = 0, comments = 0, n = 0;
+      for (const it of items) {
+        const l = it.like_count ?? 0, c = it.comment_count ?? 0;
+        likes += l; comments += c; n++;
+        const views = it.play_count ?? it.ig_play_count ?? it.fb_play_count ?? 0;
+        // Rank reels by view count; rank photo posts (no view count) by likes instead.
+        const score = views > 0 ? views : l;
+        if (score > bestScore) {
+          bestScore = score;
+          best = { views, likes: l, comments: c, text: it.caption?.text || '', thumbnail: it.image_versions2?.candidates?.[0]?.url };
+        }
+      }
+      if (n) { avgLikes = likes / n; avgComments = comments / n; }
+    }
+  } catch { /* media list is a bonus — a failed second call should not break the profile lookup */ }
+
   return {
-    handle: d.username || user, name: d.full_name || d.username, avatar: d.profile_pic_url || d.profile_pic_url_hd,
-    category: d.category || d.business_category_name, followers,
-    avgLikes, avgComments, avgViews: best ? best.views : undefined,
+    handle: p.username || user, name: p.full_name || p.username,
+    avatar: p.profile_pic_url_hd || p.profile_pic_url,
+    category: p.business_category_name || p.category_name || undefined,
+    followers, avgLikes, avgComments, avgViews: best ? best.views || undefined : undefined,
     topTitle: best && best.text ? '“' + best.text.slice(0, 70) + '”' : undefined,
     videoThumb: best ? best.thumbnail : undefined, topViews: best ? best.views : undefined,
     topLikes: best ? best.likes : undefined, topComments: best ? best.comments : undefined
