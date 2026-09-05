@@ -1,0 +1,33 @@
+# Brand Marketian
+
+> Brand Marketian is a marketing and growth agency for Indian brands, running social media, Meta and Google ads, SEO content, WhatsApp/CRM follow-up and influencer marketing as accountable, month-to-month retainers — clients own their ad accounts and assets, with no lock-in.
+
+Brand Marketian works with D2C, retail, and service brands across India, building tracked, revenue-linked marketing systems rather than one-off campaigns. Engagements start within 10 working days, each service can be taken standalone, and reporting is tied to a jointly-defined qualified lead, not raw form fills.
+
+## Services
+
+- [All services](https://brandmarketian.com/services.html): Social media, Meta & Google ads, SEO content, WhatsApp/CRM funnels, and more — ten services, one accountable team.
+- [Influencer & creator marketing](https://brandmarketian.com/influencer-marketing.html): Nano to celebrity creators across Instagram and YouTube, matched by audience fit and measured with UTMs and promo codes.
+- [Industries served](https://brandmarketian.com/industries.html): Sector-specific approaches for the brands Brand Marketian works with.
+- [Pricing](https://brandmarketian.com/pricing.html): Retainer structure and what is included at each tier.
+
+## Company
+
+- [About](https://brandmarketian.com/about.html): Who Brand Marketian is and how the team works.
+- [Case studies](https://brandmarketian.com/case-studies.html): Results delivered for past clients.
+- [Careers](https://brandmarketian.com/careers.html): Open roles at Brand Marketian.
+- [Contact](https://brandmarketian.com/contact.html): Get in touch or start a project.
+
+## Blog
+
+- [Blog index](https://brandmarketian.com/blog.html): Articles on Indian marketing strategy, budgets, and channel playbooks.
+- [Cost per lead in India, 2026](https://brandmarketian.com/blog-cpl-india-2026.html)
+- [Festive ad calendar for D2C brands](https://brandmarketian.com/blog-festive-ad-calendar-d2c.html)
+- [Local SEO for multi-location businesses](https://brandmarketian.com/blog-local-seo-multi-location.html)
+- [Setting a marketing budget by growth stage](https://brandmarketian.com/blog-marketing-budget-by-stage.html)
+- [Nine Reels that beat a 2 lakh budget](https://brandmarketian.com/blog-nine-reels-beat-2l-budget.html)
+- [WhatsApp funnels that convert](https://brandmarketian.com/blog-whatsapp-funnels.html)
+
+## Optional
+
+- [Sitemap](https://brandmarketian.com/sitemap.xml): Full list of indexable URLs.
