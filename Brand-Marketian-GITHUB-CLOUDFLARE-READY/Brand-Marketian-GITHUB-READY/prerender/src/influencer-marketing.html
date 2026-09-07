@@ -197,6 +197,9 @@
 .im-cc:hover .im-cc-img{transform:scale(1.04)}
 .im-cc-sil .h{position:absolute;left:50%;top:32%;transform:translateX(-50%);width:86px;height:86px;border-radius:50%;background:rgba(255,255,255,.32)}
 .im-cc-sil .b{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:150px;height:120px;border-radius:80px 80px 0 0;background:rgba(255,255,255,.32)}
+/* once a real creator photo is published from the CMS, drop the gradient + silhouette */
+.im-cc-img.bm-cms-has-img{background-color:#111214}
+.im-cc-img.bm-cms-has-img .h,.im-cc-img.bm-cms-has-img .b{display:none}
 .im-cc-scrim{position:absolute;inset:auto 0 0 0;height:120px;background:linear-gradient(to top,rgba(0,0,0,.72),transparent)}
 .im-cc-cat{position:absolute;left:14px;top:14px;background:rgba(255,255,255,.92);color:#111214;font-weight:800;font-size:10.5px;letter-spacing:.04em;padding:6px 11px;border-radius:999px}
 .im-cc-eng{position:absolute;right:14px;top:14px;display:inline-flex;align-items:center;gap:5px;background:rgba(17,18,20,.72);color:#fff;font-weight:800;font-size:10.5px;padding:6px 10px;border-radius:999px}
@@ -431,28 +434,28 @@
     </div>
     <div class="im-ccgrid">
       <div class="im-cc reveal">
-        <div class="im-cc-img im-cc-sil" style="background:linear-gradient(150deg,#ff9a5a,#e05600)"><div class="h"></div><div class="b"></div>
+        <div class="im-cc-img im-cc-sil" data-cms-img="infC1Photo" style="background:linear-gradient(150deg,#ff9a5a,#e05600)"><div class="h"></div><div class="b"></div>
           <div class="im-cc-cat" data-cms="infC1Cat">FOOD</div><div class="im-cc-eng"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg><span data-cms="infC1Eng">6.8%</span></div>
           <div class="im-cc-scrim"></div><div class="im-cc-name" data-cms="infC1Name">Ananya Rao</div><div class="im-cc-h" data-cms="infC1Handle">@ananya.eats</div>
         </div>
         <div class="im-cc-bar"><div class="f"><b data-cms="infC1Followers">248K</b><span>followers</span></div><a data-scroll="im-result">View →</a></div>
       </div>
       <div class="im-cc reveal">
-        <div class="im-cc-img im-cc-sil" style="background:linear-gradient(150deg,#5a74f2,#1b3bd8)"><div class="h"></div><div class="b"></div>
+        <div class="im-cc-img im-cc-sil" data-cms-img="infC2Photo" style="background:linear-gradient(150deg,#5a74f2,#1b3bd8)"><div class="h"></div><div class="b"></div>
           <div class="im-cc-cat" data-cms="infC2Cat">FITNESS</div><div class="im-cc-eng"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg><span data-cms="infC2Eng">5.4%</span></div>
           <div class="im-cc-scrim"></div><div class="im-cc-name" data-cms="infC2Name">Karan Mehta</div><div class="im-cc-h" data-cms="infC2Handle">@karanlifts</div>
         </div>
         <div class="im-cc-bar"><div class="f"><b data-cms="infC2Followers">512K</b><span>followers</span></div><a data-scroll="im-result">View →</a></div>
       </div>
       <div class="im-cc reveal">
-        <div class="im-cc-img im-cc-sil" style="background:linear-gradient(150deg,#f26fae,#b3275f)"><div class="h"></div><div class="b"></div>
+        <div class="im-cc-img im-cc-sil" data-cms-img="infC3Photo" style="background:linear-gradient(150deg,#f26fae,#b3275f)"><div class="h"></div><div class="b"></div>
           <div class="im-cc-cat" data-cms="infC3Cat">BEAUTY</div><div class="im-cc-eng"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg><span data-cms="infC3Eng">4.1%</span></div>
           <div class="im-cc-scrim"></div><div class="im-cc-name" data-cms="infC3Name">Simran Kaur</div><div class="im-cc-h" data-cms="infC3Handle">@simran.glow</div>
         </div>
         <div class="im-cc-bar"><div class="f"><b data-cms="infC3Followers">1.2M</b><span>followers</span></div><a data-scroll="im-result">View →</a></div>
       </div>
       <div class="im-cc reveal">
-        <div class="im-cc-img im-cc-sil" style="background:linear-gradient(150deg,#2bb3a3,#0e9488)"><div class="h"></div><div class="b"></div>
+        <div class="im-cc-img im-cc-sil" data-cms-img="infC4Photo" style="background:linear-gradient(150deg,#2bb3a3,#0e9488)"><div class="h"></div><div class="b"></div>
           <div class="im-cc-cat" data-cms="infC4Cat">TECH</div><div class="im-cc-eng"><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg><span data-cms="infC4Eng">7.9%</span></div>
           <div class="im-cc-scrim"></div><div class="im-cc-name" data-cms="infC4Name">Dev Malhotra</div><div class="im-cc-h" data-cms="infC4Handle">@devbuilds</div>
         </div>

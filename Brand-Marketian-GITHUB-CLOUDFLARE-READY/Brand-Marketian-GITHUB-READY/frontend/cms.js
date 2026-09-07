@@ -1,7 +1,16 @@
-/* Brand Marketian — CMS text binding.
-   Any element with data-cms="fieldName" gets its text replaced by the value
-   stored for that page in the admin panel. If the API is unreachable the
-   text authored in the page stays exactly as it is, so the site never breaks.
+/* Brand Marketian — CMS binding.
+   Any element with data-cms="fieldName" gets its TEXT replaced by the value
+   stored for that page in the admin panel. Elements can also bind media:
+     data-cms-img="fieldName"   -> sets background-image (cover/center)
+     data-cms-src="fieldName"   -> sets the src attribute (for <img>)
+     data-cms-href="fieldName"  -> sets the href attribute (for <a>)
+   A value that is a bare "/uploads/..." path is resolved against the API
+   origin, since uploaded media is served by the backend, not the website.
+   When a data-cms-img element gets a real image it also gains the class
+   `bm-cms-has-img`, so CSS can hide any placeholder/silhouette underneath.
+
+   If the API is unreachable the authored content stays exactly as it is,
+   so the site never breaks.
 
    Page key comes from <meta name="bm-page" content="home">, else the filename.
    API base comes from <meta name="bm-api" content="https://api.example.com">,
@@ -24,18 +33,68 @@
 
   var data = null;
 
+  // A bare "/uploads/..." path is served by the backend; everything else
+  // (full URL, data:, blob:, or another site-relative path) is used as-is.
+  function resolveUrl(v) {
+    if (!v) return v;
+    if (/^(https?:|data:|blob:)/i.test(v)) return v;
+    if (v.indexOf('/uploads/') === 0) return api + v;
+    return v;
+  }
+
+  function applyOne(el) {
+    // text
+    var tk = el.getAttribute('data-cms');
+    if (tk) {
+      var tv = data[tk];
+      if (typeof tv === 'string' && tv.length && el.getAttribute('data-cms-applied') !== tv) {
+        el.textContent = tv;
+        el.setAttribute('data-cms-applied', tv);
+      }
+    }
+    // background image — preload first so a broken / expired URL leaves the
+    // authored placeholder in place instead of blanking the element.
+    var ik = el.getAttribute('data-cms-img');
+    if (ik) {
+      var iv = data[ik];
+      if (typeof iv === 'string' && iv.length && el.getAttribute('data-cms-img-applied') !== iv) {
+        el.setAttribute('data-cms-img-applied', iv);
+        (function (node, url) {
+          var probe = new Image();
+          probe.onload = function () {
+            node.style.backgroundImage = 'url("' + url.replace(/"/g, '%22') + '")';
+            if (!node.style.backgroundSize) node.style.backgroundSize = 'cover';
+            if (!node.style.backgroundPosition) node.style.backgroundPosition = 'center';
+            node.classList.add('bm-cms-has-img');
+          };
+          probe.src = url;
+        })(el, resolveUrl(iv));
+      }
+    }
+    // <img> src
+    var sk = el.getAttribute('data-cms-src');
+    if (sk) {
+      var sv = data[sk];
+      if (typeof sv === 'string' && sv.length && el.getAttribute('data-cms-src-applied') !== sv) {
+        el.setAttribute('src', resolveUrl(sv));
+        el.setAttribute('data-cms-src-applied', sv);
+      }
+    }
+    // <a> href
+    var hk = el.getAttribute('data-cms-href');
+    if (hk) {
+      var hv = data[hk];
+      if (typeof hv === 'string' && hv.length && el.getAttribute('data-cms-href-applied') !== hv) {
+        el.setAttribute('href', resolveUrl(hv));
+        el.setAttribute('data-cms-href-applied', hv);
+      }
+    }
+  }
+
   function apply(root) {
     if (!data) return;
-    var nodes = (root || document).querySelectorAll('[data-cms]');
-    for (var i = 0; i < nodes.length; i++) {
-      var el = nodes[i];
-      var key = el.getAttribute('data-cms');
-      var val = data[key];
-      if (typeof val !== 'string' || !val.length) continue;
-      if (el.getAttribute('data-cms-applied') === val) continue;
-      el.textContent = val;
-      el.setAttribute('data-cms-applied', val);
-    }
+    var nodes = (root || document).querySelectorAll('[data-cms],[data-cms-img],[data-cms-src],[data-cms-href]');
+    for (var i = 0; i < nodes.length; i++) applyOne(nodes[i]);
   }
 
   function watch() {
@@ -53,8 +112,13 @@
       if (!m || m.type !== 'bm-preview' || !m.data || typeof m.data !== 'object') return;
       data = m.data;
       // force re-apply even if a value was applied before
-      var nodes = document.querySelectorAll('[data-cms-applied]');
-      for (var i = 0; i < nodes.length; i++) nodes[i].removeAttribute('data-cms-applied');
+      var nodes = document.querySelectorAll('[data-cms-applied],[data-cms-img-applied],[data-cms-src-applied],[data-cms-href-applied]');
+      for (var i = 0; i < nodes.length; i++) {
+        nodes[i].removeAttribute('data-cms-applied');
+        nodes[i].removeAttribute('data-cms-img-applied');
+        nodes[i].removeAttribute('data-cms-src-applied');
+        nodes[i].removeAttribute('data-cms-href-applied');
+      }
       apply(document);
       if (!window.__bmPvWatch) { window.__bmPvWatch = true; watch(); }
     });
