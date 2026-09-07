@@ -10,13 +10,16 @@
 
     var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* ---- nav: rides transparent while the dark hero is behind it ---- */
+    /* ---- nav: transparent only in the first sliver of scroll, where the pure
+       (content-free) top band of the hero is the only thing behind it. Past that
+       it snaps to the solid opaque bar, so page content can never show through
+       and collide with the nav text. Decision is scroll-position only — no
+       dependency on layout that may not have settled on first paint. ---- */
     var nav = document.querySelector('header');
     function updateNav() {
       if (!nav) return;
-      var navH = nav.offsetHeight || 72;
-      var over = hero.getBoundingClientRect().bottom > navH + 4;
-      nav.classList.toggle('bm-nav-over', over);
+      var y = window.scrollY || document.documentElement.scrollTop || 0;
+      nav.classList.toggle('bm-nav-solid', y >= 40);
     }
     updateNav();
     window.addEventListener('scroll', updateNav, { passive: true });
@@ -34,8 +37,8 @@
     var IDLE_R = 6.5;                    // orbit radius at rest, %
     var TRACK_R = 2.6;                   // orbit wobble while tracking the cursor, %
     var rad = IDLE_R;                    // eased current radius
-    var IDLE_SPEED = 0.028, MAX_SPEED = 0.42;
-    var EASE_IN = 0.28;                  // how fast the centre catches the cursor
+    var IDLE_SPEED = 0.028, MAX_SPEED = 0.75;
+    var EASE_IN = 0.62;                  // how fast the centre catches the cursor (near 1 = glued to it)
     var HOME_EASE = 0.06;               // how fast it drifts back to rest
 
     var lastX = null, lastY = null, lastT = 0, active = false, seenPointer = false;
@@ -67,10 +70,10 @@
     window.addEventListener('blur', function () { active = false; lastX = null; });
 
     function frame() {
-      var targetSpin = Math.min(IDLE_SPEED + vel * 0.22, MAX_SPEED);
-      spin += (targetSpin - spin) * 0.14;
+      var targetSpin = Math.min(IDLE_SPEED + vel * 0.4, MAX_SPEED);
+      spin += (targetSpin - spin) * 0.3;
       phase += spin;
-      vel *= 0.9;
+      vel *= 0.93;
 
       if (active) {
         curX += (tgtX - curX) * EASE_IN;

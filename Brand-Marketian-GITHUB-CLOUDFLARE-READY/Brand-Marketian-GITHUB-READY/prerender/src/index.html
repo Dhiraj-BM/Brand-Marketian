@@ -216,12 +216,16 @@ body{padding-top:0!important}
 .bm-hero-bg .btn-secondary{border-color:rgba(244,239,230,.32)!important;color:#F4EFE6!important;background:transparent!important}
 .bm-hero-bg .btn-secondary:hover{border-color:#F4EFE6!important;background:rgba(244,239,230,.07)!important}
 @media (prefers-reduced-motion:reduce){.bm-hero-glow{--gx:78%!important;--gy:16%!important}}
-/* homepage only: the shared nav rides transparent over the dark hero until you scroll */
-header[style*="position: fixed"] a{transition:color .25s ease}
-header[style*="position: fixed"] .bm-hamburger span{transition:background .25s ease}
-header.bm-nav-over{background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-header.bm-nav-over a{color:#F4EFE6!important}
-header.bm-nav-over .bm-hamburger span{background:#F4EFE6!important}
+/* homepage only. DEFAULT = transparent nav sitting over the dark hero (this is
+   also the pre-JS / first-paint state, so there is no white flash). Once you
+   scroll, hero-gradient.js adds .bm-nav-solid and the bar becomes FULLY OPAQUE
+   white — page content can never show through it and collide with the nav text. */
+header[style*="position: fixed"]{background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transition:background .3s ease,box-shadow .3s ease}
+header[style*="position: fixed"] a{color:#F4EFE6!important;transition:color .25s ease}
+header[style*="position: fixed"] .bm-hamburger span{background:#F4EFE6!important;transition:background .25s ease}
+header.bm-nav-solid{background:#ffffff!important;box-shadow:0 6px 22px rgba(17,18,20,.10)!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important}
+header.bm-nav-solid a{color:#111214!important}
+header.bm-nav-solid .bm-hamburger span{background:#111214!important}
 </style>
 </helmet>
 
