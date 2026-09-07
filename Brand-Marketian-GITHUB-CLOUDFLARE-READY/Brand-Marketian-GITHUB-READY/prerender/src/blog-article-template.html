@@ -79,6 +79,7 @@
 <link rel="stylesheet" href="_ds/organic-fef53163-6fb7-44b0-a953-acc5c3c3b818/styles.css">
 <link rel="stylesheet" href="brand.css">
 <link rel="stylesheet" href="blog-article.css">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <meta name="bm-page" content="blog" />
 <meta name="bm-api" content="" />
 <script defer src="cms.js"></script>
@@ -105,7 +106,12 @@
     </header>
   </div>
 
-  <div class="bm-cover"><div class="bm-cover-tag">Short visual title</div></div>
+  <!-- Cover: use a real photograph. Put the file in frontend/assets/blog/ and
+       reference it with an absolute path. Keep a 16:9-ish crop. -->
+  <figure class="bm-cover">
+    <img src="/assets/blog/REPLACE-ME.jpg" alt="Plain description of the photo for screen readers" width="1600" height="900">
+    <figcaption>Optional one-line caption.</figcaption>
+  </figure>
 
   <div class="bm-article">
 
