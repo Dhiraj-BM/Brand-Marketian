@@ -30,8 +30,8 @@
     var tgtX = homeX, tgtY = homeY;      // where the orbit centre wants to be
     var curX = homeX, curY = homeY;      // eased centre (only lags on the way home)
     var phase = Math.random() * Math.PI * 2;
-    var ORBIT_RX = 5.6, ORBIT_RY = 4.4;  // orbit radius, %
-    var IDLE_SPEED = 0.006, MAX_SPEED = 0.40;
+    var ORBIT_RX = 6.5, ORBIT_RY = 5.2;  // orbit radius, %
+    var IDLE_SPEED = 0.028, MAX_SPEED = 0.42;  // always-visible circular drift (~one lap every ~3.7s)
     var HOME_EASE = 0.08;
 
     var lastX = null, lastY = null, lastT = 0, active = false;
