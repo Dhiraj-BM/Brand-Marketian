@@ -4,6 +4,7 @@ import { Lead, Subscriber, Post, CaseStudy, Job, Application, SiteContent } from
 import { notifyLead } from '../notify.js';
 import { upload } from '../upload.js';
 import { getCreatorInsights } from '../creator.js';
+import { proxyAvatar } from '../avatar.js';
 
 const router = Router();
 
@@ -77,6 +78,11 @@ router.get('/content/:key', async (req, res) => {
   const doc = await SiteContent.findOne({ key: req.params.key });
   res.json(doc ? doc.data : {});
 });
+
+// Re-serves an Instagram/Facebook CDN image from our own origin so it does not
+// expire or get hot-link blocked in the browser. Must be declared BEFORE the
+// ':handle' route so "avatar" is not treated as a handle.
+router.get('/creator/avatar', proxyAvatar);
 
 // Instagram creator insights for the influencer-page lookup tool.
 // Returns the exact shape the website renders. Never throws to the client:

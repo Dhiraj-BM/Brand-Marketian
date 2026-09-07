@@ -36,16 +36,29 @@
       .forEach(function (el) { el.classList.toggle('im-skel', on); });
     r.classList.toggle('loading', on);
   }
+  // c.av / c.grad may be a full URL, a relative "/api/creator/avatar?u=…" proxy
+  // path (resolve against the API origin), or a plain colour / CSS gradient.
+  function imgUrl(v) {
+    if (typeof v !== 'string') return null;
+    if (/^https?:/.test(v)) return v;
+    if (v.charAt(0) === '/') return apiBase() + v;
+    return null;
+  }
   function render(c) {
     var av = $('r-av'); if (!av) return;
-    if (/^https?:/.test(c.av)) { av.style.backgroundImage = 'url("' + c.av + '")'; av.style.backgroundColor = '#eee'; }
-    else { av.style.backgroundImage = 'none'; av.style.backgroundColor = c.av; }
+    var avUrl = imgUrl(c.av);
+    if (avUrl) {
+      av.style.backgroundImage = 'url("' + avUrl + '")';
+      av.style.backgroundSize = 'cover'; av.style.backgroundPosition = 'center';
+      av.style.backgroundColor = '#eee';
+    } else { av.style.backgroundImage = 'none'; av.style.backgroundColor = c.av; }
     $('r-name').textContent = c.name; $('r-handle').textContent = c.handle;
     $('r-cat').innerHTML = c.cat; $('r-aq').textContent = c.aq + ' / 100'; $('r-aqnote').textContent = c.aqnote;
     $('r-followers').textContent = c.followers; $('r-eng').textContent = c.eng; $('r-engtag').textContent = c.engtag;
     $('r-views').textContent = c.views; $('r-cost').textContent = c.cost;
     var th = $('r-thumb');
-    if (/^https?:/.test(c.grad)) { th.style.backgroundImage = 'url("' + c.grad + '")'; th.style.backgroundSize = 'cover'; th.style.backgroundPosition = 'center'; }
+    var thUrl = imgUrl(c.grad);
+    if (thUrl) { th.style.backgroundImage = 'url("' + thUrl + '")'; th.style.backgroundSize = 'cover'; th.style.backgroundPosition = 'center'; }
     else { th.style.backgroundImage = 'none'; th.style.background = c.grad; }
     $('r-vidtitle').innerHTML = c.vidtitle;
     $('r-vv').textContent = c.vv; $('r-vl').textContent = c.vl; $('r-vc').textContent = c.vc; $('r-vs').textContent = c.vs;

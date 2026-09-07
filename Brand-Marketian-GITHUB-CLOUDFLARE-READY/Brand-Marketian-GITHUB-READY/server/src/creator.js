@@ -45,6 +45,20 @@ const GRADS = ['linear-gradient(135deg,#ff9a5a,#e05600)', 'linear-gradient(135de
   'linear-gradient(135deg,#f26fae,#b3275f)', 'linear-gradient(135deg,#2bb3a3,#0e7c86)'];
 function hash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
 
+// Instagram/Facebook CDN images expire and block hot-linking, so route them
+// through our own image proxy (see avatar.js). Non-IG image URLs (e.g. Modash-
+// hosted) are returned unchanged; anything that is not an http(s) URL yields null.
+function viaProxy(u) {
+  if (!u || !/^https?:/i.test(u)) return null;
+  try {
+    const host = new URL(u).hostname;
+    if (/(^|\.)(cdninstagram\.com|fbcdn\.net|instagram\.com)$/i.test(host)) {
+      return '/api/creator/avatar?u=' + encodeURIComponent(u);
+    }
+  } catch { /* fall through */ }
+  return u;
+}
+
 /* ---------- normaliser: raw provider data -> frontend shape ----------
    Pass whatever numbers you can extract; missing fields are estimated. */
 function normalise(r) {
@@ -53,8 +67,8 @@ function normalise(r) {
   const engRate = r.engagementRate != null ? Number(r.engagementRate)   // fraction 0..1
     : (followers && r.avgLikes != null ? (Number(r.avgLikes) + Number(r.avgComments || 0)) / followers : 0.03);
   const h = hash(handle);
-  const av = r.avatar && /^https?:/.test(r.avatar) ? r.avatar : TINTS[h % TINTS.length];
-  const grad = r.videoThumb && /^https?:/.test(r.videoThumb) ? r.videoThumb : GRADS[h % GRADS.length];
+  const av = viaProxy(r.avatar) || TINTS[h % TINTS.length];
+  const grad = viaProxy(r.videoThumb) || GRADS[h % GRADS.length];
   const aq = r.audienceQuality != null ? Math.round(Number(r.audienceQuality))
     : Math.max(60, Math.min(96, Math.round(72 + engRate * 300)));         // estimate if unknown
   return {
