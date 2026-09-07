@@ -32,7 +32,7 @@ const PostSchema = new Schema({
   excerpt: String,
   cover: String,
   body: String,
-  tag: { type: String, default: 'Playbook' },
+  tag: { type: String, default: 'Article' },
   readMinutes: { type: Number, default: 5 },
   published: { type: Boolean, default: false, index: true },
   publishedAt: Date,

@@ -12,10 +12,16 @@ await User.updateOne(
   { upsert: true }
 );
 
+// Mirrors the six static articles under frontend/ (blog-*.html). The public
+// blog and article pages are served as static files — this collection is
+// bookkeeping so the admin dashboard reflects what is actually published.
 const posts = [
-  { slug: 'good-cpl-india-2026', title: 'What a good cost per lead actually looks like in India in 2026', tag: 'Benchmarks', readMinutes: 4, excerpt: 'Live CPL ranges by category, and the three things that explain almost every outlier.', published: true, publishedAt: new Date() },
-  { slug: 'festive-ad-calendar-d2c', title: 'The festive ad calendar we run for D2C brands', tag: 'Playbook', readMinutes: 6, excerpt: 'Diwali, Holi and end-of-season, mapped backwards from the sale date.', published: true, publishedAt: new Date() },
-  { slug: 'reels-vs-ad-budget', title: 'Nine reels that outperformed a 2 lakh ad budget', tag: 'Teardown', readMinutes: 5, excerpt: 'Hooks, pacing and captions: what the winners had in common.', published: true, publishedAt: new Date() }
+  { slug: 'blog-festive-ad-calendar-d2c', title: 'The festive ad calendar we run for D2C brands', tag: 'Paid ads', readMinutes: 6, cover: '/assets/blog/festive.jpg', excerpt: 'Diwali, Holi and end-of-season, mapped backwards from the sale date.', published: true, publishedAt: new Date() },
+  { slug: 'blog-cpl-india-2026', title: 'What a good cost per lead actually looks like in India in 2026', tag: 'Benchmarks', readMinutes: 4, cover: '/assets/blog/cpl.jpg', excerpt: 'Live CPL ranges by category, and the three things that explain almost every outlier.', published: true, publishedAt: new Date() },
+  { slug: 'blog-nine-reels-beat-2l-budget', title: 'Nine reels that outperformed a ₹2L ad budget', tag: 'Creative', readMinutes: 5, cover: '/assets/blog/reels.jpg', excerpt: 'Hooks, pacing and captions: what the winners had in common, frame by frame.', published: true, publishedAt: new Date() },
+  { slug: 'blog-whatsapp-funnels', title: "WhatsApp funnels that don't annoy people", tag: 'Retention', readMinutes: 7, cover: '/assets/blog/whatsapp.jpg', excerpt: 'Opt-in, first message and a cadence that keeps reply rates above 40%.', published: true, publishedAt: new Date() },
+  { slug: 'blog-local-seo-multi-location', title: 'Local SEO for multi-location businesses', tag: 'SEO', readMinutes: 6, cover: '/assets/blog/localseo.jpg', excerpt: 'One Google Business Profile per location, done properly, beats any amount of blog content.', published: true, publishedAt: new Date() },
+  { slug: 'blog-marketing-budget-by-stage', title: 'How much should a growing brand spend on marketing?', tag: 'Benchmarks', readMinutes: 5, cover: '/assets/blog/budget.jpg', excerpt: 'Retainer plus spend, by revenue stage, with the split we recommend at each.', published: true, publishedAt: new Date() }
 ];
 for (const p of posts) await Post.updateOne({ slug: p.slug }, { $set: p }, { upsert: true });
 
@@ -45,11 +51,10 @@ const home = {
   servicesTitle: 'Meet your ',
   servicesTitleAccent: 'growth engine',
   servicesSub: 'One team instead of four vendors. Pick a single pillar or let us run all three together, tuned for how India actually buys: mobile-first, vernacular, festive, WhatsApp-led.',
-  buyersTitle: 'Two very different buyers. Two different playbooks.',
+  buyersTitle: 'Two very different buyers. Two different plans.',
   journeyTitle: 'The B lies flat until marketing joins it',
   clientsTitle: 'Brands that trust us with their growth',
   compareTitle: 'Why brands pick us over a freelancer or a big agency',
-  processTitle: 'A simple, proven process',
   indiaTitle: 'Marketing that speaks your market',
   pricingTitle: 'Three plans. One that fits.',
   storiesTitle: 'Results, not screenshots',
