@@ -160,4 +160,59 @@
     });
   }
   armCount(); setTimeout(armCount, 800); setTimeout(armCount, 2200);  // re-arm for late-injected content
+
+  /* ---- featured creator cards: pull the real Instagram profile photo by handle ----
+     Skips any card where a photo was set manually in the CMS (cms.js marks it
+     with .bm-cms-has-img). Results are cached per-browser for 12h and the
+     server caches upstream for 24h, so this costs the provider ~1 call/day
+     per handle, not one per pageview. */
+  function igCacheGet(h) {
+    try {
+      var raw = localStorage.getItem('bm_ig_' + h);
+      if (raw) { var o = JSON.parse(raw); if (o && Date.now() - o.t < 432e5) return o.v; }
+    } catch (e) {}
+    return null;
+  }
+  function igCacheSet(h, v) {
+    try { localStorage.setItem('bm_ig_' + h, JSON.stringify({ t: Date.now(), v: v })); } catch (e) {}
+  }
+  function setCardPhoto(img, url) {
+    if (img.classList.contains('bm-cms-has-img')) return;   // a manual CMS photo won
+    var probe = new Image();
+    probe.onload = function () {
+      if (img.classList.contains('bm-cms-has-img')) return;
+      img.style.backgroundImage = 'url("' + url.replace(/"/g, '%22') + '")';
+      img.style.backgroundSize = 'cover';
+      img.style.backgroundPosition = 'center';
+      img.classList.add('bm-cms-has-img');
+    };
+    probe.src = url;
+  }
+  function fillFeaturedPhotos() {
+    var imgs = document.querySelectorAll('.im-cc .im-cc-img[data-cms-img]');
+    for (var i = 0; i < imgs.length; i++) {
+      (function (img) {
+        if (img.classList.contains('bm-cms-has-img')) return;
+        var card = img.closest ? img.closest('.im-cc') : img.parentElement;
+        var hEl = card && card.querySelector('.im-cc-h');
+        var handle = hEl ? (hEl.textContent || '').trim().replace(/^@/, '').toLowerCase() : '';
+        if (!handle || img.__igHandle === handle) return;
+        img.__igHandle = handle;
+        var cached = igCacheGet(handle);
+        if (cached) { var cu = imgUrl(cached.av); if (cu) setCardPhoto(img, cu); return; }
+        fetch(apiBase() + '/api/creator/' + encodeURIComponent(handle), { headers: { Accept: 'application/json' } })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (c) {
+            if (!c || c.error || !c.followers) return;
+            igCacheSet(handle, { av: c.av });
+            var u = imgUrl(c.av);
+            if (u) setCardPhoto(img, u);
+          })
+          .catch(function () {});
+      })(imgs[i]);
+    }
+  }
+  fillFeaturedPhotos();
+  setTimeout(fillFeaturedPhotos, 1400);   // after cms.js applies handles / manual photos
+  setTimeout(fillFeaturedPhotos, 3200);
 })();
