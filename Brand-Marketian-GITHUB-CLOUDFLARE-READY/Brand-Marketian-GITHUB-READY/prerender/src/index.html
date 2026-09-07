@@ -597,22 +597,7 @@ header.bm-nav-solid .bm-hamburger span{background:#111214!important}
 </div>
 </section>
 
-<section style="max-width:1240px;margin:0 auto;padding:64px 32px">
-<span class="tag tag-accent-2" style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase">How we work</span>
-<h2 style="font-size:44px;margin:18px 0 30px" data-cms="processTitle">A simple, proven process</h2>
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
-<sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
-<div class="card elev-sm" style="padding:var(--space-4);background:{{ s.bg }};border:1px solid var(--color-divider);transition:transform .3s ease" style-hover="transform:translateY(-5px)">
-<div style="width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:{{ s.chip }};color:#fff;font-family:var(--font-heading);font-weight:800;font-size:16px">{{ s.n }}</div>
-<h4 style="margin:4px 0 0;font-size:20px">{{ s.title }}</h4>
-<p class="card-body" style="font-size:13.5px">{{ s.note }}</p>
-</div>
-</sc-for>
-</div>
-</section>
-
-
-<section style="max-width:1240px;margin:0 auto;padding:8px 32px 64px">
+<section style="max-width:1240px;margin:0 auto;padding:64px 32px 64px">
 <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
 <div>
 <span class="tag tag-accent" style="font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase">Pricing</span>
@@ -673,7 +658,7 @@ header.bm-nav-solid .bm-hamburger span{background:#111214!important}
 <div class="card elev-sm" style="background:var(--color-accent-100);padding:var(--space-6)">
 <div class="card-kicker">Newsletter</div>
 <h3 style="font-size:26px;margin:0">The Growth Note</h3>
-<p class="card-body" style="font-size:14px;flex:none">One practical Indian-market playbook a fortnight, ad benchmarks, creative teardowns, festive calendars.</p>
+<p class="card-body" style="font-size:14px;flex:none">One practical Indian-market deep-dive a fortnight — ad benchmarks, creative teardowns, festive calendars.</p>
 <div class="field" style="margin-top:6px"><input class="input" type="email" placeholder="you@company.com"></div>
 <button class="btn btn-primary btn-block">Subscribe</button>
 </div>
@@ -880,13 +865,6 @@ class Component extends DCLogic {
         { label: 'Team', us: 'One dedicated pod, weekly reviews', freelance: 'One person, one skill', agency: 'Rotating account managers' },
         { label: 'Pricing', us: 'Flat monthly retainer, no lock-in', freelance: 'Per deliverable', agency: 'Long contracts + % of spend' }
       ],
-      steps: [
-        { n: '01', title: 'Discover', note: 'We audit your brand, audience and competitors to find the real opportunity.', bg: 'var(--color-accent-2-100)', chip: 'var(--color-accent-2)' },
-        { n: '02', title: 'Strategize', note: 'A clear 90-day roadmap with goals, channels and a content plan.', bg: 'var(--bm-teal-100)', chip: 'var(--bm-teal)' },
-        { n: '03', title: 'Create', note: 'On-brand content and ad creatives designed to convert, not just look good.', bg: 'var(--bm-plum-100)', chip: 'var(--bm-plum)' },
-        { n: '04', title: 'Launch', note: 'We publish, run the ads and manage the community daily.', bg: 'var(--bm-amber-100)', chip: 'var(--bm-amber)' },
-        { n: '05', title: 'Optimize', note: "Weekly data reviews to double down on what works and cut what doesn't.", bg: 'var(--color-accent-100)', chip: 'var(--color-accent)' }
-      ],
       plans: [
       { name: 'Launch', badge: 'Starter', glyph: '\u2726', price: '\u20b924,999', unit: ' /mo', feat: '',
         pc: 'var(--bm-teal)', pct: 'var(--bm-teal-100)',
@@ -910,9 +888,9 @@ class Component extends DCLogic {
         items: ['End-to-end marketing across every channel', 'Business development from scratch', 'Brand, website & funnel built for you', 'Dedicated strategy + growth team', 'Scales with your business, month on month'] }
     ],
       posts: [
-        { tag: 'Playbook', title: 'The festive ad calendar we run for D2C brands', read: '6 min read', thumb: this.bg(this.res('mediaD2c', 'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=400&q=70')) },
+        { tag: 'Paid ads', title: 'The festive ad calendar we run for D2C brands', read: '6 min read', thumb: this.bg(this.res('mediaD2c', 'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=400&q=70')) },
         { tag: 'Benchmarks', title: 'What a good CPL actually looks like in India in 2026', read: '4 min read', thumb: this.bg(this.res('pillar2', 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=400&q=70')) },
-        { tag: 'Teardown', title: 'Nine reels that outperformed a ₹2L ad budget', read: '5 min read', thumb: this.bg(this.res('pillar1', 'https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=400&q=70')) }
+        { tag: 'Creative', title: 'Nine reels that outperformed a ₹2L ad budget', read: '5 min read', thumb: this.bg(this.res('pillar1', 'https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=400&q=70')) }
       ],
       quote: quotes[this.state.q % quotes.length],
       prevQuote: () => this.setState(s => ({ q: (s.q + quotes.length - 1) % quotes.length })),
