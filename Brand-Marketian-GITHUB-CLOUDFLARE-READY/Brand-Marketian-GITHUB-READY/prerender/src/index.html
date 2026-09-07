@@ -109,7 +109,6 @@
 <script defer src="enhance.js"></script>
 <script defer src="home.js"></script>
 <script defer src="home-hero.js"></script>
-<script defer src="hero-flow.js"></script>
 <script defer src="hero-gradient.js"></script>
 <template id="__bundler_thumbnail" data-bg-color="#ffffff">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
@@ -209,10 +208,10 @@ a:hover{color:var(--color-accent-600)}
    top of the page, its own top padding clearing the nav that floats over it. */
 body{padding-top:0!important}
 .bm-hero-bg{position:relative;overflow:hidden;isolation:isolate;background:#050403;color:#F4EFE6;padding-top:83px;--gx:78%;--gy:16%;--gi:1}
-.bm-hero-glow{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:var(--gi);will-change:background;background:radial-gradient(circle 15vw at var(--gx) var(--gy),rgba(255,190,120,.30) 0%,rgba(255,190,120,0) 62%),radial-gradient(circle 40vw at var(--gx) var(--gy),rgba(255,122,36,.40) 0%,rgba(255,122,36,.07) 46%,rgba(255,122,36,0) 72%),radial-gradient(circle 52vw at 4% 112%,#1e1408 0%,rgba(30,20,8,0) 58%),linear-gradient(158deg,#0c0805 0%,#000 56%,#000 100%)}
+.bm-hero-bg>.bm-hero-glow{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:var(--gi);will-change:background;background:radial-gradient(circle 15vw at var(--gx) var(--gy),rgba(255,190,120,.30) 0%,rgba(255,190,120,0) 62%),radial-gradient(circle 40vw at var(--gx) var(--gy),rgba(255,122,36,.40) 0%,rgba(255,122,36,.07) 46%,rgba(255,122,36,0) 72%),radial-gradient(circle 52vw at 4% 112%,#1e1408 0%,rgba(30,20,8,0) 58%),linear-gradient(158deg,#0c0805 0%,#000 56%,#000 100%)}
 .bm-hero-bg::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.30;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .bm-hero-bg::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(255,180,120,.05) 0%,transparent 14%),linear-gradient(180deg,rgba(0,0,0,.18) 0%,transparent 20%,transparent 74%,rgba(0,0,0,.6) 100%),radial-gradient(120% 80% at 50% 40%,transparent 55%,rgba(0,0,0,.4) 100%)}
-.bm-hero-bg>*{position:relative;z-index:2}
+.bm-hero-bg>section{position:relative;z-index:2}
 .bm-hero-accent{background:linear-gradient(95deg,#ffb347,#ff7a24 60%,#ff9d4d);-webkit-background-clip:text;background-clip:text;color:transparent}
 .bm-hero-bg .btn-secondary{border-color:rgba(244,239,230,.32)!important;color:#F4EFE6!important;background:transparent!important}
 .bm-hero-bg .btn-secondary:hover{border-color:#F4EFE6!important;background:rgba(244,239,230,.07)!important}
