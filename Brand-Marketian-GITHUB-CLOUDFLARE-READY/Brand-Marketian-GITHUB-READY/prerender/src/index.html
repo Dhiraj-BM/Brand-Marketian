@@ -38,17 +38,34 @@
       "@type": "Organization",
       "@id": "https://brandmarketian.com/#org",
       "name": "Brand Marketian",
-      "alternateName": "Brandmarketian",
+      "legalName": "Brand Marketian",
+      "alternateName": ["Brandmarketian", "Brand Marketian Agency", "Brand Marketian India"],
+      "slogan": "One system for social, ads and follow-up.",
       "url": "https://brandmarketian.com/",
       "logo": "https://brandmarketian.com/android-chrome-512x512.png",
       "image": "https://brandmarketian.com/og-image.png",
-      "description": "Brand Marketian is an Indian digital marketing agency that runs social media, paid ads and CRM follow-up as one system for founders, D2C and B2B brands.",
+      "description": "Brand Marketian is an Indian digital marketing and growth agency that runs social media, paid ads and CRM follow-up as one system for founders, D2C and B2B brands.",
       "email": "growth@brandmarketian.com",
       "telephone": "+919650618193",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IN"
+      },
       "areaServed": {
         "@type": "Country",
         "name": "India"
       },
+      "knowsAbout": [
+        "Digital marketing",
+        "Social media marketing",
+        "Meta advertising",
+        "Google Ads",
+        "SEO",
+        "WhatsApp marketing",
+        "Influencer marketing",
+        "D2C growth",
+        "B2B lead generation"
+      ],
       "sameAs": [
         "https://www.instagram.com/brand.marketian/",
         "https://wa.me/919650618193"
@@ -70,9 +87,18 @@
       "@id": "https://brandmarketian.com/#website",
       "url": "https://brandmarketian.com/",
       "name": "Brand Marketian",
+      "alternateName": ["Brandmarketian", "Brand Marketian India"],
       "inLanguage": "en-IN",
       "publisher": {
         "@id": "https://brandmarketian.com/#org"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://brandmarketian.com/blog.html?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
       }
     },
     {
@@ -218,14 +244,19 @@ body{padding-top:0!important}
 @media (prefers-reduced-motion:reduce){.bm-hero-glow{--gx:78%!important;--gy:16%!important}}
 /* homepage only. DEFAULT = transparent nav sitting over the dark hero (this is
    also the pre-JS / first-paint state, so there is no white flash). Once you
-   scroll, hero-gradient.js adds .bm-nav-solid and the bar becomes FULLY OPAQUE
-   white — page content can never show through it and collide with the nav text. */
+   scroll, hero-gradient.js adds .bm-nav-solid: a TRANSLUCENT frosted-glass bar —
+   a heavy backdrop blur smears whatever scrolls behind it, so the nav text stays
+   crisp and readable and nothing collides with it. */
 header[style*="position: fixed"]{background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transition:background .3s ease,box-shadow .3s ease}
 header[style*="position: fixed"] a{color:#F4EFE6!important;transition:color .25s ease}
 header[style*="position: fixed"] .bm-hamburger span{background:#F4EFE6!important;transition:background .25s ease}
-header.bm-nav-solid{background:#ffffff!important;box-shadow:0 6px 22px rgba(17,18,20,.10)!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important}
+header.bm-nav-solid{background:rgba(255,255,255,.78)!important;box-shadow:0 6px 22px rgba(17,18,20,.10)!important;backdrop-filter:blur(22px) saturate(1.7)!important;-webkit-backdrop-filter:blur(22px) saturate(1.7)!important}
 header.bm-nav-solid a{color:#111214!important}
 header.bm-nav-solid .bm-hamburger span{background:#111214!important}
+/* fallback for browsers without backdrop-filter: go opaque so text never overlaps */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  header.bm-nav-solid{background:#ffffff!important}
+}
 </style>
 </helmet>
 
@@ -462,7 +493,7 @@ header.bm-nav-solid .bm-hamburger span{background:#111214!important}
 <h2 style="font-size:46px;margin:14px 0 0;max-width:22ch;color:#fff" data-cms="journeyTitle">The B lies flat until marketing joins it</h2>
 </div>
 </div>
-<p style="max-width:64ch;font-size:16.5px;line-height:1.65;margin-top:20px;color:rgba(255,255,255,.72)">Look at the mark. The <strong>B</strong> is your brand, resting on its side, doing nothing on its own. The <strong>M</strong> is what we do. The moment they lock together the shape stands up, and so does the business behind it. That is the whole journey we run with you.</p>
+<p style="max-width:66ch;font-size:16.5px;line-height:1.65;margin-top:20px;color:rgba(255,255,255,.72)"><strong>Brand Marketian</strong> is a digital marketing and growth agency built for Indian brands &mdash; and the name is the idea. Look at the mark: the <strong>B</strong> is your brand, resting on its side, doing nothing on its own. The <strong>M</strong> is Brand Marketian &mdash; the marketing. The moment they lock together the shape stands up, and so does the business behind it. That is the whole journey Brand Marketian runs with you: social, ads and follow-up as one system.</p>
 
 <div style="position:relative;margin-top:52px">
 <div style="position:absolute;left:0;right:0;top:26px;height:3px;background:linear-gradient(90deg, rgba(255,255,255,.16), var(--color-accent))"></div>
