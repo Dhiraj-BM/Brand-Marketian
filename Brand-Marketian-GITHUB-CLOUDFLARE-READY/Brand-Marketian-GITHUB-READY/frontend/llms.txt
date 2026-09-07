@@ -1,8 +1,8 @@
 # Brand Marketian
 
-> Brand Marketian is a marketing and growth agency for Indian brands, running social media, Meta and Google ads, SEO content, WhatsApp/CRM follow-up and influencer marketing as accountable, month-to-month retainers — clients own their ad accounts and assets, with no lock-in.
+> Brand Marketian is a growth agency for brands. Its main strength is building brands from scratch — then running social media, Meta and Google ads, SEO content, WhatsApp/CRM follow-up and influencer marketing as accountable, month-to-month retainers. Clients own their ad accounts and assets, with no lock-in.
 
-Brand Marketian works with D2C, retail, and service brands across India, building tracked, revenue-linked marketing systems rather than one-off campaigns. Engagements start within 10 working days, each service can be taken standalone, and reporting is tied to a jointly-defined qualified lead, not raw form fills.
+Brand Marketian works with D2C, retail, and service brands, building tracked, revenue-linked marketing systems rather than one-off campaigns. Engagements start within 10 working days, each service can be taken standalone, and reporting is tied to a jointly-defined qualified lead, not raw form fills.
 
 ## Services
 
@@ -20,7 +20,7 @@ Brand Marketian works with D2C, retail, and service brands across India, buildin
 
 ## Blog
 
-- [Blog index](https://brandmarketian.com/blog.html): Articles on Indian marketing strategy, budgets, and channel playbooks.
+- [Blog index](https://brandmarketian.com/blog.html): Articles on marketing strategy, budgets, and channel playbooks.
 - [Cost per lead in India, 2026](https://brandmarketian.com/blog-cpl-india-2026.html)
 - [Festive ad calendar for D2C brands](https://brandmarketian.com/blog-festive-ad-calendar-d2c.html)
 - [Local SEO for multi-location businesses](https://brandmarketian.com/blog-local-seo-multi-location.html)

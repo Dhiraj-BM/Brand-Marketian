@@ -50,7 +50,7 @@ const home = {
   heroCta: 'Book a free audit for your business',
   servicesTitle: 'Meet your ',
   servicesTitleAccent: 'growth engine',
-  servicesSub: 'One team instead of four vendors. Pick a single pillar or let us run all three together, tuned for how India actually buys: mobile-first, vernacular, festive, WhatsApp-led.',
+  servicesSub: 'One team instead of four vendors. Pick a single pillar or let us run all three together as one system, from the brand up.',
   buyersTitle: 'Two very different buyers. Two different plans.',
   journeyTitle: 'The B lies flat until marketing joins it',
   clientsTitle: 'Brands that trust us with their growth',
@@ -60,7 +60,7 @@ const home = {
   storiesTitle: 'Results, not screenshots',
   homeInfEyebrow: 'New · Influencer Marketing',
   homeInfTitle: 'Creators who sell your product, not just tag it.',
-  homeInfSub: 'The right Indian creators, briefs that convert, and campaigns measured in orders and revenue — not vanity views.',
+  homeInfSub: 'The right creators, briefs that convert, and campaigns measured in orders and revenue — not vanity views.',
   homeInfCta: 'Explore influencer marketing →'
 };
 await SiteContent.updateOne({ key: 'home' }, { $setOnInsert: { data: home, updatedBy: 'seed', status: 'published' } }, { upsert: true });
@@ -69,7 +69,7 @@ const influencer = {
   infHeroEyebrow: 'Influencer & Creator Marketing',
   infHeroTitle: 'Creators who sell your product, ',
   infHeroTitleAccent: 'not just tag it.',
-  infHeroSub: 'We match your brand with the right Indian creators, write briefs that actually convert, and run the whole campaign to a number that matters — enquiries, orders and revenue, not vanity views.',
+  infHeroSub: 'We match your brand with the right creators, write briefs that actually convert, and run the whole campaign to a number that matters — enquiries, orders and revenue, not vanity views.',
   infHeroCta: 'Plan my creator campaign',
   infStat1Num: '1,200+', infStat1Label: 'Vetted creators in our network',
   infStat2Num: '50+', infStat2Label: 'Brands run and scaled',
@@ -77,7 +77,7 @@ const influencer = {
   infStat4Num: '4.2x', infStat4Label: 'Median return on creator spend',
   infHowKicker: 'How we run it', infHowTitle: 'Three moves, one accountable team',
   infHowSub: 'No random shout-outs. A tight system from creator selection to the sale, with tracking on every rupee.',
-  infStep1Title: 'Match the right creators', infStep1Body: 'We shortlist creators by real audience fit, engagement quality and past sales — not follower counts. Nano to celebrity, across every Indian language and niche.',
+  infStep1Title: 'Match the right creators', infStep1Body: 'We shortlist creators by real audience fit, engagement quality and past sales — not follower counts. Nano to celebrity, across every major language and niche.',
   infStep2Title: 'Build campaigns that convert', infStep2Body: 'Hooks, briefs, scripts, offers and landing pages built to move product. Whitelisting and paid amplification so a winning post keeps selling.',
   infStep3Title: 'Deliver real brand impact', infStep3Body: 'UTMs, promo codes and a live dashboard tie every creator to enquiries and orders — so you know exactly what worked and what to scale.',
   infGetTitle: "What's included",
@@ -99,7 +99,7 @@ await SiteContent.updateOne({ key: 'influencer' }, { $setOnInsert: { data: influ
 
 const global = {
   companyName: 'Brand Marketian',
-  tagline: 'Marketing & Growth Agency for Indian Brands',
+  tagline: 'Growth Agency for Brands',
   contactEmail: 'growth@brandmarketian.com',
   contactPhone: '+91 96506 18193',
   logo: '/logo.jpg',
@@ -108,8 +108,8 @@ const global = {
   whatsapp: 'https://wa.me/919650618193',
   linkedin: '',
   footerText: '© Brand Marketian. Marketing that turns spend into countable enquiries.',
-  seoTitle: 'Brand Marketian | Marketing & Growth Agency for Indian Brands',
-  seoDescription: 'Brand Marketian runs your social media, paid ads and follow-up as one system — turning ad spend into countable enquiries for 50+ Indian brands.'
+  seoTitle: 'Brand Marketian | Growth Agency for Brands',
+  seoDescription: 'Brand Marketian is a growth agency that builds brands from scratch — brand, social, paid ads and CRM follow-up run as one system that turns spend into countable enquiries.'
 };
 await SiteContent.updateOne({ key: 'global' }, { $setOnInsert: { data: global, updatedBy: 'seed', status: 'published' } }, { upsert: true });
 
