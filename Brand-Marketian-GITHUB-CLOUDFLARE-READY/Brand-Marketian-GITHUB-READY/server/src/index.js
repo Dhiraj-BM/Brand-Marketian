@@ -31,7 +31,7 @@ app.get('/uploads/:name', async (req, res, next) => {
     res.set({
       'Content-Type': file.contentType || 'application/octet-stream',
       'Content-Length': String(file.length),
-      'Cache-Control': 'public, max-age=31536000, immutable',
+      'Cache-Control': 'public, max-age=604800',
       'Cross-Origin-Resource-Policy': 'cross-origin',
       'X-Content-Type-Options': 'nosniff'
     });

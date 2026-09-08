@@ -163,8 +163,10 @@
 
   /* ---- featured creator cards: photo per creator ----
      The CMS "photo source" field per creator (infC<N>PhotoSource) decides:
-       - "manual": use the uploaded photo (infC<N>Photo). If that image fails
-                   to load, fall back to Instagram so the card is never blank.
+       - "manual": use ONLY the uploaded photo (infC<N>Photo). Instagram is
+                   never used for this creator — if the upload is missing the
+                   card keeps its plain gradient, a clear "upload a photo"
+                   signal rather than a wrong face.
        - "auto" (default): fetch the creator's Instagram profile photo via the
                    server (/api/creator/<handle>), which proxies the image so
                    it is not hot-link blocked in the browser.
@@ -234,9 +236,9 @@
           img.__creatorDone = true;
           var handle = creatorHandle(img);
           var source = String(content['infC' + n + 'PhotoSource'] || 'auto').toLowerCase();
-          var manual = imgUrl(content['infC' + n + 'Photo']);
-          if (source === 'manual' && manual) {
-            setCardPhoto(img, manual, function () { fillFromInstagram(img, handle); });
+          if (source === 'manual') {
+            var manual = imgUrl(content['infC' + n + 'Photo']);
+            if (manual) setCardPhoto(img, manual);   // uploaded photo only — no Instagram fallback
           } else {
             fillFromInstagram(img, handle);
           }
