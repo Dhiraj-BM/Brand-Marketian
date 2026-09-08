@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { Lead, Subscriber, Post, CaseStudy, Job, Application, SiteContent } from '../models.js';
 import { notifyLead } from '../notify.js';
 import { upload } from '../upload.js';
+import { saveFile, makeName } from '../storage.js';
 import { getCreatorInsights } from '../creator.js';
 import { proxyAvatar } from '../avatar.js';
 
@@ -40,10 +41,16 @@ router.post('/newsletter', async (req, res) => {
 router.post('/applications', upload.single('resume'), async (req, res) => {
   const { name, email, phone, portfolio, why, roleTitle, job } = req.body;
   if (!name || !email) return res.status(422).json({ error: 'Name and email are required' });
+  let resumePath;
+  if (req.file) {
+    const stored = makeName(req.file.originalname);
+    await saveFile({ buffer: req.file.buffer, filename: stored, mime: req.file.mimetype });
+    resumePath = '/uploads/' + stored;
+  }
   const app = await Application.create({
     name, email, phone, portfolio, why, roleTitle,
     job: job || undefined,
-    resumePath: req.file ? '/uploads/' + req.file.filename : undefined
+    resumePath
   });
   res.status(201).json({ ok: true, id: app._id });
 });

@@ -188,29 +188,49 @@
     };
     probe.src = url;
   }
+  // The CMS is the source of truth for a featured card's photo. We fetch the
+  // published influencer content once and only auto-fill a card whose CMS
+  // photo field is EMPTY — so a photo set in the Content Studio always wins
+  // and is never overwritten by the Instagram auto-fill below.
+  var _infContentPromise = null;
+  function infContent() {
+    if (!_infContentPromise) {
+      _infContentPromise = fetch(apiBase() + '/api/content/influencer', { headers: { Accept: 'application/json' } })
+        .then(function (r) { return r.ok ? r.json() : {}; })
+        .catch(function () { return {}; });
+    }
+    return _infContentPromise;
+  }
   function fillFeaturedPhotos() {
     var imgs = document.querySelectorAll('.im-cc .im-cc-img[data-cms-img]');
-    for (var i = 0; i < imgs.length; i++) {
-      (function (img) {
-        if (img.classList.contains('bm-cms-has-img')) return;
-        var card = img.closest ? img.closest('.im-cc') : img.parentElement;
-        var hEl = card && card.querySelector('.im-cc-h');
-        var handle = hEl ? (hEl.textContent || '').trim().replace(/^@/, '').toLowerCase() : '';
-        if (!handle || img.__igHandle === handle) return;
-        img.__igHandle = handle;
-        var cached = igCacheGet(handle);
-        if (cached) { var cu = imgUrl(cached.av); if (cu) setCardPhoto(img, cu); return; }
-        fetch(apiBase() + '/api/creator/' + encodeURIComponent(handle), { headers: { Accept: 'application/json' } })
-          .then(function (r) { return r.ok ? r.json() : null; })
-          .then(function (c) {
-            if (!c || c.error || !c.followers) return;
-            igCacheSet(handle, { av: c.av });
-            var u = imgUrl(c.av);
-            if (u) setCardPhoto(img, u);
-          })
-          .catch(function () {});
-      })(imgs[i]);
-    }
+    if (!imgs.length) return;
+    infContent().then(function (content) {
+      content = content || {};
+      for (var i = 0; i < imgs.length; i++) {
+        (function (img) {
+          var field = img.getAttribute('data-cms-img');
+          var cmsVal = field ? content[field] : '';
+          if (typeof cmsVal === 'string' && cmsVal.trim()) return;   // CMS owns this slot — leave it to cms.js
+          if (img.classList.contains('bm-cms-has-img')) return;
+          var card = img.closest ? img.closest('.im-cc') : img.parentElement;
+          var hEl = card && card.querySelector('.im-cc-h');
+          var handle = hEl ? (hEl.textContent || '').trim().replace(/^@/, '').toLowerCase() : '';
+          if (!handle || img.__igHandle === handle) return;
+          img.__igHandle = handle;
+          var cached = igCacheGet(handle);
+          if (cached) { var cu = imgUrl(cached.av); if (cu) setCardPhoto(img, cu); return; }
+          fetch(apiBase() + '/api/creator/' + encodeURIComponent(handle), { headers: { Accept: 'application/json' } })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (c) {
+              if (!c || c.error || !c.followers) return;
+              igCacheSet(handle, { av: c.av });
+              var u = imgUrl(c.av);
+              if (u) setCardPhoto(img, u);
+            })
+            .catch(function () {});
+        })(imgs[i]);
+      }
+    });
   }
   fillFeaturedPhotos();
   setTimeout(fillFeaturedPhotos, 1400);   // after cms.js applies handles / manual photos
