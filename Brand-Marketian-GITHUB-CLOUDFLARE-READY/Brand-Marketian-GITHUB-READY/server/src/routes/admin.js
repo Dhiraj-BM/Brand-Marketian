@@ -1,11 +1,10 @@
-import fs from 'node:fs';
-import nodePath from 'node:path';
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import slugify from 'slugify';
 import { Lead, Subscriber, Post, CaseStudy, Job, Application, User, SiteContent, Media } from '../models.js';
 import { requireAuth, sign, ROLES } from '../auth.js';
 import { upload } from '../upload.js';
+import { saveFile, deleteFile, makeName } from '../storage.js';
 
 const router = Router();
 const MAX_VERSIONS = 30;
@@ -207,11 +206,16 @@ router.put('/content/:key', requireAuth(ROLES.PUBLISH), async (req, res) => {
 /* ================================ MEDIA ================================= */
 
 router.post('/media', requireAuth(ROLES.EDIT), upload.any(), async (req, res) => {
-  const files = (req.files || []).map(f => ({
-    name: f.originalname, path: '/uploads/' + f.filename, mime: f.mimetype, size: f.size,
-    tag: req.body.tag || 'Website Images', alt: req.body.alt || '', uploadedBy: req.user.email
-  }));
-  const saved = await Media.insertMany(files);
+  const docs = [];
+  for (const f of (req.files || [])) {
+    const stored = makeName(f.originalname);
+    await saveFile({ buffer: f.buffer, filename: stored, mime: f.mimetype });
+    docs.push({
+      name: f.originalname, path: '/uploads/' + stored, mime: f.mimetype, size: f.size,
+      tag: req.body.tag || 'Website Images', alt: req.body.alt || '', uploadedBy: req.user.email
+    });
+  }
+  const saved = await Media.insertMany(docs);
   res.status(201).json(saved);
 });
 
@@ -233,10 +237,9 @@ router.patch('/media/:id', requireAuth(ROLES.EDIT), async (req, res) => {
 
 router.delete('/media/:id', requireAuth(ROLES.MEDIA_DELETE), async (req, res) => {
   const m = await Media.findByIdAndDelete(req.params.id);
-  // Best-effort remove the file from disk if it lives under /uploads.
+  // Best-effort remove the bytes from GridFS if it lives under /uploads.
   if (m?.path?.startsWith('/uploads/')) {
-    const abs = nodePath.resolve('uploads', nodePath.basename(m.path));
-    fs.promises.unlink(abs).catch(() => {});
+    deleteFile(m.path.slice('/uploads/'.length)).catch(() => {});
   }
   res.json({ ok: true });
 });

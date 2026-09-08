@@ -9,4 +9,8 @@ The backend lives in `server/` and is a Node.js/Express API using MongoDB.
 5. Start with `npm start`.
 6. Verify `GET /api/health` returns `{ "ok": true }`.
 
+Uploaded media (CMS images, résumé files) is stored in MongoDB via GridFS and
+served from `GET /uploads/<name>`, so it survives restarts and redeploys. No
+persistent disk or volume is required on the host — only `MONGODB_URI`.
+
 Never upload a real `.env` file or database/JWT/SMTP credentials to GitHub.

@@ -161,58 +161,90 @@
   }
   armCount(); setTimeout(armCount, 800); setTimeout(armCount, 2200);  // re-arm for late-injected content
 
-  /* ---- featured creator cards: pull the real Instagram profile photo by handle ----
-     Skips any card where a photo was set manually in the CMS (cms.js marks it
-     with .bm-cms-has-img). Results are cached per-browser for 12h and the
-     server caches upstream for 24h, so this costs the provider ~1 call/day
-     per handle, not one per pageview. */
+  /* ---- featured creator cards: photo per creator ----
+     The CMS "photo source" field per creator (infC<N>PhotoSource) decides:
+       - "manual": use the uploaded photo (infC<N>Photo). If that image fails
+                   to load, fall back to Instagram so the card is never blank.
+       - "auto" (default): fetch the creator's Instagram profile photo via the
+                   server (/api/creator/<handle>), which proxies the image so
+                   it is not hot-link blocked in the browser.
+     influencer.js is the sole authority for these card images (cms.js no
+     longer binds them), so the two scripts never race.
+     The per-handle Instagram result is cached per-browser for 12h; the server
+     also caches upstream, so the provider sees ~1 call/day per handle. */
+  var IG_CACHE_PREFIX = 'bm_ig2_';   // v2 — older "bm_ig_" entries held pre-proxy raw URLs
   function igCacheGet(h) {
     try {
-      var raw = localStorage.getItem('bm_ig_' + h);
+      var raw = localStorage.getItem(IG_CACHE_PREFIX + h);
       if (raw) { var o = JSON.parse(raw); if (o && Date.now() - o.t < 432e5) return o.v; }
     } catch (e) {}
     return null;
   }
   function igCacheSet(h, v) {
-    try { localStorage.setItem('bm_ig_' + h, JSON.stringify({ t: Date.now(), v: v })); } catch (e) {}
+    try { localStorage.setItem(IG_CACHE_PREFIX + h, JSON.stringify({ t: Date.now(), v: v })); } catch (e) {}
   }
-  function setCardPhoto(img, url) {
-    if (img.classList.contains('bm-cms-has-img')) return;   // a manual CMS photo won
+  function setCardPhoto(img, url, onFail) {
+    if (!url) { if (onFail) onFail(); return; }
     var probe = new Image();
     probe.onload = function () {
-      if (img.classList.contains('bm-cms-has-img')) return;
       img.style.backgroundImage = 'url("' + url.replace(/"/g, '%22') + '")';
       img.style.backgroundSize = 'cover';
       img.style.backgroundPosition = 'center';
       img.classList.add('bm-cms-has-img');
     };
+    probe.onerror = function () { if (onFail) onFail(); };
     probe.src = url;
   }
-  function fillFeaturedPhotos() {
-    var imgs = document.querySelectorAll('.im-cc .im-cc-img[data-cms-img]');
-    for (var i = 0; i < imgs.length; i++) {
-      (function (img) {
-        if (img.classList.contains('bm-cms-has-img')) return;
-        var card = img.closest ? img.closest('.im-cc') : img.parentElement;
-        var hEl = card && card.querySelector('.im-cc-h');
-        var handle = hEl ? (hEl.textContent || '').trim().replace(/^@/, '').toLowerCase() : '';
-        if (!handle || img.__igHandle === handle) return;
-        img.__igHandle = handle;
-        var cached = igCacheGet(handle);
-        if (cached) { var cu = imgUrl(cached.av); if (cu) setCardPhoto(img, cu); return; }
-        fetch(apiBase() + '/api/creator/' + encodeURIComponent(handle), { headers: { Accept: 'application/json' } })
-          .then(function (r) { return r.ok ? r.json() : null; })
-          .then(function (c) {
-            if (!c || c.error || !c.followers) return;
-            igCacheSet(handle, { av: c.av });
-            var u = imgUrl(c.av);
-            if (u) setCardPhoto(img, u);
-          })
-          .catch(function () {});
-      })(imgs[i]);
+  function creatorHandle(img) {
+    var card = img.closest ? img.closest('.im-cc') : img.parentElement;
+    var hEl = card && card.querySelector('.im-cc-h');
+    return hEl ? (hEl.textContent || '').trim().replace(/^@/, '').toLowerCase() : '';
+  }
+  function fillFromInstagram(img, handle) {
+    if (!handle) return;
+    var cached = igCacheGet(handle);
+    if (cached) { setCardPhoto(img, imgUrl(cached.av)); return; }
+    fetch(apiBase() + '/api/creator/' + encodeURIComponent(handle), { headers: { Accept: 'application/json' } })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (c) {
+        if (!c || c.error || !c.followers) return;
+        igCacheSet(handle, { av: c.av });
+        setCardPhoto(img, imgUrl(c.av));
+      })
+      .catch(function () {});
+  }
+  var _infContent = null;
+  function influencerContent() {
+    if (!_infContent) {
+      _infContent = fetch(apiBase() + '/api/content/influencer', { headers: { Accept: 'application/json' } })
+        .then(function (r) { return r.ok ? r.json() : {}; })
+        .catch(function () { return {}; });
     }
+    return _infContent;
+  }
+  function fillFeaturedPhotos() {
+    var imgs = document.querySelectorAll('.im-cc .im-cc-img[data-creator-photo]');
+    if (!imgs.length) return;
+    influencerContent().then(function (content) {
+      content = content || {};
+      for (var i = 0; i < imgs.length; i++) {
+        (function (img) {
+          var n = img.getAttribute('data-creator-photo');
+          if (!n || img.__creatorDone) return;
+          img.__creatorDone = true;
+          var handle = creatorHandle(img);
+          var source = String(content['infC' + n + 'PhotoSource'] || 'auto').toLowerCase();
+          var manual = imgUrl(content['infC' + n + 'Photo']);
+          if (source === 'manual' && manual) {
+            setCardPhoto(img, manual, function () { fillFromInstagram(img, handle); });
+          } else {
+            fillFromInstagram(img, handle);
+          }
+        })(imgs[i]);
+      }
+    });
   }
   fillFeaturedPhotos();
-  setTimeout(fillFeaturedPhotos, 1400);   // after cms.js applies handles / manual photos
+  setTimeout(fillFeaturedPhotos, 1400);   // re-run for content injected late by the x-dc runtime
   setTimeout(fillFeaturedPhotos, 3200);
 })();
