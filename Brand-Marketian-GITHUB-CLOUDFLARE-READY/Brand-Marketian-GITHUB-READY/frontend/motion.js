@@ -23,8 +23,9 @@
 
   /* ---------------- styles (self-contained) ---------------- */
   var css = [
-    'html.bm-motion [data-bm-reveal]{opacity:0;transform:translateY(14px);',
-    'transition:opacity .6s cubic-bezier(.22,.9,.28,1),transform .6s cubic-bezier(.22,.9,.28,1)}',
+    // matches brand.css's own bm-rise keyframe (.7s, same easing, 18-22px rise)
+    'html.bm-motion [data-bm-reveal]{opacity:0;transform:translateY(18px);',
+    'transition:opacity .7s cubic-bezier(.22,.9,.28,1),transform .7s cubic-bezier(.22,.9,.28,1)}',
     'html.bm-motion [data-bm-reveal].bm-in{opacity:1;transform:none}',
     '@media (prefers-reduced-motion:reduce){html.bm-motion [data-bm-reveal]{opacity:1!important;transform:none!important;transition:none!important}}'
   ].join('');
@@ -51,6 +52,7 @@
     var decimals = (numStr.split('.')[1] || '').length;
     var end = parseFloat(numStr.replace(/,/g, ''));
     if (isNaN(end)) return;
+    if (reduce) { return; }              // reduced motion: leave the figure as authored, no roll-up
     var dur = 1200, start = null;
     function step(ts) {
       if (start === null) start = ts;
@@ -75,12 +77,16 @@
     if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT' || tag === 'BR' || tag === 'HR') return true;
     if (el.getAttribute('data-bm-reveal') === 'off') return true;
     if (el.closest('header, nav, .bm-mobile-menu')) return true;
+    // brand.css already animates these itself (bm-rise via animation-timeline; marquees)
+    if (el.matches && el.matches('.card, [data-rise], .bm-marquee, .bm-marquee-row, .bm-marquee-row *')) return true;
+    var cs = (el.ownerDocument.defaultView || window).getComputedStyle(el);
+    if (cs.animationName && cs.animationName !== 'none') return true;   // element already has its own CSS animation
+    // horizontal scroller / carousel track — never override its transform
+    if (el.scrollWidth > el.clientWidth * 1.5) return true;
     // homepage hero carousel — leave it to home-hero.js
     if (el.querySelector && el.querySelector('canvas, [aria-label="Growth dashboard"], [aria-label="Brand visibility"]')) return true;
-    if (el.getBoundingClientRect) {
-      var r = el.getBoundingClientRect();
-      if (r.width < 8 || r.height < 8) return true;
-    }
+    var r = el.getBoundingClientRect();
+    if (r.width < 8 || r.height < 8) return true;
     return false;
   }
   function isGrid(el) {
