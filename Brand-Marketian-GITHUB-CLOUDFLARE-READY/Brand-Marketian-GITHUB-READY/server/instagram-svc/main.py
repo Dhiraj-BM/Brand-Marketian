@@ -63,20 +63,21 @@ _lock = threading.Lock()
 _last_error: str | None = None  # why the last login attempt failed (shown by /health)
 
 
-def _authenticate(cl: Client) -> None:
+def _authenticate(cl: Client) -> str:
     """Log `cl` in. Prefer a browser sessionid (no challenge); fall back to
-    username + password. Raises RuntimeError if neither is configured/usable."""
+    username + password. Returns the method used ("sessionid" | "password").
+    Raises RuntimeError if neither is configured/usable."""
     if IG_SESSIONID:
         try:
             cl.login_by_sessionid(IG_SESSIONID)
             log.info("authenticated via IG_SESSIONID")
-            return
+            return "sessionid"
         except Exception as exc:
             log.warning("IG_SESSIONID rejected (%s) — trying username/password", exc)
     if IG_USERNAME and IG_PASSWORD:
         cl.login(IG_USERNAME, IG_PASSWORD)
         log.info("authenticated via IG_USERNAME/IG_PASSWORD")
-        return
+        return "password"
     raise RuntimeError(
         "no usable Instagram auth — set IG_SESSIONID (preferred) or "
         "IG_USERNAME + IG_PASSWORD in server/instagram-svc/.env"
@@ -86,7 +87,7 @@ def _authenticate(cl: Client) -> None:
 def _build_client() -> Client:
     global _last_error
     cl = Client()
-    cl.delay_range = [1, 3]  # random pause between requests — looks less robotic
+    cl.delay_range = [2, 5]  # random pause between requests — looks less robotic
     if IG_PROXY:
         cl.set_proxy(IG_PROXY)
 
@@ -99,16 +100,22 @@ def _build_client() -> Client:
             log.warning("could not load session (%s) — logging in fresh", exc)
 
     try:
-        _authenticate(cl)
-        # Confirm the session actually works; re-auth once if not.
-        try:
-            cl.get_timeline_feed()
-        except LoginRequired:
-            log.info("session not valid — re-authenticating")
-            uuids = cl.get_settings().get("uuids", {})
-            cl.set_settings({})
-            cl.set_uuids(uuids)
-            _authenticate(cl)
+        method = _authenticate(cl)
+        # For a password login, verify with the timeline feed and re-auth once if
+        # the saved session was stale. Do NOT do this for a sessionid login:
+        # `login_by_sessionid` already validates by fetching the account's own
+        # profile, and `feed/timeline/` returns 403 for browser-origin cookies
+        # even when profile/media endpoints work fine — the check would wrongly
+        # tear down a perfectly good session.
+        if method == "password":
+            try:
+                cl.get_timeline_feed()
+            except LoginRequired:
+                log.info("saved session stale — re-authenticating")
+                uuids = cl.get_settings().get("uuids", {})
+                cl.set_settings({})
+                cl.set_uuids(uuids)
+                _authenticate(cl)
     except Exception as exc:
         _last_error = f"{type(exc).__name__}: {exc}"
         raise
