@@ -50,7 +50,7 @@ const home = {
   heroCta: 'Book a free audit for your business',
   servicesTitle: 'Meet your ',
   servicesTitleAccent: 'growth engine',
-  servicesSub: 'One team instead of four vendors. Pick a single pillar or let us run all three together as one system, from the brand up.',
+  servicesSub: 'One team, not four separate vendors. Take one service on its own, or let us run them together as a single plan — starting with your brand.',
   buyersTitle: 'Two very different buyers. Two different plans.',
   journeyTitle: 'The B lies flat until marketing joins it',
   clientsTitle: 'Brands that trust us with their growth',
@@ -60,7 +60,7 @@ const home = {
   storiesTitle: 'Results, not screenshots',
   homeInfEyebrow: 'New · Influencer Marketing',
   homeInfTitle: 'Creators who sell your product, not just tag it.',
-  homeInfSub: 'The right creators, briefs that convert, and campaigns measured in orders and revenue — not vanity views.',
+  homeInfSub: 'The right creators, briefs that convert, and campaigns measured in orders and revenue, not just views.',
   homeInfCta: 'Explore influencer marketing →'
 };
 await SiteContent.updateOne({ key: 'home' }, { $setOnInsert: { data: home, updatedBy: 'seed', status: 'published' } }, { upsert: true });
