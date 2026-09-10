@@ -22,10 +22,12 @@ export const config = {
     password: process.env.ADMIN_PASSWORD || 'changeme123'
   },
   creator: {
-    provider: process.env.CREATOR_PROVIDER || 'sample', // 'sample' | 'modash' | 'rapidapi'
+    provider: process.env.CREATOR_PROVIDER || 'sample', // 'sample' | 'modash' | 'rapidapi' | 'scraperapi2' | 'instagrapi'
     modashKey: process.env.MODASH_API_KEY || '',
     rapidapiKey: process.env.RAPIDAPI_KEY || '',
     rapidapiHost: process.env.RAPIDAPI_HOST || '',
+    instagrapiUrl: process.env.INSTAGRAM_SVC_URL || '',   // URL of server/instagram-svc
+    instagrapiToken: process.env.INSTAGRAM_SVC_TOKEN || '', // optional; must match svc SVC_TOKEN
     cacheTtlMs: Number(process.env.CREATOR_CACHE_TTL_MS || 24 * 60 * 60 * 1000)
   }
 };

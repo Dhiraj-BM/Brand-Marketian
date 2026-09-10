@@ -5,10 +5,13 @@
    it, and falls back to realistic sample data so the site never breaks.
 
    Configure with env vars (see config.js):
-     CREATOR_PROVIDER = sample | modash | rapidapi   (default: sample)
+     CREATOR_PROVIDER = sample | modash | rapidapi | scraperapi2 | instagrapi   (default: sample)
      MODASH_API_KEY   = <your Modash key>            (for provider=modash)
+     INSTAGRAM_SVC_URL   = http://127.0.0.1:8000     (for provider=instagrapi — see server/instagram-svc)
+     INSTAGRAM_SVC_TOKEN = <shared secret>           (optional, must match the svc's SVC_TOKEN)
      RAPIDAPI_KEY     = <your RapidAPI key>           (for provider=rapidapi)
      RAPIDAPI_HOST    = <e.g. instagram-scraper-api2.p.rapidapi.com>
+                        (optional for provider=scraperapi2 — defaults to that host)
      CREATOR_CACHE_TTL_MS = 86400000                  (24h default)
 
    Output shape (matches frontend render()):
@@ -196,6 +199,99 @@ async function fromRapidApi(handle) {
   };
 }
 
+/* ---------- provider: RapidAPI (instagram-scraper-api2, free tier) ----------
+   Wired against "Instagram Scraper API 2" by SocialAPI
+   (instagram-scraper-api2.p.rapidapi.com) — has a $0/mo free tier. Two calls
+   per lookup, both cached for CREATOR_CACHE_TTL_MS:
+     1. GET /v1/info?username_or_id_or_url=<handle>   -> followers, name, avatar
+     2. GET /v1/posts?username_or_id_or_url=<handle>  -> recent posts for engagement
+   Set CREATOR_PROVIDER=scraperapi2 and RAPIDAPI_KEY; RAPIDAPI_HOST is optional
+   (defaults to instagram-scraper-api2.p.rapidapi.com). If you switch to another
+   RapidAPI listing, adjust the field names marked ADJUST below. */
+async function fromScraperApi2(handle) {
+  const host = config.creator.rapidapiHost || 'instagram-scraper-api2.p.rapidapi.com';
+  const H = { 'x-rapidapi-key': config.creator.rapidapiKey, 'x-rapidapi-host': host };
+  const user = handle.replace(/^@/, '');
+  const q = encodeURIComponent(user);
+
+  const pRes = await fetch('https://' + host + '/v1/info?username_or_id_or_url=' + q, { headers: H });
+  if (!pRes.ok) throw new Error('scraperapi2 info ' + pRes.status);
+  const pj = await pRes.json();                                   // ADJUST if not instagram-scraper-api2
+  const p = pj.data || pj;
+  if (!p || !p.username) throw new Error('scraperapi2: ' + (pj.detail || pj.message || 'profile not found'));
+  const followers = p.follower_count ?? p.edge_followed_by?.count ?? 0;
+
+  let avgLikes, avgComments, best = null, bestScore = -1;
+  try {
+    const mRes = await fetch('https://' + host + '/v1/posts?username_or_id_or_url=' + q, { headers: H });
+    if (mRes.ok) {
+      const mj = await mRes.json();
+      const items = Array.isArray(mj.data?.items) ? mj.data.items
+        : (Array.isArray(mj.items) ? mj.items : []);
+      let likes = 0, comments = 0, n = 0;
+      for (const it of items) {
+        const l = it.like_count ?? 0, c = it.comment_count ?? 0;
+        likes += l; comments += c; n++;
+        const views = it.play_count ?? it.ig_play_count ?? it.fb_play_count ?? it.view_count ?? 0;
+        // Rank reels by view count; rank photo posts (no view count) by likes instead.
+        const score = views > 0 ? views : l;
+        if (score > bestScore) {
+          bestScore = score;
+          best = { views, likes: l, comments: c, text: it.caption?.text || '', thumbnail: it.image_versions2?.candidates?.[0]?.url || it.thumbnail_url };
+        }
+      }
+      if (n) { avgLikes = likes / n; avgComments = comments / n; }
+    }
+  } catch { /* media list is a bonus — a failed second call should not break the profile lookup */ }
+
+  return {
+    handle: p.username || user, name: p.full_name || p.username,
+    avatar: p.profile_pic_url_hd || p.hd_profile_pic_url_info?.url || p.profile_pic_url,
+    category: p.category || p.category_name || p.business_category_name || undefined,
+    followers, avgLikes, avgComments, avgViews: best ? best.views || undefined : undefined,
+    topTitle: best && best.text ? '“' + best.text.slice(0, 70) + '”' : undefined,
+    videoThumb: best ? best.thumbnail : undefined, topViews: best ? best.views : undefined,
+    topLikes: best ? best.likes : undefined, topComments: best ? best.comments : undefined
+  };
+}
+
+/* ---------- provider: instagrapi microservice (real data, self-hosted, free) ----------
+   Talks to the small Python service in server/instagram-svc, which is logged in
+   to a throwaway Instagram account via `instagrapi` and returns real numbers.
+   Set CREATOR_PROVIDER=instagrapi and INSTAGRAM_SVC_URL (default 127.0.0.1:8000);
+   INSTAGRAM_SVC_TOKEN is optional and must match the service's SVC_TOKEN.
+   The service already shapes the payload, so this just maps the field names. */
+async function fromInstagrapi(handle) {
+  const base = (config.creator.instagrapiUrl || 'http://127.0.0.1:8000').replace(/\/+$/, '');
+  const H = { Accept: 'application/json' };
+  if (config.creator.instagrapiToken) H['x-svc-token'] = config.creator.instagrapiToken;
+  const user = handle.replace(/^@/, '');
+
+  const res = await fetch(base + '/profile/' + encodeURIComponent(user), { headers: H });
+  if (!res.ok) {
+    let msg = 'instagrapi svc ' + res.status;
+    try { const j = await res.json(); if (j && j.detail) msg += ': ' + j.detail; } catch { /* no body */ }
+    throw new Error(msg);
+  }
+  const p = await res.json();
+  const t = p.top || {};
+  return {
+    handle: p.username || user,
+    name: p.full_name || p.username,
+    avatar: p.profile_pic_url,
+    category: p.category || undefined,
+    followers: p.follower_count,
+    avgLikes: p.avg_likes != null ? p.avg_likes : undefined,
+    avgComments: p.avg_comments != null ? p.avg_comments : undefined,
+    avgViews: p.avg_views != null ? p.avg_views : undefined,
+    topTitle: t.caption ? '“' + String(t.caption).slice(0, 70) + '”' : undefined,
+    videoThumb: t.thumbnail_url || undefined,
+    topViews: t.views != null ? t.views : undefined,
+    topLikes: t.likes != null ? t.likes : undefined,
+    topComments: t.comments != null ? t.comments : undefined
+  };
+}
+
 /* ---------- cache (in-memory, TTL) ---------- */
 const cache = new Map(); // handle -> { at, data }
 function cacheGet(k) {
@@ -215,7 +311,9 @@ export async function getCreatorInsights(handle) {
   let data;
   try {
     const provider = config.creator.provider;
-    if (provider === 'modash' && config.creator.modashKey) data = normalise(await fromModash(key));
+    if (provider === 'instagrapi') data = normalise(await fromInstagrapi(key));
+    else if (provider === 'modash' && config.creator.modashKey) data = normalise(await fromModash(key));
+    else if (provider === 'scraperapi2' && config.creator.rapidapiKey) data = normalise(await fromScraperApi2(key));
     else if (provider === 'rapidapi' && config.creator.rapidapiKey && config.creator.rapidapiHost) data = normalise(await fromRapidApi(key));
     else data = getSample(key);                 // provider=sample or missing keys
   } catch (e) {
