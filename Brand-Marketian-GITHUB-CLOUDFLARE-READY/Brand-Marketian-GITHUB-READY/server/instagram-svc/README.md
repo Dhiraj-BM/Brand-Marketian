@@ -27,23 +27,35 @@ in**. No account = no real data. That is a platform limitation, not a code one.
 cd server/instagram-svc
 python -m venv .venv && . .venv/bin/activate     # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-
 cp .env.example .env
-# edit .env  ->  IG_USERNAME, IG_PASSWORD  (a NEW throwaway account)
+```
 
+Now give it a login — **one** of these, in `.env`:
+
+**A. sessionid cookie (recommended — no password, no challenge)**
+1. Log into `instagram.com` in a browser as a **throwaway** account.
+2. F12 → Application/Storage → Cookies → `https://www.instagram.com`.
+3. Copy the value of the **`sessionid`** cookie into `IG_SESSIONID=` in `.env`.
+
+**B. username + password** — set `IG_USERNAME` / `IG_PASSWORD` instead. The first
+login often triggers a "Was this you?" challenge you must clear once in a
+browser, then restart the service.
+
+Then run it:
+
+```bash
 uvicorn main:app --host 127.0.0.1 --port 8000 --env-file .env
 ```
 
-First boot logs in and writes `session.json`. Watch the log for
-`logged in as @...`. If you see `ChallengeRequired`, open Instagram in a browser
-as that account, clear the "Was this you?" prompt, then start the service again.
-
-Quick check:
+Watch the log for `logged in as ...`. Check it:
 
 ```bash
-curl -s http://127.0.0.1:8000/health
-curl -s http://127.0.0.1:8000/profile/nasa | python -m json.tool
+curl -s http://127.0.0.1:8000/health      # -> "logged_in": true
+curl -s http://127.0.0.1:8000/profile/nasa
 ```
+
+`/health` reports `auth_configured`, `auth_method`, and `last_error` so you can
+see exactly why it is not logged in.
 
 ## Wire it to the Node API
 

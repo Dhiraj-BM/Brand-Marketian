@@ -15,14 +15,15 @@ Run:
     cp .env.example .env   &&   edit IG_USERNAME / IG_PASSWORD
     uvicorn main:app --host 127.0.0.1 --port 8000
 
-Environment (see .env.example):
-    IG_USERNAME       required — the throwaway account's username
-    IG_PASSWORD       required — its password
-    IG_PROXY          optional — http://user:pass@host:port (recommended on a VPS)
-    IG_SESSION_FILE   optional — where to persist the login (default: session.json)
-    IG_MEDIA_COUNT    optional — recent posts to sample for engagement (default: 12)
-    SVC_TOKEN         optional — shared secret; if set, callers must send it as
-                                 the  x-svc-token  header
+Environment (see .env.example) — you need IG_SESSIONID *or* IG_USERNAME+IG_PASSWORD:
+    IG_SESSIONID      preferred — `sessionid` cookie from a logged-in browser
+    IG_USERNAME       fallback  — the throwaway account's username
+    IG_PASSWORD       fallback  — its password
+    IG_PROXY          optional  — http://user:pass@host:port (recommended on a VPS)
+    IG_SESSION_FILE   optional  — where to persist the login (default: session.json)
+    IG_MEDIA_COUNT    optional  — recent posts to sample for engagement (default: 12)
+    SVC_TOKEN         optional  — shared secret; if set, callers must send it as
+                                  the  x-svc-token  header
 """
 from __future__ import annotations
 
@@ -44,6 +45,7 @@ from instagrapi.exceptions import (
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("instagram-svc")
 
+IG_SESSIONID = os.environ.get("IG_SESSIONID", "").strip()
 IG_USERNAME = os.environ.get("IG_USERNAME", "").strip()
 IG_PASSWORD = os.environ.get("IG_PASSWORD", "")
 IG_PROXY = os.environ.get("IG_PROXY", "").strip()
@@ -51,24 +53,44 @@ SVC_TOKEN = os.environ.get("SVC_TOKEN", "").strip()
 SESSION_FILE = Path(os.environ.get("IG_SESSION_FILE", "session.json"))
 MEDIA_COUNT = int(os.environ.get("IG_MEDIA_COUNT", "12"))
 
-app = FastAPI(title="brand-marketian instagram-svc", version="1.0.0")
+app = FastAPI(title="brand-marketian instagram-svc", version="1.1.0")
 
 # instagrapi's Client is NOT thread-safe and FastAPI serves sync endpoints from a
 # threadpool, so every Instagram call goes through this one lock. Fine at the low
 # request volume this tool sees (and the Node side caches each handle for 24h).
 _client: Client | None = None
 _lock = threading.Lock()
+_last_error: str | None = None  # why the last login attempt failed (shown by /health)
+
+
+def _authenticate(cl: Client) -> None:
+    """Log `cl` in. Prefer a browser sessionid (no challenge); fall back to
+    username + password. Raises RuntimeError if neither is configured/usable."""
+    if IG_SESSIONID:
+        try:
+            cl.login_by_sessionid(IG_SESSIONID)
+            log.info("authenticated via IG_SESSIONID")
+            return
+        except Exception as exc:
+            log.warning("IG_SESSIONID rejected (%s) — trying username/password", exc)
+    if IG_USERNAME and IG_PASSWORD:
+        cl.login(IG_USERNAME, IG_PASSWORD)
+        log.info("authenticated via IG_USERNAME/IG_PASSWORD")
+        return
+    raise RuntimeError(
+        "no usable Instagram auth — set IG_SESSIONID (preferred) or "
+        "IG_USERNAME + IG_PASSWORD in server/instagram-svc/.env"
+    )
 
 
 def _build_client() -> Client:
-    if not IG_USERNAME or not IG_PASSWORD:
-        raise RuntimeError("IG_USERNAME / IG_PASSWORD are not set")
-
+    global _last_error
     cl = Client()
     cl.delay_range = [1, 3]  # random pause between requests — looks less robotic
     if IG_PROXY:
         cl.set_proxy(IG_PROXY)
 
+    # Reuse a saved session first — re-authenticating is what tends to trip a ban.
     if SESSION_FILE.exists():
         try:
             cl.load_settings(SESSION_FILE)
@@ -76,20 +98,24 @@ def _build_client() -> Client:
         except Exception as exc:  # corrupt / old format — start fresh
             log.warning("could not load session (%s) — logging in fresh", exc)
 
-    cl.login(IG_USERNAME, IG_PASSWORD)  # reuses the loaded session if still valid
-
-    # Confirm the session is actually authenticated; re-login if not.
     try:
-        cl.get_timeline_feed()
-    except LoginRequired:
-        log.info("saved session expired — performing a fresh login")
-        uuids = cl.get_settings().get("uuids", {})
-        cl.set_settings({})
-        cl.set_uuids(uuids)
-        cl.login(IG_USERNAME, IG_PASSWORD)
+        _authenticate(cl)
+        # Confirm the session actually works; re-auth once if not.
+        try:
+            cl.get_timeline_feed()
+        except LoginRequired:
+            log.info("session not valid — re-authenticating")
+            uuids = cl.get_settings().get("uuids", {})
+            cl.set_settings({})
+            cl.set_uuids(uuids)
+            _authenticate(cl)
+    except Exception as exc:
+        _last_error = f"{type(exc).__name__}: {exc}"
+        raise
 
     cl.dump_settings(SESSION_FILE)
-    log.info("logged in as @%s; session saved to %s", IG_USERNAME, SESSION_FILE)
+    _last_error = None
+    log.info("logged in as %s; session saved to %s", IG_USERNAME or "(sessionid)", SESSION_FILE)
     return cl
 
 
@@ -120,7 +146,15 @@ def _startup() -> None:
 
 @app.get("/health")
 def health() -> dict:
-    return {"ok": True, "logged_in": _client is not None, "account": IG_USERNAME or None}
+    auth_configured = bool(IG_SESSIONID or (IG_USERNAME and IG_PASSWORD))
+    return {
+        "ok": _client is not None,
+        "logged_in": _client is not None,
+        "auth_configured": auth_configured,
+        "auth_method": "sessionid" if IG_SESSIONID else ("password" if IG_USERNAME else None),
+        "account": IG_USERNAME or None,
+        "last_error": _last_error,
+    }
 
 
 def _str(value) -> str | None:
@@ -139,6 +173,11 @@ def profile(handle: str, x_svc_token: str = Header(default="")) -> dict:
     try:
         cl = _get_client()
         user = cl.user_info_by_username(handle)
+    except HTTPException:
+        raise
+    except RuntimeError as exc:
+        # No auth configured / not logged in — the operator must fix .env.
+        raise HTTPException(status_code=503, detail=str(exc))
     except UserNotFound:
         raise HTTPException(status_code=404, detail="handle not found")
     except ChallengeRequired:
@@ -155,6 +194,9 @@ def profile(handle: str, x_svc_token: str = Header(default="")) -> dict:
         raise HTTPException(status_code=429, detail=f"rate-limited by Instagram: {exc}")
     except ClientError as exc:
         raise HTTPException(status_code=502, detail=f"instagram error: {exc}")
+    except Exception as exc:  # noqa: BLE001 — last resort, keep the service answering
+        _reset_client()
+        raise HTTPException(status_code=502, detail=f"{type(exc).__name__}: {exc}")
 
     uid = user.pk
 
