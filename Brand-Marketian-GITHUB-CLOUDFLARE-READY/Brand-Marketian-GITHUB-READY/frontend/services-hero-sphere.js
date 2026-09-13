@@ -88,14 +88,15 @@
 
   // Redraws a flat badge icon as a stacked pair like the reference: a SOLID,
   // fully-opaque duplicate peeking out behind (upper-right), and the actual
-  // icon in FRONT (lower-left) rendered as translucent glass — composited
-  // with 'lighten' so the glyph stays crisp white while the seam where the
-  // two tiles overlap blends/glows instead of just looking dimmed. A glass
-  // sheen + light grain on top, both clipped to the shape via 'source-atop'.
-  var ICON_TEXTURE_SIZE = 170;
-  var ICON_ART = 104;
-  var ICON_BACK = { x: 44, y: 26 };   // solid duplicate, peeking up-right
-  var ICON_FRONT = { x: 26, y: 44 };  // translucent glass tile, in front, down-left
+  // icon in FRONT (lower-left), genuinely translucent (real alpha, not a
+  // subtle blend) so it visibly reads as glass at the small size these render
+  // at on the sphere — the offset is a full ~35% of the tile so the back
+  // tile's peek is an unmistakable corner, not a sliver that disappears at a
+  // distance. A glass sheen + light grain on top, clipped via 'source-atop'.
+  var ICON_TEXTURE_SIZE = 180;
+  var ICON_ART = 96;
+  var ICON_BACK = { x: 58, y: 26 };   // solid duplicate, peeking up-right
+  var ICON_FRONT = { x: 26, y: 58 };  // translucent tile, in front, down-left
   function buildIconTexture(img) {
     var size = ICON_TEXTURE_SIZE, art = ICON_ART;
     var c = document.createElement('canvas');
@@ -104,20 +105,20 @@
 
     // BACK: solid and fully opaque, just a duplicate of the badge peeking out
     ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,.32)';
-    ctx.shadowBlur = 9;
+    ctx.shadowColor = 'rgba(0,0,0,.35)';
+    ctx.shadowBlur = 8;
     ctx.shadowOffsetY = 4;
     ctx.drawImage(img, ICON_BACK.x, ICON_BACK.y, art, art);
     ctx.restore();
 
-    // FRONT: the real icon, blended with 'lighten' so it reads as translucent
-    // glass over the solid back tile (their overlap glows instead of muddying)
-    // while the white glyph itself never darkens or dims
+    // FRONT: the real icon at real reduced alpha — genuinely see-through, so
+    // the back tile's colour visibly shows through the overlap, the way the
+    // reference's glass tile does (not just a slightly-brighter blend)
     ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,.28)';
-    ctx.shadowBlur = 14;
+    ctx.shadowColor = 'rgba(0,0,0,.3)';
+    ctx.shadowBlur = 12;
     ctx.shadowOffsetY = 6;
-    ctx.globalCompositeOperation = 'lighten';
+    ctx.globalAlpha = 0.62;
     ctx.drawImage(img, ICON_FRONT.x, ICON_FRONT.y, art, art);
     ctx.restore();
 
@@ -125,8 +126,8 @@
     ctx.save();
     ctx.globalCompositeOperation = 'source-atop';
     var sheen = ctx.createLinearGradient(0, 0, 0, size);
-    sheen.addColorStop(0, 'rgba(255,255,255,.38)');
-    sheen.addColorStop(.5, 'rgba(255,255,255,.06)');
+    sheen.addColorStop(0, 'rgba(255,255,255,.42)');
+    sheen.addColorStop(.5, 'rgba(255,255,255,.08)');
     sheen.addColorStop(1, 'rgba(255,255,255,0)');
     ctx.fillStyle = sheen;
     ctx.fillRect(0, 0, size, size);
@@ -191,8 +192,10 @@
 
     // the styled tile has padding around the badge (for the shadow/duplicate
     // layer) that the old plain icon didn't, so the sprite is scaled up by the
-    // same ratio to keep the badge itself the same apparent size as before
-    var spriteScale = 0.5 * (ICON_TEXTURE_SIZE / ICON_ART);
+    // same ratio to keep the badge itself the same apparent size as before;
+    // nudged up slightly from 0.5 so the stacked/glass effect has room to
+    // actually read at the size these render on the sphere
+    var spriteScale = 0.56 * (ICON_TEXTURE_SIZE / ICON_ART);
     var positions = fibonacciSphere(icons.length, 1.95);
     icons.forEach(function (img, i) {
       if (!img) return;
