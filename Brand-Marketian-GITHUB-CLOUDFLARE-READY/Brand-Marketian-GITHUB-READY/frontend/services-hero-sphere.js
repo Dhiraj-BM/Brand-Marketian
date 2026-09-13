@@ -86,24 +86,25 @@
     });
   }
 
-  // Redraws a flat colour-rect + white-glyph badge as ONE frosted-glass tile
-  // — no duplicate/offset layer. The badge is recoloured in place: its own
-  // brand colour (sampled from a safe background pixel) becomes the glyph
-  // colour, and the rect becomes a pale glass tint of that same colour, then
-  // it's composited onto a padded canvas with a drop shadow and a soft
-  // top-left specular highlight, matching the single-tile glass-icon look.
+  // Redraws a flat colour-rect + white-glyph badge as ONE glass tile — no
+  // duplicate layer, and this time genuinely translucent: the "glass" pixels
+  // get their ALPHA reduced (not just their colour paled), so the sprite's
+  // real transparency lets the sphere/wireframe behind actually show through
+  // at render time — a live effect, not a pre-baked tint. The glyph is kept
+  // separate on its own layer, given a diagonal light/dark bevel (an emboss,
+  // faking the 3D relief in the reference) and a soft blurred contact shadow
+  // it casts onto the glass beneath it, so it reads as sitting above the glass.
   var ICON_ART = 116;
   var ICON_PAD = 27;
   var ICON_TEXTURE_SIZE = ICON_ART + ICON_PAD * 2;
   function buildIconTexture(img) {
     var art = ICON_ART, pad = ICON_PAD, size = ICON_TEXTURE_SIZE;
 
-    // rasterize the source badge so its pixels can be recoloured
-    var src = document.createElement('canvas');
-    src.width = src.height = art;
-    var sctx = src.getContext('2d');
-    sctx.drawImage(img, 0, 0, art, art);
-    var data = sctx.getImageData(0, 0, art, art);
+    var raw = document.createElement('canvas');
+    raw.width = raw.height = art;
+    var rctx = raw.getContext('2d');
+    rctx.drawImage(img, 0, 0, art, art);
+    var data = rctx.getImageData(0, 0, art, art);
     var px = data.data;
 
     // sample the badge's own brand colour from a safe spot: top-center strip,
@@ -111,35 +112,69 @@
     var sx = Math.floor(art * 0.5), sy = Math.floor(art * 0.06);
     var sIdx = (sy * art + sx) * 4;
     var brand = { r: px[sIdx], g: px[sIdx + 1], b: px[sIdx + 2] };
-    var tint = {
-      r: Math.round(brand.r + (255 - brand.r) * 0.78),
-      g: Math.round(brand.g + (255 - brand.g) * 0.78),
-      b: Math.round(brand.b + (255 - brand.b) * 0.78)
+    var glassTint = {
+      r: Math.round(brand.r + (255 - brand.r) * 0.3),
+      g: Math.round(brand.g + (255 - brand.g) * 0.3),
+      b: Math.round(brand.b + (255 - brand.b) * 0.3)
     };
 
-    // white glyph -> brand colour; coloured rect -> pale glass tint of it
+    // split into two layers: GLASS (tinted, low alpha — real transparency)
+    // and GLYPH (full brand colour, full alpha), by how white each pixel is
+    var glassData = rctx.createImageData(art, art);
+    var glyphData = rctx.createImageData(art, art);
+    var gpx = glassData.data, ypx = glyphData.data;
     for (var i = 0; i < px.length; i += 4) {
-      if (px[i + 3] === 0) continue; // transparent corner — leave alone
+      var a = px[i + 3];
+      if (a === 0) continue; // transparent corner on both layers
       var minC = Math.min(px[i], px[i + 1], px[i + 2]);
       var t = Math.max(0, Math.min(1, (minC - 175) / 70)); // 0=rect, 1=glyph
-      px[i]     = Math.round(tint.r + (brand.r - tint.r) * t);
-      px[i + 1] = Math.round(tint.g + (brand.g - tint.g) * t);
-      px[i + 2] = Math.round(tint.b + (brand.b - tint.b) * t);
+      gpx[i] = glassTint.r; gpx[i + 1] = glassTint.g; gpx[i + 2] = glassTint.b;
+      gpx[i + 3] = Math.round(a * (1 - t) * 0.58); // this is the actual "see-through"
+      ypx[i] = brand.r; ypx[i + 1] = brand.g; ypx[i + 2] = brand.b;
+      ypx[i + 3] = Math.round(a * t);
     }
-    sctx.putImageData(data, 0, 0);
+    var glassCanvas = document.createElement('canvas');
+    glassCanvas.width = glassCanvas.height = art;
+    glassCanvas.getContext('2d').putImageData(glassData, 0, 0);
+
+    var glyphCanvas = document.createElement('canvas');
+    glyphCanvas.width = glyphCanvas.height = art;
+    var gctx = glyphCanvas.getContext('2d');
+    gctx.putImageData(glyphData, 0, 0);
+    // emboss: a diagonal light-to-dark bevel, clipped to the glyph's own alpha
+    gctx.save();
+    gctx.globalCompositeOperation = 'source-atop';
+    var bevel = gctx.createLinearGradient(0, 0, art, art);
+    bevel.addColorStop(0, 'rgba(255,255,255,.5)');
+    bevel.addColorStop(.5, 'rgba(255,255,255,0)');
+    bevel.addColorStop(1, 'rgba(0,0,0,.4)');
+    gctx.fillStyle = bevel;
+    gctx.fillRect(0, 0, art, art);
+    gctx.restore();
 
     var c = document.createElement('canvas');
     c.width = c.height = size;
     var ctx = c.getContext('2d');
 
+    // the glass chip itself — soft outer shadow, real per-pixel transparency
     ctx.save();
     ctx.shadowColor = 'rgba(0,0,0,.4)';
     ctx.shadowBlur = 14;
     ctx.shadowOffsetY = 7;
-    ctx.drawImage(src, pad, pad, art, art);
+    ctx.drawImage(glassCanvas, pad, pad, art, art);
     ctx.restore();
 
-    // soft specular highlight, top-left, clipped to the tile via 'source-atop'
+    // the contact shadow the glyph casts onto the glass beneath it
+    ctx.save();
+    try { ctx.filter = 'blur(3px)'; } catch (e) {}
+    ctx.globalAlpha = 0.35;
+    ctx.drawImage(glyphCanvas, pad + 2, pad + 3, art, art);
+    ctx.restore();
+
+    // the glyph, crisp, on top
+    ctx.drawImage(glyphCanvas, pad, pad, art, art);
+
+    // overall glossy sheen across glass + glyph, clipped via 'source-atop'
     ctx.save();
     ctx.globalCompositeOperation = 'source-atop';
     var glow = ctx.createRadialGradient(size * .32, size * .28, 0, size * .32, size * .28, size * .66);
@@ -204,7 +239,9 @@
     icons.forEach(function (img, i) {
       if (!img) return;
       var tex = new THREE.CanvasTexture(buildIconTexture(img));
-      var sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true }));
+      // depthWrite:false so the tile's real (now much lower) alpha blends
+      // correctly against the wireframe/core behind it instead of occluding
+      var sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false }));
       sprite.scale.set(spriteScale, spriteScale, 1);
       sprite.position.set(positions[i].x, positions[i].y, positions[i].z);
       group.add(sprite);
