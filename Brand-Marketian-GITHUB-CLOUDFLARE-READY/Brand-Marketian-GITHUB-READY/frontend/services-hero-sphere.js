@@ -86,14 +86,46 @@
     });
   }
 
+  function rgbToHsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    var max = Math.max(r, g, b), min = Math.min(r, g, b), h, s, l = (max + min) / 2;
+    if (max === min) { h = s = 0; }
+    else {
+      var d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
+      else if (max === g) h = (b - r) / d + 2;
+      else h = (r - g) / d + 4;
+      h /= 6;
+    }
+    return [h, s, l];
+  }
+  function hslToRgb(h, s, l) {
+    var r, g, b;
+    if (s === 0) { r = g = b = l; }
+    else {
+      var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      var p = 2 * l - q;
+      var hue2rgb = function (p, q, t) {
+        if (t < 0) t += 1; if (t > 1) t -= 1;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+        return p;
+      };
+      r = hue2rgb(p, q, h + 1 / 3); g = hue2rgb(p, q, h); b = hue2rgb(p, q, h - 1 / 3);
+    }
+    return 'rgb(' + Math.round(r * 255) + ',' + Math.round(g * 255) + ',' + Math.round(b * 255) + ')';
+  }
+
   // Redraws a flat colour-rect + white-glyph badge as ONE glass tile — no
-  // duplicate layer, and this time genuinely translucent: the "glass" pixels
-  // get their ALPHA reduced (not just their colour paled), so the sprite's
-  // real transparency lets the sphere/wireframe behind actually show through
-  // at render time — a live effect, not a pre-baked tint. The glyph is kept
-  // separate on its own layer, given a diagonal light/dark bevel (an emboss,
-  // faking the 3D relief in the reference) and a soft blurred contact shadow
-  // it casts onto the glass beneath it, so it reads as sitting above the glass.
+  // duplicate layer. The "glass" is genuinely translucent (real reduced
+  // alpha, not just a paled colour, so the sprite's real transparency lets
+  // the wireframe sphere show through at render time). The glyph is vivid —
+  // saturation/lightness pushed into a punchy range rather than the badge's
+  // sometimes-muted original — and embossed with real offset highlight/
+  // shadow duplicates (not just a gradient wash) so it reads as a raised 3D
+  // shape, plus a soft blurred contact shadow it casts onto the glass.
   var ICON_ART = 116;
   var ICON_PAD = 27;
   var ICON_TEXTURE_SIZE = ICON_ART + ICON_PAD * 2;
@@ -118,11 +150,21 @@
       b: Math.round(brand.b + (255 - brand.b) * 0.3)
     };
 
-    // split into two layers: GLASS (tinted, low alpha — real transparency)
-    // and GLYPH (full brand colour, full alpha), by how white each pixel is
+    // a punchier, more saturated version of the brand colour for the glyph
+    // itself, so it reads as "filled with colour" rather than the badge's
+    // sometimes muted original tone
+    var hsl = rgbToHsl(brand.r, brand.g, brand.b);
+    var vividS = Math.min(1, hsl[1] * 1.4 + 0.15);
+    var vividL = Math.min(0.6, Math.max(0.42, hsl[2]));
+    var vividColor = hslToRgb(hsl[0], vividS, vividL);
+    var darkColor = hslToRgb(hsl[0], vividS, Math.max(0.14, vividL - 0.24));
+    var lightColor = hslToRgb(hsl[0], vividS * 0.7, Math.min(0.9, vividL + 0.32));
+
+    // split into GLASS (tinted, low alpha — real transparency) and a plain
+    // white GLYPH-MASK (alpha only — colour is applied afterwards per copy)
     var glassData = rctx.createImageData(art, art);
-    var glyphData = rctx.createImageData(art, art);
-    var gpx = glassData.data, ypx = glyphData.data;
+    var maskData = rctx.createImageData(art, art);
+    var gpx = glassData.data, mpx = maskData.data;
     for (var i = 0; i < px.length; i += 4) {
       var a = px[i + 3];
       if (a === 0) continue; // transparent corner on both layers
@@ -130,27 +172,33 @@
       var t = Math.max(0, Math.min(1, (minC - 175) / 70)); // 0=rect, 1=glyph
       gpx[i] = glassTint.r; gpx[i + 1] = glassTint.g; gpx[i + 2] = glassTint.b;
       gpx[i + 3] = Math.round(a * (1 - t) * 0.58); // this is the actual "see-through"
-      ypx[i] = brand.r; ypx[i + 1] = brand.g; ypx[i + 2] = brand.b;
-      ypx[i + 3] = Math.round(a * t);
+      mpx[i] = mpx[i + 1] = mpx[i + 2] = 255;
+      mpx[i + 3] = Math.round(a * t);
     }
     var glassCanvas = document.createElement('canvas');
     glassCanvas.width = glassCanvas.height = art;
     glassCanvas.getContext('2d').putImageData(glassData, 0, 0);
 
-    var glyphCanvas = document.createElement('canvas');
-    glyphCanvas.width = glyphCanvas.height = art;
-    var gctx = glyphCanvas.getContext('2d');
-    gctx.putImageData(glyphData, 0, 0);
-    // emboss: a diagonal light-to-dark bevel, clipped to the glyph's own alpha
-    gctx.save();
-    gctx.globalCompositeOperation = 'source-atop';
-    var bevel = gctx.createLinearGradient(0, 0, art, art);
-    bevel.addColorStop(0, 'rgba(255,255,255,.5)');
-    bevel.addColorStop(.5, 'rgba(255,255,255,0)');
-    bevel.addColorStop(1, 'rgba(0,0,0,.4)');
-    gctx.fillStyle = bevel;
-    gctx.fillRect(0, 0, art, art);
-    gctx.restore();
+    var maskCanvas = document.createElement('canvas');
+    maskCanvas.width = maskCanvas.height = art;
+    maskCanvas.getContext('2d').putImageData(maskData, 0, 0);
+
+    // stamp the mask into a solid colour via 'destination-in' — reused for
+    // the vivid face, the embossed highlight/shadow rims, and the contact
+    // shadow, so the glyph shape is only computed once
+    function tintedGlyph(color) {
+      var t = document.createElement('canvas');
+      t.width = t.height = art;
+      var tctx = t.getContext('2d');
+      tctx.fillStyle = color;
+      tctx.fillRect(0, 0, art, art);
+      tctx.globalCompositeOperation = 'destination-in';
+      tctx.drawImage(maskCanvas, 0, 0);
+      return t;
+    }
+    var glyphDark = tintedGlyph(darkColor);
+    var glyphLight = tintedGlyph(lightColor);
+    var glyphVivid = tintedGlyph(vividColor);
 
     var c = document.createElement('canvas');
     c.width = c.height = size;
@@ -164,22 +212,26 @@
     ctx.drawImage(glassCanvas, pad, pad, art, art);
     ctx.restore();
 
-    // the contact shadow the glyph casts onto the glass beneath it
+    // soft blurred contact shadow the glyph casts onto the glass beneath it
     ctx.save();
     try { ctx.filter = 'blur(3px)'; } catch (e) {}
-    ctx.globalAlpha = 0.35;
-    ctx.drawImage(glyphCanvas, pad + 2, pad + 3, art, art);
+    ctx.globalAlpha = 0.4;
+    ctx.drawImage(glyphDark, pad + 3, pad + 4, art, art);
     ctx.restore();
 
-    // the glyph, crisp, on top
-    ctx.drawImage(glyphCanvas, pad, pad, art, art);
+    // emboss: a crisp dark rim (bottom-right) and light rim (top-left),
+    // offset a couple of pixels each way — real duplicated shapes, not a
+    // gradient wash — so the vivid face on top reads as a raised 3D surface
+    ctx.drawImage(glyphDark, pad + 2, pad + 2, art, art);
+    ctx.drawImage(glyphLight, pad - 1, pad - 1, art, art);
+    ctx.drawImage(glyphVivid, pad, pad, art, art);
 
-    // overall glossy sheen across glass + glyph, clipped via 'source-atop'
+    // a little extra gloss across glass + glyph together, clipped via 'source-atop'
     ctx.save();
     ctx.globalCompositeOperation = 'source-atop';
     var glow = ctx.createRadialGradient(size * .32, size * .28, 0, size * .32, size * .28, size * .66);
-    glow.addColorStop(0, 'rgba(255,255,255,.55)');
-    glow.addColorStop(.45, 'rgba(255,255,255,.12)');
+    glow.addColorStop(0, 'rgba(255,255,255,.4)');
+    glow.addColorStop(.45, 'rgba(255,255,255,.08)');
     glow.addColorStop(1, 'rgba(255,255,255,0)');
     ctx.fillStyle = glow;
     ctx.fillRect(0, 0, size, size);
