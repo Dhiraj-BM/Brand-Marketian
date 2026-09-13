@@ -41,8 +41,6 @@
     return { scale: 1, x: 2.9 };                    // desktop
   }
 
-  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-
   // the ten platforms this page is about — real badge files already in /assets,
   // same ones used elsewhere on the site (industries.html, footer, etc.)
   var ICON_FILES = [
@@ -88,6 +86,57 @@
     });
   }
 
+  // Redraws a flat badge icon as a small stacked, frosted-glass tile: a dimmer
+  // duplicate offset behind, a soft drop shadow under both, a glass sheen and
+  // a light grain on top — clipped to the badge's own rounded shape via
+  // 'source-atop' so nothing needs a separate rounded-rect clip path.
+  var ICON_TEXTURE_SIZE = 160;
+  var ICON_PAD = 24; // headroom for the shadow + back-layer offset
+  function buildIconTexture(img) {
+    var size = ICON_TEXTURE_SIZE, pad = ICON_PAD, art = size - pad * 2;
+    var c = document.createElement('canvas');
+    c.width = c.height = size;
+    var ctx = c.getContext('2d');
+
+    ctx.save();
+    ctx.globalAlpha = 0.5;
+    ctx.shadowColor = 'rgba(0,0,0,.35)';
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetY = 4;
+    ctx.drawImage(img, pad + 9, pad + 9, art, art); // dimmer duplicate, offset down-right
+    ctx.restore();
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,.32)';
+    ctx.shadowBlur = 16;
+    ctx.shadowOffsetY = 7;
+    ctx.drawImage(img, pad, pad, art, art); // main tile on top
+    ctx.restore();
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'source-atop'; // paint only over what's already opaque
+    var sheen = ctx.createLinearGradient(0, 0, 0, size);
+    sheen.addColorStop(0, 'rgba(255,255,255,.4)');
+    sheen.addColorStop(.5, 'rgba(255,255,255,.08)');
+    sheen.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = sheen;
+    ctx.fillRect(0, 0, size, size);
+
+    var grain = ctx.createImageData(size, size);
+    for (var i = 0; i < grain.data.length; i += 4) {
+      grain.data[i] = grain.data[i + 1] = grain.data[i + 2] = 255;
+      grain.data[i + 3] = Math.random() * 20;
+    }
+    var noise = document.createElement('canvas');
+    noise.width = noise.height = size;
+    noise.getContext('2d').putImageData(grain, 0, 0);
+    ctx.globalAlpha = 0.5;
+    ctx.drawImage(noise, 0, 0);
+    ctx.restore();
+
+    return c;
+  }
+
   function init(THREE, icons) {
     var w = mount.clientWidth, h = mount.clientHeight;
     if (!w || !h) return;
@@ -131,15 +180,16 @@
     );
     group.add(shell);
 
+    // the styled tile has padding around the badge (for the shadow/duplicate
+    // layer) that the old plain icon didn't, so the sprite is scaled up by the
+    // same ratio to keep the badge itself the same apparent size as before
+    var spriteScale = 0.5 * (ICON_TEXTURE_SIZE / (ICON_TEXTURE_SIZE - ICON_PAD * 2));
     var positions = fibonacciSphere(icons.length, 1.95);
     icons.forEach(function (img, i) {
       if (!img) return;
-      var c = document.createElement('canvas');
-      c.width = c.height = 128;
-      c.getContext('2d').drawImage(img, 0, 0, 128, 128);
-      var tex = new THREE.CanvasTexture(c);
+      var tex = new THREE.CanvasTexture(buildIconTexture(img));
       var sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true }));
-      sprite.scale.set(0.5, 0.5, 1);
+      sprite.scale.set(spriteScale, spriteScale, 1);
       sprite.position.set(positions[i].x, positions[i].y, positions[i].z);
       group.add(sprite);
     });
