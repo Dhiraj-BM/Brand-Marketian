@@ -94,6 +94,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="bm-page" content="about" />
 <meta name="bm-api" content="" />
 <script defer src="cms.js"></script><script defer="" src="motion.js"></script>
+<script defer src="about-hero-scene.js"></script><script defer src="tilt-cards.js"></script>
 <script src="_ds/organic-fef53163-6fb7-44b0-a953-acc5c3c3b818/_ds_bundle.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media=&#39;all&#39;"><noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <style>body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)}a{color:var(--color-accent-700);text-decoration:none}a:hover{color:var(--color-accent-600)}</style>
@@ -106,24 +107,35 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <p style="font-size:17px;max-width:48ch;color:color-mix(in srgb, var(--color-text) 76%, transparent)">Brand Marketian is a growth agency for brands, and building brands from scratch is what we do best. We started because founders kept getting the same thing from agencies — activity reports instead of growth. So we run one pod per client, own a number, and report against it every week.</p>
 <div style="display:flex;gap:12px;margin-top:26px;flex-wrap:wrap"><a class="btn btn-primary" href="/contact" style="padding:12px 26px">Work with us</a><a class="btn btn-secondary" href="/careers" style="padding:12px 26px">Join the team</a></div>
 </div>
-<dc-import name="Media" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=70" label="The studio" tone="ink" stat="Delhi NCR" stat-label="hybrid" lock="11" hint-size="100%,320px" style="width:100%;height:320px"></dc-import>
+<div style="position:relative;width:100%;height:340px;border-radius:var(--radius-lg);overflow:hidden;background:linear-gradient(155deg,var(--bm-ink),var(--color-accent-700) 130%)">
+<div id="aboutHeroGL" style="position:absolute;inset:0" aria-hidden="true"></div>
+<div style="position:absolute;left:14px;bottom:14px;display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.94);border-radius:999px;padding:7px 13px;box-shadow:var(--shadow-sm);pointer-events:none">
+<span style="width:8px;height:8px;border-radius:50%;background:var(--bm-ink);animation:bm-pulse 2.6s ease-in-out infinite"></span>
+<span style="font-weight:700;font-size:11.5px;letter-spacing:.02em;color:var(--bm-ink);white-space:nowrap">The studio</span>
+</div>
+<div style="position:absolute;right:14px;top:14px;background:var(--bm-ink);color:#fff;border-radius:12px;padding:9px 13px;box-shadow:var(--shadow-md);animation:bm-float 5s ease-in-out infinite;pointer-events:none">
+<div style="font-family:var(--font-heading);font-weight:800;font-size:19px;line-height:1">Delhi NCR</div>
+<div style="font-size:10px;font-weight:600;opacity:.9;letter-spacing:.04em;text-transform:uppercase">hybrid</div>
+</div>
+<div style="position:absolute;left:14px;top:14px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.55);pointer-events:none">drag / click to nudge</div>
+</div>
 </section>
 
 <section style="max-width:1240px;margin:0 auto;padding:24px 32px">
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
-<div class="card elev-sm"><div style="font-family:var(--font-heading);font-size:38px;line-height:1">50+</div><div class="card-body" style="flex:none">brands served to date</div></div>
-<div class="card elev-sm"><div style="font-family:var(--font-heading);font-size:38px;line-height:1;color:var(--color-accent-700)">₹30L+</div><div class="card-body" style="flex:none">monthly ad spend managed</div></div>
-<div class="card elev-sm"><div style="font-family:var(--font-heading);font-size:38px;line-height:1">15+</div><div class="card-body" style="flex:none">brands built from scratch</div></div>
-<div class="card elev-sm"><div style="font-family:var(--font-heading);font-size:38px;line-height:1;color:var(--color-accent-2-700)">3x</div><div class="card-body" style="flex:none">avg. reach growth in 90 days</div></div>
+<div class="card elev-sm" data-tilt><div style="font-family:var(--font-heading);font-size:38px;line-height:1" data-countup>50+</div><div class="card-body" style="flex:none">brands served to date</div></div>
+<div class="card elev-sm" data-tilt><div style="font-family:var(--font-heading);font-size:38px;line-height:1;color:var(--color-accent-700)" data-countup>₹30L+</div><div class="card-body" style="flex:none">monthly ad spend managed</div></div>
+<div class="card elev-sm" data-tilt><div style="font-family:var(--font-heading);font-size:38px;line-height:1" data-countup>15+</div><div class="card-body" style="flex:none">brands built from scratch</div></div>
+<div class="card elev-sm" data-tilt><div style="font-family:var(--font-heading);font-size:38px;line-height:1;color:var(--color-accent-2-700)" data-countup>3x</div><div class="card-body" style="flex:none">avg. reach growth in 90 days</div></div>
 </div>
 </section>
 
 <section style="max-width:1240px;margin:0 auto;padding:52px 32px 20px">
 <h2 style="font-size:40px;margin:0 0 22px">How we behave</h2>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:22px">
-<div class="card elev-sm" style="padding:var(--space-6)"><div style="width:44px;height:44px;border-radius:50%;background:var(--color-accent-200)"></div><h3 style="margin:8px 0 0;font-size:24px">Own the number</h3><p class="card-body" style="font-size:14.5px">Reach, cost per lead, return on ad spend — one agreed metric per account, reviewed weekly. If it is not moving, we change the plan, not the slide.</p></div>
-<div class="card elev-sm" style="padding:var(--space-6)"><div style="width:44px;height:44px;border-radius:50%;background:var(--color-accent-2-200)"></div><h3 style="margin:8px 0 0;font-size:24px">Say it plainly</h3><p class="card-body" style="font-size:14.5px">No jargon in reports, no hiding behind impressions. You should be able to explain your own marketing to your board.</p></div>
-<div class="card elev-sm" style="padding:var(--space-6)"><div style="width:44px;height:44px;border-radius:50%;background:var(--color-neutral-300)"></div><h3 style="margin:8px 0 0;font-size:24px">Build the brand first</h3><p class="card-body" style="font-size:14.5px">A name, a look and a story before the ad spend. Most of what we run started as a brand we built from scratch, and the campaigns work because the brand underneath them does.</p></div>
+<div class="card elev-sm" data-tilt style="padding:var(--space-6)"><div style="width:44px;height:44px;border-radius:50%;background:var(--color-accent-200);display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;color:var(--color-accent-700)">1</div><h3 style="margin:8px 0 0;font-size:24px">Own the number</h3><p class="card-body" style="font-size:14.5px">Reach, cost per lead, return on ad spend — one agreed metric per account, reviewed weekly. If it is not moving, we change the plan, not the slide.</p></div>
+<div class="card elev-sm" data-tilt style="padding:var(--space-6)"><div style="width:44px;height:44px;border-radius:50%;background:var(--color-accent-2-200);display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;color:var(--color-accent-2-700)">2</div><h3 style="margin:8px 0 0;font-size:24px">Say it plainly</h3><p class="card-body" style="font-size:14.5px">No jargon in reports, no hiding behind impressions. You should be able to explain your own marketing to your board.</p></div>
+<div class="card elev-sm" data-tilt style="padding:var(--space-6)"><div style="width:44px;height:44px;border-radius:50%;background:var(--color-neutral-300);display:grid;place-items:center;font-family:var(--font-heading);font-weight:800;color:var(--bm-ink)">3</div><h3 style="margin:8px 0 0;font-size:24px">Build the brand first</h3><p class="card-body" style="font-size:14.5px">A name, a look and a story before the ad spend. Most of what we run started as a brand we built from scratch, and the campaigns work because the brand underneath them does.</p></div>
 </div>
 </section>
 
@@ -132,7 +144,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <h2 style="font-size:40px;margin:0 0 26px">Where we've got to</h2>
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
 <sc-for list="{{ timeline }}" as="m" hint-placeholder-count="4">
-<div class="card" style="background:var(--color-bg)"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;opacity:.6">{{ m.year }}</div><div style="font-family:var(--font-heading);font-size:20px;margin-top:4px">{{ m.title }}</div><p class="card-body" style="font-size:13.5px">{{ m.note }}</p></div>
+<div class="card" data-tilt style="background:var(--color-bg)"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;opacity:.6">{{ m.year }}</div><div style="font-family:var(--font-heading);font-size:20px;margin-top:4px">{{ m.title }}</div><p class="card-body" style="font-size:13.5px">{{ m.note }}</p></div>
 </sc-for>
 </div>
 </div>

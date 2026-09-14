@@ -87,7 +87,7 @@ for (const file of pages) {
     // <canvas> get baked into the static HTML — then run AGAIN on the live
     // page, loading Three.js twice into one page and leaving the canvas
     // un-rendered. Blocking it here makes the capture deterministic either way.
-    if (/\/(enhance|cms|home-hero|hero-flow|influencer|services-hero-sphere)\.js(\?|$)/.test(u)) return r.abort();
+    if (/\/(enhance|cms|home-hero|hero-flow|influencer|services-hero-sphere|about-hero-scene|tilt-cards)\.js(\?|$)/.test(u)) return r.abort();
     r.continue();
   });
   const warnings = [];
