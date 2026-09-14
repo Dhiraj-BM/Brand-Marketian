@@ -81,7 +81,13 @@ for (const file of pages) {
     // block the progressive-enhancement scripts during the build so they do NOT
     // inject their markup (hamburger, mobile menu, swipe hooks) into the snapshot.
     // They stay referenced in <head> and run fresh on the live static page.
-    if (/\/(enhance|cms|home-hero|hero-flow|influencer)\.js(\?|$)/.test(u)) return r.abort();
+    // services-hero-sphere is included here too: it fetches Three.js + icon
+    // assets async and, if that chain happens to resolve before page.content()
+    // is captured, its dynamically-injected <script src=three.min.js> and
+    // <canvas> get baked into the static HTML — then run AGAIN on the live
+    // page, loading Three.js twice into one page and leaving the canvas
+    // un-rendered. Blocking it here makes the capture deterministic either way.
+    if (/\/(enhance|cms|home-hero|hero-flow|influencer|services-hero-sphere)\.js(\?|$)/.test(u)) return r.abort();
     r.continue();
   });
   const warnings = [];
