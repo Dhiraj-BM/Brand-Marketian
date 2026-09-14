@@ -27,7 +27,20 @@
     'html.bm-motion [data-bm-reveal]{opacity:0;transform:translateY(18px);',
     'transition:opacity .7s cubic-bezier(.22,.9,.28,1),transform .7s cubic-bezier(.22,.9,.28,1)}',
     'html.bm-motion [data-bm-reveal].bm-in{opacity:1;transform:none}',
-    '@media (prefers-reduced-motion:reduce){html.bm-motion [data-bm-reveal]{opacity:1!important;transform:none!important;transition:none!important}}'
+    '@media (prefers-reduced-motion:reduce){html.bm-motion [data-bm-reveal]{opacity:1!important;transform:none!important;transition:none!important}}',
+    // ---- hero intro (adapted from the "Maruncy" landing-page-animation shot) ----
+    // leading blocks of the first hero rise + fade on load, staggered.
+    'html.bm-motion .bm-hero-item{opacity:0;transform:translateY(24px);',
+    'transition:opacity .7s cubic-bezier(.22,.9,.28,1) var(--bm-hd,0ms),transform .7s cubic-bezier(.22,.9,.28,1) var(--bm-hd,0ms)}',
+    'html.bm-motion .bm-hero-in .bm-hero-item{opacity:1;transform:none}',
+    // animated underline swept under the hero accent word — pseudo element, so
+    // cms.js re-setting the span text can never remove it.
+    'html.bm-motion .bm-hero-accent,html.bm-motion .svc-hero .ac,html.bm-motion h1 .ac{position:relative}',
+    'html.bm-motion .bm-hero-fx .bm-hero-accent::after,html.bm-motion .bm-hero-fx h1 .ac::after{content:"";position:absolute;left:0;right:0;bottom:-.09em;height:.085em;',
+    'background:var(--color-accent,#ff6600);border-radius:3px;transform:scaleX(0);transform-origin:left;',
+    'transition:transform .7s cubic-bezier(.22,.9,.28,1) .45s}',
+    'html.bm-motion .bm-hero-fx.bm-hero-in .bm-hero-accent::after,html.bm-motion .bm-hero-fx.bm-hero-in h1 .ac::after{transform:scaleX(1)}',
+    '@media (prefers-reduced-motion:reduce){html.bm-motion .bm-hero-item{opacity:1!important;transform:none!important;transition:none!important}}'
   ].join('');
   var style = document.createElement('style');
   style.id = 'bm-motion-css';
@@ -136,6 +149,40 @@
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }) : null;
 
+  /* ============================================================ hero intro
+     A one-shot load sequence for the top of the page: the leading blocks of
+     the first hero rise + fade in on load, and the accent word gets an
+     underline sweep. Adapted from the "Maruncy" landing-page-animation shot.
+     No dependency. No-ops if there is no hero. Reduced motion → skipped. */
+  function heroIntro() {
+    if (reduce || !io) return;
+    var h1 = document.querySelector('main h1, section h1, .svc-hero h1, h1');
+    if (!h1 || h1.__bmHero) return;
+    if (h1.closest('header, nav, .bm-mobile-menu')) return;
+    // must actually be near the top — otherwise it is a content heading, not a hero
+    if (h1.getBoundingClientRect().top > (window.innerHeight || 800) * 1.15) return;
+    h1.__bmHero = 1;
+
+    var parent = h1.parentElement;
+    var kids = [].slice.call(parent.children);
+    var idx = kids.indexOf(h1);
+    var seq = kids.slice(Math.max(0, idx - 1), idx + 4).filter(function (el) {
+      return !/^(SCRIPT|STYLE|CANVAS|TEMPLATE)$/.test(el.tagName);
+    });
+    seq.forEach(function (el, i) {
+      el.classList.add('bm-hero-item');
+      el.style.setProperty('--bm-hd', (i * 90) + 'ms');
+    });
+
+    var hero = h1.closest('section') || parent;
+    hero.classList.add('bm-hero-fx');
+
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { hero.classList.add('bm-hero-in'); });
+    });
+    setTimeout(function () { hero.classList.add('bm-hero-in'); }, 1600);   // failsafe
+  }
+
   function arm() {
     // count-up
     document.querySelectorAll('[data-countup]').forEach(function (el) {
@@ -170,12 +217,14 @@
 
   if (!reduce && io) document.documentElement.classList.add('bm-motion');
 
+  function rescan() { arm(); heroIntro(); }
+
   function boot() {
-    arm();
+    rescan();
     // the x-dc runtime / cms.js inject content after load — re-scan a few times
-    setTimeout(arm, 700);
-    setTimeout(arm, 1800);
-    setTimeout(arm, 3400);
+    setTimeout(rescan, 700);
+    setTimeout(rescan, 1800);
+    setTimeout(rescan, 3400);
     if ('MutationObserver' in window) {
       var mo = new MutationObserver(function () { clearTimeout(boot.__t); boot.__t = setTimeout(arm, 250); });
       mo.observe(document.body, { childList: true, subtree: true });
@@ -183,6 +232,7 @@
     // failsafe: nothing stays hidden
     setTimeout(function () {
       document.querySelectorAll('[data-bm-reveal]:not(.bm-in)').forEach(function (el) { el.classList.add('bm-in'); });
+      document.querySelectorAll('.bm-hero-fx:not(.bm-hero-in)').forEach(function (el) { el.classList.add('bm-hero-in'); });
     }, 3000);
   }
 
