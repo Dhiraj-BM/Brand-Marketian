@@ -144,6 +144,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="bm-page" content="services" />
 <meta name="bm-api" content="" />
 <script defer src="cms.js"></script><script defer="" src="motion.js"></script>
+<script defer src="services-hero-sphere.js"></script>
 <script src="_ds/organic-fef53163-6fb7-44b0-a953-acc5c3c3b818/_ds_bundle.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media=&#39;all&#39;"><noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <style>
@@ -151,11 +152,24 @@ body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var
 a{color:var(--color-accent-700);text-decoration:none}a:hover{color:var(--color-accent-600)}
 
 /* ===== services — editorial, type-forward, section colour ===== */
-.svc-wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+.svc-wrap{max-width:1240px;margin:0 auto;padding:0 32px}
 
 /* hero */
 .svc-hero{background:var(--bm-ink);color:#fff;position:relative;overflow:hidden}
-.svc-hero::after{content:"";position:absolute;right:-14%;top:-46%;width:60%;height:190%;background:radial-gradient(circle at center,color-mix(in srgb,var(--color-accent) 40%,transparent),transparent 60%);filter:blur(30px);pointer-events:none}
+/* services-hero-sphere.js upgrades this to a WebGL icon sphere on capable
+   desktops only; stays empty (and harmless) everywhere else — narrow screens,
+   prefers-reduced-motion and Save-Data just get the flat ink hero below */
+.svc-hero-gl{position:absolute;inset:0;pointer-events:none}
+.svc-hero-gl canvas{display:block;width:100% !important;height:100% !important;-webkit-mask-image:linear-gradient(to left,black 45%,transparent 92%);mask-image:linear-gradient(to left,black 45%,transparent 92%)}
+/* mobile: the sphere can't share a row with the headline (its own min font-size
+   already fills the width), so it drops out of the absolute overlay and becomes
+   its own small, centered block below the text instead — still on, just smaller */
+@media (max-width:719px){
+  .svc-hero{display:flex;flex-direction:column}
+  .svc-hero .svc-wrap{order:1}
+  .svc-hero-gl{position:relative;inset:auto;order:2;width:min(240px,58vw);height:min(240px,58vw);margin:4px auto 32px;flex:none}
+  .svc-hero-gl canvas{-webkit-mask-image:none;mask-image:none}
+}
 .svc-hero .svc-wrap{padding-top:92px;padding-bottom:56px;position:relative;z-index:1}
 .svc-hero .eyebrow{color:var(--color-accent-300);font-weight:800;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
 .svc-hero h1{font-family:var(--font-heading);font-weight:900;font-size:clamp(40px,7vw,74px);line-height:1;letter-spacing:-.026em;margin:20px 0 0;max-width:15ch;color:#fff}
@@ -256,6 +270,7 @@ a{color:var(--color-accent-700);text-decoration:none}a:hover{color:var(--color-a
 
 <!-- HERO -->
 <section class="svc-hero">
+<div class="svc-hero-gl" id="svcHeroGL" aria-hidden="true"></div>
 <div class="svc-wrap">
 <h1 data-cms="svcTitle">Ten levers. One team that owns the number.</h1>
 <p data-cms="svcSub">Run a single service or connect them into one growth system — starting with your brand. Every one is built for how people actually buy now: mobile-first, multilingual, always running, WhatsApp-led.</p>
