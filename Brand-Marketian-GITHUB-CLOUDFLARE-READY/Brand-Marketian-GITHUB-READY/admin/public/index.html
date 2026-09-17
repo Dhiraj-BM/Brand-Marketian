@@ -313,6 +313,12 @@ const SCHEMA = {
     SEO
   ]},
 
+  blog:{ label:'Blog', icon:'📝', desc:'Blog listing page.', sections:[
+    {title:'Hero', fields:[{k:'heroTitle',label:'Heading',type:'text'},{k:'heroSub',label:'Sub',type:'textarea'}]},
+    {title:'Intro', fields:[{k:'introText',label:'Intro text',type:'textarea'}]},
+    SEO
+  ]},
+
   pricing:{ label:'Pricing', icon:'💳', desc:'Plans and pricing.', sections:[
     {title:'Hero', fields:[{k:'heroTitle',label:'Heading',type:'text'},{k:'heroSub',label:'Sub',type:'textarea'}]},
     {title:'Plans', fields:[
@@ -400,7 +406,7 @@ const SCHEMA = {
     SEO
   ]}
 };
-const PAGE_ORDER = ['home','influencer','services','industries','work','pricing','about','contact','global'];
+const PAGE_ORDER = ['home','influencer','services','industries','work','blog','pricing','about','contact','global'];
 
 /* ================================================= PERMISSIONS */
 const CAN = {
