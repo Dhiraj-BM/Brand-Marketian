@@ -65,7 +65,7 @@
             !panel.contains(e.target) && !btn.contains(e.target)) close();
       });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
-      window.addEventListener('resize', function () { if (window.innerWidth > 760) close(); });
+      window.addEventListener('resize', function () { if (window.innerWidth > 980) close(); });
     });
   }
 
@@ -159,7 +159,37 @@
     });
   }
 
-  function boot() { initNav(); initHeroSwipe(); initStorySwipe(); initFooterForm(); }
+  /* ---------- 5. Phone legibility + touch targets ----------
+     Many labels are authored at 10-11px and text links are ~20px tall.
+     On phones, lift text to a 12px floor and give standalone text links a
+     44px tap area. Skips svg/canvas and anything inside the header. */
+  function initPhoneFit() {
+    if (!window.matchMedia || !window.matchMedia('(max-width: 640px)').matches) return;
+    var els = document.querySelectorAll('body *');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (el.closest('header, .bm-mobile-menu, svg, canvas, script, style')) continue;
+      var hasText = false;
+      for (var n = el.firstChild; n; n = n.nextSibling) {
+        if (n.nodeType === 3 && n.nodeValue.trim().length > 1) { hasText = true; break; }
+      }
+      if (!hasText) continue;
+      var cs = window.getComputedStyle(el);
+      if (parseFloat(cs.fontSize) < 12) el.style.fontSize = '12px';
+      if (el.tagName === 'A' && !el.classList.contains('btn')) {
+        var r = el.getBoundingClientRect();
+        var p = el.parentElement;
+        var alone = p && (p.textContent.trim() === el.textContent.trim() || /flex|grid/.test(window.getComputedStyle(p).display));
+        if (alone && r.height > 0 && r.height < 40) {
+          el.style.display = 'inline-flex';
+          el.style.alignItems = 'center';
+          el.style.minHeight = '44px';
+        }
+      }
+    }
+  }
+
+  function boot() { initNav(); initHeroSwipe(); initStorySwipe(); initFooterForm(); initPhoneFit(); setTimeout(initPhoneFit, 2200); }
   if (document.readyState === 'complete') setTimeout(boot, 300);
   else window.addEventListener('load', function () { setTimeout(boot, 300); });
 })();
