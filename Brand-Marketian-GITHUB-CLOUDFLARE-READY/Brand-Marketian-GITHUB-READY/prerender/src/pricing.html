@@ -214,6 +214,8 @@ body.pp-body{margin:0;background:var(--pp-bg);color:var(--pp-ink);font-family:va
 :where(.pp) :where(h1,h2,h3,h4,p,ul,dl,dd,figure){margin:0}
 :where(.pp) :where(ul){padding:0;list-style:none}
 :where(.pp) a{color:inherit;text-decoration:none}
+/* the site's global a{text-decoration:none} lived in each page's own stylesheet; restore it for the shared header/footer */
+:where(body.pp-body) a{text-decoration:none}
 .pp svg{display:block;flex:none}
 .pp :focus-visible{outline:3px solid var(--pp-blue);outline-offset:3px;border-radius:6px}
 .pp-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
