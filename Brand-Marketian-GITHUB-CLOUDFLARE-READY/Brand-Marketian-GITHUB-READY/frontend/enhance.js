@@ -50,6 +50,26 @@
       header.appendChild(panel);
       bar.appendChild(btn);
 
+      /* translucent pill that follows the cursor / keyboard focus across the desktop nav */
+      if (!nav.querySelector('.bm-nav-pill')) {
+        var pill = document.createElement('span');
+        pill.className = 'bm-nav-pill';
+        pill.setAttribute('aria-hidden', 'true');
+        nav.insertBefore(pill, nav.firstChild);
+        var moveTo = function (a) {
+          pill.style.width = a.offsetWidth + 'px';
+          pill.style.height = a.offsetHeight + 'px';
+          pill.style.transform = 'translate(' + a.offsetLeft + 'px,' + a.offsetTop + 'px)';
+          pill.classList.add('on');
+        };
+        nav.querySelectorAll('a').forEach(function (a) {
+          a.addEventListener('mouseenter', function () { moveTo(a); });
+          a.addEventListener('focus', function () { moveTo(a); });
+          a.addEventListener('blur', function () { pill.classList.remove('on'); });
+        });
+        nav.addEventListener('mouseleave', function () { pill.classList.remove('on'); });
+      }
+
       function close() {
         document.body.classList.remove('bm-menu-open');
         btn.setAttribute('aria-expanded', 'false');

@@ -238,9 +238,6 @@ body.pp-body{margin:0;background:var(--pp-bg);color:var(--pp-ink);font-family:va
 html.pp-js .pp-rv{opacity:0;transform:translateY(var(--ty,20px));transition:opacity .5s ease-out var(--rd,0ms),transform .5s ease-out var(--rd,0ms)}
 html.pp-js .pp-rv.in{opacity:1;transform:none}
 
-/* header: compact + solid once scrolled (the site's own behaviour, restored for this static build) */
-body.pp-scrolled header{background:#fff !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;box-shadow:0 1px 0 rgba(17,18,20,.08),0 8px 22px -14px rgba(17,18,20,.22) !important}
-body.pp-scrolled header>div:first-child{padding-top:9px !important;padding-bottom:9px !important}
 
 /* hero: clean light-blue wash with slow colour drift */
 .pp-hero{position:relative;padding:96px 0 64px;overflow:hidden;background:linear-gradient(135deg,#e6ebff 0%,#f5f7ff 48%,#fff1e6 100%)}
@@ -738,7 +735,7 @@ Brand Marketian
     });
   });
 
-  /* ---- header: compact + solid once scrolled; restore the scroll-progress bar ---- */
+  /* ---- header: restore the scroll-progress bar ---- */
   var hdr = $('header');
   var bar = hdr && hdr.querySelector(':scope > div:last-of-type > div');
   var ticking = false;
@@ -748,7 +745,6 @@ Brand Marketian
     requestAnimationFrame(function () {
       ticking = false;
       var y = window.pageYOffset || root.scrollTop;
-      d.body.classList.toggle('pp-scrolled', y > 16);
       if (bar) {
         var h = root.scrollHeight - window.innerHeight;
         bar.style.width = (h > 0 ? Math.min(100, y / h * 100) : 0) + '%';
