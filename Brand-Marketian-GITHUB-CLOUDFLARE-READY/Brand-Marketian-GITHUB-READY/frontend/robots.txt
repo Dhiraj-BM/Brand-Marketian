@@ -32,3 +32,4 @@ User-agent: Bingbot
 Allow: /
 
 Sitemap: https://brandmarketian.com/sitemap.xml
+Sitemap: https://brandmarketian.com/sitemap-pages.xml
