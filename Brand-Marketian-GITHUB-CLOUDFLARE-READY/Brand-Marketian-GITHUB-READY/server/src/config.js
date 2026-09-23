@@ -21,6 +21,10 @@ export const config = {
     email: process.env.ADMIN_EMAIL || 'growth@brandmarketian.com',
     password: process.env.ADMIN_PASSWORD || 'changeme123'
   },
+  cloudinary: {
+    url: process.env.CLOUDINARY_URL || '',
+    folder: process.env.CLOUDINARY_FOLDER || 'brand-marketian'
+  },
   creator: {
     provider: process.env.CREATOR_PROVIDER || 'sample', // 'sample' | 'modash' | 'rapidapi'
     modashKey: process.env.MODASH_API_KEY || '',

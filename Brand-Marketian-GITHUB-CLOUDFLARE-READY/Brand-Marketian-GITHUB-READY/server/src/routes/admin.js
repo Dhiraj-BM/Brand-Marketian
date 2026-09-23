@@ -5,6 +5,7 @@ import { Lead, Subscriber, Post, CaseStudy, Job, Application, User, SiteContent,
 import { requireAuth, sign, ROLES } from '../auth.js';
 import { upload } from '../upload.js';
 import { saveFile, deleteFile, makeName } from '../storage.js';
+import { cloudinaryEnabled, uploadToCloudinary, deleteFromCloudinary } from '../cloudinary.js';
 
 const router = Router();
 const MAX_VERSIONS = 30;
@@ -208,12 +209,20 @@ router.put('/content/:key', requireAuth(ROLES.PUBLISH), async (req, res) => {
 router.post('/media', requireAuth(ROLES.EDIT), upload.any(), async (req, res) => {
   const docs = [];
   for (const f of (req.files || [])) {
-    const stored = makeName(f.originalname);
-    await saveFile({ buffer: f.buffer, filename: stored, mime: f.mimetype });
-    docs.push({
-      name: f.originalname, path: '/uploads/' + stored, mime: f.mimetype, size: f.size,
+    const base = {
+      name: f.originalname, mime: f.mimetype, size: f.size,
       tag: req.body.tag || 'Website Images', alt: req.body.alt || '', uploadedBy: req.user.email
-    });
+    };
+    if (cloudinaryEnabled) {
+      let c;
+      try { c = await uploadToCloudinary({ buffer: f.buffer, filename: f.originalname, mime: f.mimetype }); }
+      catch (e) { console.error(e); return res.status(502).json({ error: 'Image upload failed: ' + e.message }); }
+      docs.push({ ...base, path: c.url, storage: 'cloudinary', publicId: c.publicId, resourceType: c.resourceType, width: c.width, height: c.height });
+    } else {
+      const stored = makeName(f.originalname);
+      await saveFile({ buffer: f.buffer, filename: stored, mime: f.mimetype });
+      docs.push({ ...base, path: '/uploads/' + stored, storage: 'gridfs' });
+    }
   }
   const saved = await Media.insertMany(docs);
   res.status(201).json(saved);
@@ -240,6 +249,8 @@ router.delete('/media/:id', requireAuth(ROLES.MEDIA_DELETE), async (req, res) =>
   // Best-effort remove the bytes from GridFS if it lives under /uploads.
   if (m?.path?.startsWith('/uploads/')) {
     deleteFile(m.path.slice('/uploads/'.length)).catch(() => {});
+  } else if (m?.storage === 'cloudinary') {
+    deleteFromCloudinary(m.publicId, m.resourceType);
   }
   res.json({ ok: true });
 });

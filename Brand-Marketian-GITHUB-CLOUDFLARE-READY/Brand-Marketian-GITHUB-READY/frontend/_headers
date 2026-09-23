@@ -1,10 +1,9 @@
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  X-Frame-Options: SAMEORIGIN
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Strict-Transport-Security: max-age=31536000
-  Content-Security-Policy: frame-ancestors 'self'; base-uri 'self'; object-src 'none'
+  Content-Security-Policy: frame-ancestors 'self' https://admin.brandmarketian.com; base-uri 'self'; object-src 'none'
 
 # design-canvas partials are not real pages
 /*.dc.html

@@ -121,6 +121,13 @@ a{color:var(--info)}
 .chip.on{background:var(--brand-soft);border-color:var(--brand);color:var(--brand-ink)}
 
 /* modal */
+#veRoot{position:fixed;inset:0;z-index:90;background:#e5e7eb;display:flex;flex-direction:column}
+.ve-top{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.ve-top select{padding:6px 8px;border:1px solid var(--line);border-radius:8px}
+.ve-stage{flex:1;display:flex;justify-content:center;overflow:hidden;min-height:0}
+.ve-stage iframe{border:0;width:100%;height:100%;background:#fff;transition:width .2s}
+.ve-stage.mob iframe{width:390px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+@media(max-width:920px){.ve-hint{display:none}}
 .modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.5);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100}
 .modal{background:#fff;border-radius:14px;width:100%;max-width:760px;max-height:88vh;overflow:auto;box-shadow:0 20px 40px rgba(0,0,0,.2)}
 .modal .mh{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;position:sticky;top:0;background:#fff}
@@ -194,8 +201,13 @@ const CFG = {
 };
 // page key -> published filename (for Preview / links)
 const PAGE_FILE = { home:'index.html', services:'services.html', industries:'industries.html',
-  work:'case-studies.html', pricing:'pricing.html', about:'about.html', contact:'contact.html',
+  work:'work.html', pricing:'pricing.html', about:'about.html', contact:'contact.html',
   influencer:'influencer-marketing.html', blog:'blog.html', careers:'careers.html' };
+// Every published file that uses a page key (the blog articles share "blog"),
+// offered in the on-page editor's page switcher.
+const PAGE_FILES = { blog:['blog.html','blog-cpl-india-2026.html','blog-festive-ad-calendar-d2c.html',
+  'blog-local-seo-multi-location.html','blog-marketing-budget-by-stage.html','blog-nine-reels-beat-2l-budget.html',
+  'blog-whatsapp-funnels.html'] };
 const MEDIA_CATS = ['Logos','Icons','Website Images','Service Images','Client Logos','Case Study Images','Team Images','Banners','Videos'];
 
 /* ===================================================== CONTENT SCHEMA
@@ -406,7 +418,8 @@ const SCHEMA = {
     SEO
   ]}
 };
-const PAGE_ORDER = ['home','influencer','services','industries','work','blog','pricing','about','contact','global'];
+SCHEMA.careers = { label:'Careers', icon:'💼', desc:'Careers / open roles page.', sections:[SEO] };
+const PAGE_ORDER = ['home','influencer','services','industries','work','blog','pricing','about','contact','careers','global'];
 
 /* ================================================= PERMISSIONS */
 const CAN = {
@@ -531,7 +544,7 @@ function renderEditor(){
     <button class="btn ghost sm" onclick="leaveEditor()" style="margin-bottom:12px">← All pages</button>
     <div class="editor">
       <div><h3 style="margin:0 0 4px">${sc.icon} ${esc(sc.label)}</h3>
-        <p class="muted" style="margin:0 0 16px">${esc(sc.desc||'')}</p>${secHtml}</div>
+        <p class="muted" style="margin:0 0 16px">${esc(sc.desc||'')}</p>${onPageCard()}${secHtml}</div>
       <div>${workflowPanel()}</div>
     </div>`;
   wireFields();
@@ -662,6 +675,87 @@ function preview(){
   window.addEventListener('message',function onr(ev){ if(ev.data&&ev.data.type==='bm-preview-ready'){ w.postMessage(payload,CFG.siteOrigin); } });
   toast('Opening preview…');
 }
+
+/* --- on-page (visual) editor ---
+   Loads the real page in an iframe with ?bmEdit=1; cms.js there makes every
+   heading, paragraph, button, link and image editable and reports changes
+   back here as S.draft._edits (plus any wired page fields). Done saves the
+   draft; it only goes live when published, like every other change. */
+const KIND_LABEL={text:'Text',html:'Text',tn:'Text',src:'Image',href:'Link',bg:'Background'};
+function short(s){ s=String(s||'').replace(/<[^>]+>/g,''); return s.length>70?s.slice(0,70)+'…':s; }
+function onPageCard(){
+  if(!PAGE_FILE[S.pageKey]) return '';
+  const eds=S.draft._edits||[], canE=CAN.edit(S.user.role);
+  const cell=(e,v)=> (e.k==='src'||e.k==='bg')
+    ? (v?`<span style="display:inline-block;width:44px;height:30px;border-radius:5px;background:#eee center/cover no-repeat;background-image:url('${esc(mediaUrl(v))}')"></span>`:'—')
+    : esc(short(v));
+  const rows=eds.map((e,i)=>`<tr><td>${esc(e.f)}</td><td>${KIND_LABEL[e.k]||esc(e.k)}</td><td class="muted">${cell(e,e.o)}</td><td>${cell(e,e.v)}</td>
+    <td>${canE?`<button class="btn ghost sm" onclick="delEdit(${i})">Undo</button>`:''}</td></tr>`).join('');
+  return `<div class="card" style="padding:16px;margin-bottom:16px;border:1px solid #fed7aa;background:#fff7ed">
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <div style="flex:1;min-width:220px"><strong>Edit directly on the page</strong>
+        <div class="muted" style="font-size:13px">Click any heading, paragraph, button, link or image on the real page to change it — every part of the page, not just the fields below.</div></div>
+      ${canE?`<button class="btn primary" onclick="openVisual()">✏️ Open on-page editor</button>`:''}
+    </div>
+    ${eds.length?`<details style="margin-top:12px"><summary style="cursor:pointer;font-weight:600">${eds.length} on-page change${eds.length>1?'s':''}</summary>
+      <div style="overflow:auto"><table style="margin-top:8px"><thead><tr><th>Page</th><th>Type</th><th>Was</th><th>Now</th><th></th></tr></thead><tbody>${rows}</tbody></table></div></details>`:''}
+  </div>`;
+}
+function delEdit(i){ S.draft._edits.splice(i,1); markDirty(); renderEditor(); }
+
+let VE=null;
+function openVisual(file){
+  const files=PAGE_FILES[S.pageKey]||[PAGE_FILE[S.pageKey]];
+  file=file||files[0];
+  const keep=VE; closeVisual();
+  const root=document.createElement('div'); root.id='veRoot';
+  root.innerHTML=`<div class="ve-top">
+      <strong>✏️ ${esc(SCHEMA[S.pageKey].label)}</strong>
+      ${files.length>1?`<select id="veFile">${files.map(f=>`<option ${f===file?'selected':''}>${esc(f)}</option>`).join('')}</select>`:''}
+      <span class="muted ve-hint" style="font-size:13px">Click text to type · click an image to replace it · orange outline = editable, green = changed</span>
+      <span style="flex:1"></span>
+      <button class="btn sm" id="veDev">📱 Mobile view</button>
+      <button class="btn ghost sm" id="veCancel">Cancel</button>
+      <button class="btn primary sm" id="veDone">Done — save draft</button>
+    </div>
+    <div class="ve-stage"><iframe id="veFrame" title="Page editor" src="${esc(CFG.siteOrigin+'/'+file+'?bmEdit=1&t='+Date.now())}"></iframe></div>`;
+  document.body.appendChild(root);
+  VE={ file, frame:root.querySelector('iframe'),
+       edits: keep?keep.edits:JSON.parse(JSON.stringify(S.draft._edits||[])),
+       fields: keep?keep.fields:{}, dirty: keep?keep.dirty:false };
+  root.querySelector('#veDev').onclick=e=>{ const st=root.querySelector('.ve-stage'); st.classList.toggle('mob'); e.target.textContent=st.classList.contains('mob')?'🖥 Desktop view':'📱 Mobile view'; };
+  root.querySelector('#veCancel').onclick=()=>{ if(VE.dirty && !confirm('Discard the changes you made on the page?')) return; closeVisual(); VE=null; };
+  root.querySelector('#veDone').onclick=finishVisual;
+  const sel=root.querySelector('#veFile'); if(sel) sel.onchange=()=>openVisual(sel.value);
+}
+function closeVisual(){ const r=document.getElementById('veRoot'); if(r) r.remove(); }
+function finishVisual(){
+  if(!VE) return;
+  try{ VE.frame.contentWindow.postMessage({type:'bm-edit-commit'},CFG.siteOrigin); }catch(e){}
+  setTimeout(applyVisual,400);   // the page answers with its final edit list first
+}
+function applyVisual(){
+  if(!VE) return;
+  const v=VE; VE=null; closeVisual();
+  if(!v.dirty){ toast('No changes made'); return; }
+  S.draft._edits=v.edits;
+  Object.keys(v.fields).forEach(k=>setVal(S.draft,k,v.fields[k]));
+  markDirty(); saveDraft();
+}
+window.addEventListener('message',ev=>{
+  if(!VE || ev.origin!==CFG.siteOrigin || ev.source!==VE.frame.contentWindow) return;
+  const m=ev.data||{};
+  if(m.type==='bm-edit-ready'){
+    VE.frame.contentWindow.postMessage({type:'bm-edit-init', data:Object.assign({},S.draft,VE.fields), edits:VE.edits}, CFG.siteOrigin);
+  }else if(m.type==='bm-edit-change'||m.type==='bm-edit-committed'){
+    if(Array.isArray(m.edits)){ VE.edits=m.edits; if(m.type==='bm-edit-change') VE.dirty=true; }
+  }else if(m.type==='bm-edit-field' && typeof m.k==='string'){
+    VE.fields[m.k]=m.v; VE.dirty=true;
+  }else if(m.type==='bm-edit-pick'){
+    const win=VE.frame.contentWindow;
+    openPicker(url=>win.postMessage({type:'bm-edit-image', id:m.id, url}, CFG.siteOrigin));
+  }
+});
 
 /* --- version history --- */
 async function showVersions(){

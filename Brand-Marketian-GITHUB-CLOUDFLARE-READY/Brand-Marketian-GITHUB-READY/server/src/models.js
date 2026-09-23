@@ -126,7 +126,12 @@ const MediaSchema = new Schema({
   size: Number,
   tag: String,        // category: Logos, Icons, Website Images, ...
   alt: String,
-  uploadedBy: String
+  uploadedBy: String,
+  storage: String,      // 'cloudinary' | 'gridfs' (unset = gridfs, older uploads)
+  publicId: String,     // Cloudinary public_id, for deletes
+  resourceType: String, // Cloudinary resource type: image | video | raw
+  width: Number,
+  height: Number
 }, { timestamps: true });
 
 export const SiteContent = model('SiteContent', SiteContentSchema);
