@@ -824,9 +824,9 @@ class Component extends DCLogic {
   bg(src) { return "url('" + src + "')"; }
   pillarImage(i) {
     const stock = [
-      'https://res.cloudinary.com/og6uf2ic/image/upload/c_limit,w_1200,f_auto,q_auto/v1790194056/brand-marketian/site/bm-01-social',
-      'https://res.cloudinary.com/og6uf2ic/image/upload/c_limit,w_1200,f_auto,q_auto/v1790194058/brand-marketian/site/bm-02-ads',
-      'https://res.cloudinary.com/og6uf2ic/image/upload/c_limit,w_1200,f_auto,q_auto/v1790194060/brand-marketian/site/bm-03-team'
+      'https://res.cloudinary.com/og6uf2ic/image/upload/c_fill,g_auto,w_800,h_1040,f_auto,q_auto/v1790194056/brand-marketian/site/bm-01-social',
+      'https://res.cloudinary.com/og6uf2ic/image/upload/c_fill,g_auto,w_800,h_1040,f_auto,q_auto/v1790194058/brand-marketian/site/bm-02-ads',
+      'https://res.cloudinary.com/og6uf2ic/image/upload/c_fill,g_auto,w_800,h_1040,f_auto,q_auto/v1790194060/brand-marketian/site/bm-03-team'
     ][i] || ('assets/pillar' + (i + 1) + '.png');
     return "url('" + this.res('pillar' + (i + 1), stock) + "')";
   }
