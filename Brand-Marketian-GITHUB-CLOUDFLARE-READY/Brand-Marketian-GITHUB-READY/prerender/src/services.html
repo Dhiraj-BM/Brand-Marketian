@@ -125,8 +125,18 @@
 
 <script src="./support.js"></script>
 <script defer src="enhance.js"></script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TTKCQJDV');</script>
+<!-- End Google Tag Manager -->
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TTKCQJDV" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 <x-dc>
 <helmet>
 <link rel="stylesheet" href="_ds/organic-fef53163-6fb7-44b0-a953-acc5c3c3b818/styles.css">
@@ -274,7 +284,7 @@ a{color:var(--color-accent-700);text-decoration:none}a:hover{color:var(--color-a
 <ol class="svc-index">
 <sc-for list="{{ services }}" as="s" hint-placeholder-count="10">
 <li class="svc-row" style="--sc:{{ s.sc }}">
-<a class="svc-row-in" href="contact.html">
+<a class="svc-row-in" href="/contact">
 <span class="svc-row-n">{{ s.n }}</span>
 <span class="svc-row-main">
 <span class="svc-row-name">{{ s.name }}</span>
@@ -361,7 +371,7 @@ a{color:var(--color-accent-700);text-decoration:none}a:hover{color:var(--color-a
 <h2>Not sure which lever to pull first?</h2>
 <p>Book a free audit and we&#8217;ll tell you where the fastest win is — no pitch, no pressure.</p>
 </div>
-<a class="go" href="contact.html">Book a free audit</a>
+<a class="go" href="/contact">Book a free audit</a>
 </div>
 </div>
 </section>
