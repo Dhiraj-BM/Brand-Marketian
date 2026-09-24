@@ -284,7 +284,7 @@ a{color:var(--color-accent-700);text-decoration:none}a:hover{color:var(--color-a
 <ol class="svc-index">
 <sc-for list="{{ services }}" as="s" hint-placeholder-count="10">
 <li class="svc-row" style="--sc:{{ s.sc }}">
-<a class="svc-row-in" href="/contact">
+<a class="svc-row-in" href="{{ s.href }}">
 <span class="svc-row-n">{{ s.n }}</span>
 <span class="svc-row-main">
 <span class="svc-row-name">{{ s.name }}</span>
@@ -383,13 +383,13 @@ a{color:var(--color-accent-700);text-decoration:none}a:hover{color:var(--color-a
 class Component extends DCLogic {
   services() {
     return [
-      { name: 'Performance / paid ads', kicker: 'Paid ads', headline: 'Every rupee tracked to a result.',
+      { name: 'Performance / paid ads', href: '/services/performance-marketing', kicker: 'Paid ads', headline: 'Every rupee tracked to a result.',
         sub: 'Meta, Google and YouTube campaigns built to make money back — setup, bidding, re-showing ads to visitors — reviewed weekly against your cost per lead and return on ad spend.',
         priceNote: 'In Growth · ₹49,999/mo' },
-      { name: 'SEO', kicker: 'SEO', headline: 'Be the answer, not the ad.',
+      { name: 'SEO', href: '/services/seo', kicker: 'SEO', headline: 'Be the answer, not the ad.',
         sub: 'Technical fixes, groups of linked articles, your Google Business Profile and visibility in AI search — traffic that keeps paying after the campaign stops.',
         priceNote: 'In Dominate · ₹89,999/mo' },
-      { name: 'Social media management', kicker: 'Social', headline: 'Content that stops the scroll.',
+      { name: 'Social media management', href: '/services/social-media-marketing', kicker: 'Social', headline: 'Content that stops the scroll.',
         sub: 'A calendar, a look and a community — your organic presence run end to end, tuned to how your audience actually scrolls.',
         priceNote: 'From ₹24,999/mo' },
       { name: 'Content marketing', kicker: 'Content', headline: 'Content with a job to do.',
@@ -401,16 +401,16 @@ class Component extends DCLogic {
       { name: 'Video / reels production', kicker: 'Video', headline: 'Reels made to perform, not just to post.',
         sub: 'Hooks, scripts, shoots and edits built for the first three seconds — plus ad cutdowns from the same footage.',
         priceNote: 'From ₹24,999/mo (bundled)' },
-      { name: 'Influencer marketing', kicker: 'Influencer', headline: 'Creators picked on numbers, not vibes.',
+      { name: 'Influencer marketing', href: '/influencer-marketing', kicker: 'Influencer', headline: 'Creators picked on numbers, not vibes.',
         sub: 'Shortlisting, negotiation, briefing and running the best posts as ads — performance tracked per creator, not per post.',
         priceNote: 'In Dominate' },
       { name: 'Web design & development', kicker: 'Web', headline: 'Websites that do not just look good — they sell.',
         sub: 'UI/UX, a fast mobile-first build, SEO-ready structure, CMS or e-commerce, plus domain, hosting and SSL.',
         priceNote: 'Custom · on request' },
-      { name: 'E-commerce / D2C growth', kicker: 'E-commerce', headline: 'From first sale to repeat buyer.',
+      { name: 'E-commerce / D2C growth', href: '/services/d2c-growth', kicker: 'E-commerce', headline: 'From first sale to repeat buyer.',
         sub: 'Improving your store to sell more, product ads, repeat-buyer emails and marketplace presence — measured on the profit left after costs, not numbers that only look good.',
         priceNote: 'In Dominate' },
-      { name: 'Lead generation', kicker: 'Lead gen', headline: 'Leads your sales team actually calls back.',
+      { name: 'Lead generation', href: '/services/b2b-lead-generation', kicker: 'Lead gen', headline: 'Leads your sales team actually calls back.',
         sub: 'Offer, landing page, form, WhatsApp follow-up and handoff to your sales system — built as one system and judged on genuine leads.',
         priceNote: 'In Growth' }
     ];
@@ -419,6 +419,7 @@ class Component extends DCLogic {
     const pal = ['--color-accent', '--bm-teal', '--bm-plum', '--color-accent-2', '--bm-amber'];
     const services = this.services().map((s, k) => ({
       ...s,
+      href: s.href || '/contact',
       n: String(k + 1).padStart(2, '0'),
       sc: 'var(' + pal[k % pal.length] + ')'
     }));

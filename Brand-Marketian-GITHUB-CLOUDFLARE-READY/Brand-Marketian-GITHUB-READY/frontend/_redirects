@@ -68,3 +68,16 @@
 /thank-you/ /thank-you 301
 /work.html /work 301
 /work/ /work 301
+
+# service pages
+/services/influencer-marketing /influencer-marketing 301
+/services/performance-marketing.html /services/performance-marketing 301
+/services/performance-marketing/ /services/performance-marketing 301
+/services/seo.html /services/seo 301
+/services/seo/ /services/seo 301
+/services/social-media-marketing.html /services/social-media-marketing 301
+/services/social-media-marketing/ /services/social-media-marketing 301
+/services/d2c-growth.html /services/d2c-growth 301
+/services/d2c-growth/ /services/d2c-growth 301
+/services/b2b-lead-generation.html /services/b2b-lead-generation 301
+/services/b2b-lead-generation/ /services/b2b-lead-generation 301
