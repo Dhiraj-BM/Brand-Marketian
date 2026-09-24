@@ -47,9 +47,22 @@
     if (dropzone) dropzone.textContent = f.name + ' — ready to send';
   }
 
+  // "Apply" on a role row: the runtime that used to set the role is stripped by
+  // the static build, so label the form with that role and bring it into view.
+  Array.prototype.forEach.call(document.querySelectorAll('[data-apply]'), function (btn) {
+    btn.addEventListener('click', function () {
+      if (kicker) kicker.textContent = 'Application · ' + btn.getAttribute('data-apply');
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(function () { if (nameEl) nameEl.focus({ preventScroll: true }); }, 500);
+    });
+  });
+
   if (dropzone) {
     dropzone.style.cursor = 'pointer';
     dropzone.addEventListener('click', function () { fileInput.click(); });
+    dropzone.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
+    });
     dropzone.addEventListener('dragover', function (e) { e.preventDefault(); dropzone.style.borderColor = 'var(--color-accent)'; });
     dropzone.addEventListener('dragleave', function () { dropzone.style.borderColor = ''; });
     dropzone.addEventListener('drop', function (e) {

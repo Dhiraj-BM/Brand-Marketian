@@ -1,3 +1,6 @@
 # old Case Studies URL -> Work
 /case-studies /work 301
 /case-studies.html /work 301
+# /media was a design-component preview published by mistake (no content)
+/media /about 301
+/media.html /about 301

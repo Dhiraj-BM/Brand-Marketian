@@ -81,7 +81,8 @@ for (const file of pages) {
     // block the progressive-enhancement scripts during the build so they do NOT
     // inject their markup (hamburger, mobile menu, swipe hooks) into the snapshot.
     // They stay referenced in <head> and run fresh on the live static page.
-    if (/\/(enhance|cms|home-hero|hero-flow|influencer)\.js(\?|$)/.test(u)) return r.abort();
+    // motion.js too: its reveal/stagger/marquee state must be set up live, not baked in.
+    if (/\/(enhance|cms|motion|home-hero|hero-flow|influencer)\.js(\?|$)/.test(u)) return r.abort();
     r.continue();
   });
   const warnings = [];

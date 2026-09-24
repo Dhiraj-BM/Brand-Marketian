@@ -78,7 +78,7 @@
     if (el.getAttribute('data-bm-reveal') === 'off') return true;
     if (el.closest('header, nav, .bm-mobile-menu')) return true;
     // brand.css already animates these itself (bm-rise via animation-timeline; marquees)
-    if (el.matches && el.matches('.card, [data-rise], .bm-marquee, .bm-marquee-row, .bm-marquee-row *')) return true;
+    if (el.matches && el.matches('.card, [data-rise], .bm-marquee, .bm-marquee-row, .bm-marquee-row *, .bm-logos, [data-bm-stagger], [data-bm-stagger] > *, .bm-tl, .bm-tl > *')) return true;
     var cs = (el.ownerDocument.defaultView || window).getComputedStyle(el);
     if (cs.animationName && cs.animationName !== 'none') return true;   // element already has its own CSS animation
     // horizontal scroller / carousel track — never override its transform
@@ -168,22 +168,132 @@
     });
   }
 
+  /* ============================================================ client logos
+     <div class="bm-logos" data-bm-logos></div> becomes an endless, hover/focus-
+     pausable marquee of real client logos. The list is doubled (second copy
+     aria-hidden) so the -50% keyframe loops seamlessly; under reduced motion
+     brand.css stops the track and wraps it into a static row. */
+  var LOGOS = [
+    ['haldirams', "Haldiram's", 463, 271], ['fabindia', 'Fabindia', 437, 177], ['bajaj-allianz', 'Bajaj Allianz', 554, 99],
+    ['healthkart', 'HealthKart', 538, 166], ['physics-wallah', 'Physics Wallah', 445, 442], ['ajio', 'AJIO', 536, 188],
+    ['marks-and-spencer', 'Marks & Spencer', 640, 276], ['acko', 'Acko', 597, 335], ['muscleblaze', 'MuscleBlaze', 447, 447],
+    ['libas', 'Libas', 146, 114], ['milton', 'Milton', 225, 225], ['black-berrys', 'Black Berrys', 636, 154],
+    ['om-books-international', 'Om Books International', 250, 99], ['fuel-one', 'Fuel One', 640, 147],
+    ['divine-home-india', 'Divine Home India', 447, 447], ['the-pet-foundry', 'The Pet Foundry', 399, 399],
+    ['community-chulha', 'Community Chulha', 214, 212], ['first-fiddle', 'First Fiddle', 450, 450],
+    ['nakul-associates', 'Nakul Associates', 234, 290], ['sri-sai-convention-hall', 'Sri Sai Convention Hall', 640, 117]
+  ];
+  function buildLogos() {
+    document.querySelectorAll('[data-bm-logos]').forEach(function (box) {
+      if (box.querySelector('.bm-logos-track')) return;
+      var list = LOGOS.slice();
+      if (box.getAttribute('data-bm-logos') === 'rev') { list.reverse(); box.classList.add('rev'); }
+      var track = document.createElement('div');
+      track.className = 'bm-logos-track';
+      [0, 1].forEach(function (copy) {
+        list.forEach(function (l) {
+          var img = document.createElement('img');
+          img.src = 'assets/work/client-logo-' + l[0] + '.png';
+          img.alt = copy ? '' : l[1] + ' logo';
+          img.width = l[2]; img.height = l[3];
+          img.loading = 'lazy'; img.decoding = 'async';
+          if (copy) img.setAttribute('aria-hidden', 'true');
+          track.appendChild(img);
+        });
+      });
+      box.setAttribute('role', 'region');
+      if (!box.getAttribute('aria-label')) box.setAttribute('aria-label', 'Brands we have worked with');
+      box.appendChild(track);
+    });
+  }
+
+  /* ============================================================ in-view hooks
+     [data-bm-stagger] children rise in one after another; .bm-tl draws its
+     track. Both get .is-in once seen. */
+  var io2 = canObserve ? new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      en.target.classList.add('is-in');
+      io2.unobserve(en.target);
+    });
+  }, { threshold: 0.2 }) : null;
+  function armInView() {
+    document.querySelectorAll('[data-bm-stagger], .bm-tl').forEach(function (el) {
+      if (el.__bmIv) return;
+      el.__bmIv = 1;
+      for (var i = 0; i < el.children.length; i++) el.children[i].style.setProperty('--i', i);
+      if (reduce || !io2) el.classList.add('is-in'); else io2.observe(el);
+    });
+  }
+
+  /* ============================================================ tabs
+     [data-bm-tabs] containing [role=tab][data-tab] buttons and
+     [role=tabpanel] panels (id="ind-<tab>"). Arrow keys move between tabs;
+     a #<tab> hash opens that tab directly (shareable links per sector). */
+  function armTabs() {
+    document.querySelectorAll('[data-bm-tabs]').forEach(function (box) {
+      if (box.__bmTabs) return;
+      box.__bmTabs = 1;
+      var tabs = [].slice.call(box.querySelectorAll('[role="tab"]'));
+      function select(tab, focus) {
+        tabs.forEach(function (t) {
+          var on = t === tab;
+          t.setAttribute('aria-selected', on ? 'true' : 'false');
+          t.tabIndex = on ? 0 : -1;
+          var p = document.getElementById(t.getAttribute('aria-controls'));
+          if (p) p.hidden = !on;
+        });
+        if (focus) tab.focus();
+      }
+      tabs.forEach(function (t, i) {
+        t.addEventListener('click', function () {
+          select(t);
+          try { history.replaceState(null, '', '#' + t.getAttribute('data-tab')); } catch (e) {}
+        });
+        t.addEventListener('keydown', function (e) {
+          var k = e.key, n = null;
+          if (k === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
+          else if (k === 'ArrowLeft') n = tabs[(i - 1 + tabs.length) % tabs.length];
+          else if (k === 'Home') n = tabs[0];
+          else if (k === 'End') n = tabs[tabs.length - 1];
+          if (n) { e.preventDefault(); select(n, true); }
+        });
+      });
+      var h = (location.hash || '').slice(1);
+      var start = (h && tabs.filter(function (t) { return t.getAttribute('data-tab') === h; })[0]) || tabs[0];
+      if (start) select(start);
+      box.classList.add('is-armed');
+    });
+  }
+
   if (!reduce && io) document.documentElement.classList.add('bm-motion');
 
   function boot() {
+    armTabs();
+    buildLogos();
+    armInView();
     arm();
     // the x-dc runtime / cms.js inject content after load — re-scan a few times
     setTimeout(arm, 700);
     setTimeout(arm, 1800);
     setTimeout(arm, 3400);
     if ('MutationObserver' in window) {
-      var mo = new MutationObserver(function () { clearTimeout(boot.__t); boot.__t = setTimeout(arm, 250); });
+      var mo = new MutationObserver(function () { clearTimeout(boot.__t); boot.__t = setTimeout(function () { buildLogos(); armInView(); arm(); }, 250); });
       mo.observe(document.body, { childList: true, subtree: true });
     }
-    // failsafe: nothing stays hidden
-    setTimeout(function () {
-      document.querySelectorAll('[data-bm-reveal]:not(.bm-in)').forEach(function (el) { el.classList.add('bm-in'); });
-    }, 3000);
+    // failsafe: nothing that is on screen (or already scrolled past) stays hidden.
+    // Content further down keeps its scroll reveal instead of popping in unseen.
+    function failsafe() {
+      var vh = window.innerHeight || 800;
+      document.querySelectorAll('[data-bm-reveal]:not(.bm-in)').forEach(function (el) {
+        if (el.getBoundingClientRect().top < vh) el.classList.add('bm-in');
+      });
+      document.querySelectorAll('[data-bm-stagger]:not(.is-in), .bm-tl:not(.is-in)').forEach(function (el) {
+        if (el.getBoundingClientRect().top < vh) el.classList.add('is-in');
+      });
+    }
+    setTimeout(failsafe, 3000);
+    window.addEventListener('scroll', function () { clearTimeout(failsafe.__t); failsafe.__t = setTimeout(failsafe, 400); }, { passive: true });
   }
 
   if (document.readyState === 'loading') {
