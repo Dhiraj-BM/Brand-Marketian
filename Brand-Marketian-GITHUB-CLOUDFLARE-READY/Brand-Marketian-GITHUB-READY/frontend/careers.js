@@ -102,7 +102,8 @@
     fetch(apiBase() + '/api/applications', { method: 'POST', body: fd })
       .then(function (res) {
         if (!res.ok) throw new Error('http ' + res.status);
-        window.location.href = 'thank-you.html';
+        if (window.bmTrack) window.bmTrack('job_application', {}, '/thank-you');
+        else window.location.href = '/thank-you';
       })
       .catch(function () {
         sending = false;

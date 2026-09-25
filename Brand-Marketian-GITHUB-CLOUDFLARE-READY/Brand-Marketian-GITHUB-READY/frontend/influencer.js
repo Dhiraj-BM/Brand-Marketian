@@ -97,6 +97,7 @@
       segment: 'other', source: 'influencer-page', page: 'influencer'
     };
     if (sb) { sb.disabled = true; sb.innerHTML = 'Sending…'; }
+    (window.dataLayer = window.dataLayer || []).push({ event: 'generate_lead', lead_source: 'influencer-page', service: payload.services.join(', '), budget: payload.budget });
     var done = function () { form.style.display = 'none'; var ok = $('im-form-ok'); if (ok) ok.classList.add('on'); };
     fetch(apiBase() + '/api/leads', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       .then(function (r) { return r.ok ? r.json() : Promise.reject(r); }).then(done).catch(done);

@@ -91,6 +91,8 @@
         })
       }).catch(function () {});
     } catch (e) {}
-    window.location.href = 'thank-you.html';
+    var lead = { lead_source: 'contact-page', service: serviceChips.selected().join(', '), budget: (budgetChips.selected()[0] || '') };
+    if (window.bmTrack) window.bmTrack('generate_lead', lead, '/thank-you');
+    else window.location.href = '/thank-you';
   });
 })();

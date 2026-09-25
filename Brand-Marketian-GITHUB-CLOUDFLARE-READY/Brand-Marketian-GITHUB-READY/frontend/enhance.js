@@ -175,9 +175,22 @@
           })
         }).catch(function () {});
       } catch (e) {}
-      window.location.href = 'thank-you.html';
+      bmTrack('generate_lead', { lead_source: 'footer', service: g('bmf_service'), budget: g('bmf_budget') }, '/thank-you');
     });
   }
+
+  /* Push a GTM event, then navigate once the tags have fired (or after a
+     timeout, so a blocked/slow GTM never strands the visitor). Absolute
+     /thank-you: a relative path broke on /services/* pages. */
+  function bmTrack(event, data, next) {
+    var gone = false;
+    var go = function () { if (!gone && next) { gone = true; window.location.href = next; } };
+    var payload = { event: event, eventCallback: go, eventTimeout: 1200 };
+    for (var k in data) payload[k] = data[k];
+    (window.dataLayer = window.dataLayer || []).push(payload);
+    setTimeout(go, 1500);
+  }
+  window.bmTrack = bmTrack;
 
   /* ---------- 5. Phone legibility + touch targets ----------
      Many labels are authored at 10-11px and text links are ~20px tall.
