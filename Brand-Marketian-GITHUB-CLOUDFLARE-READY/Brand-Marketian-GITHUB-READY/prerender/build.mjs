@@ -42,7 +42,8 @@ const strip = () => {
       /(^|\/)support\.js(\?|$)/.test(src) ||
       /_ds_bundle\.js(\?|$)/.test(src) ||
       /(^|\/)home\.js(\?|$)/.test(src) ||          // referenced but never shipped -> 404
-      /unpkg\.com\/(react|react-dom|@babel)/.test(src)
+      /unpkg\.com\/(react|react-dom|@babel)/.test(src) ||
+      /googletagmanager\.com\/(gtm|gtag)/.test(src)   // injected by the GTM snippet at runtime; the snippet itself stays
     ) kill.push(s);
   });
   kill.forEach((s) => s.remove());
@@ -78,6 +79,8 @@ for (const file of pages) {
     const u = r.url();
     // block the slow CMS API so authored copy is baked in
     if (u.includes('brand-marketian-api.onrender.com') || /brandmarketian\.com\/api\//.test(u)) return r.abort();
+    // never fire analytics during the build (it would also bake GTM's injected tags into the page)
+    if (/googletagmanager\.com|google-analytics\.com|doubleclick\.net/.test(u)) return r.abort();
     // block the progressive-enhancement scripts during the build so they do NOT
     // inject their markup (hamburger, mobile menu, swipe hooks) into the snapshot.
     // They stay referenced in <head> and run fresh on the live static page.
