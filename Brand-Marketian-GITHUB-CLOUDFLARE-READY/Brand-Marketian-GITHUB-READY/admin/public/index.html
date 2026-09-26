@@ -205,9 +205,30 @@ const PAGE_FILE = { home:'index.html', services:'services.html', industries:'ind
   influencer:'influencer-marketing.html', blog:'blog.html', careers:'careers.html' };
 // Every published file that uses a page key (the blog articles share "blog"),
 // offered in the on-page editor's page switcher.
-const PAGE_FILES = { blog:['blog.html','blog-cpl-india-2026.html','blog-festive-ad-calendar-d2c.html',
-  'blog-local-seo-multi-location.html','blog-marketing-budget-by-stage.html','blog-nine-reels-beat-2l-budget.html',
-  'blog-whatsapp-funnels.html'] };
+// Blog posts: slug (file blog-<slug>.html) -> label. Each gets a cover image +
+// alt text field (keys cover_<slug> / coverAlt_<slug>) used by the article
+// cover AND its card on blog.html. Keep in sync with scripts/blog-images.json.
+const BLOG_POSTS = [
+  ['best-seo-agency-delhi-ncr','Best SEO agency Delhi NCR'],
+  ['best-marketing-agency-delhi-ncr','Best marketing agency Delhi NCR'],
+  ['best-b2b-marketing-agency-delhi-ncr','Best B2B marketing agency Delhi NCR'],
+  ['best-branding-agency-delhi-ncr','Best branding agency Delhi NCR'],
+  ['best-content-marketing-agency-india','Best content marketing agency India'],
+  ['best-d2c-growth-agency-india','Best D2C growth agency India'],
+  ['best-influencer-marketing-agency-india','Best influencer marketing agency India'],
+  ['best-lead-generation-agency-delhi-ncr','Best lead generation agency Delhi NCR'],
+  ['best-performance-marketing-agency-india','Best performance marketing agency India'],
+  ['best-social-media-marketing-agency-delhi-ncr','Best social media agency Delhi NCR'],
+  ['best-website-design-company-delhi-ncr','Best website design company Delhi NCR'],
+  ['cpl-india-2026','CPL benchmarks India 2026'],
+  ['digital-marketing-cost-india-2026','Digital marketing cost India 2026'],
+  ['festive-ad-calendar-d2c','Festive ad calendar for D2C'],
+  ['local-seo-multi-location','Local SEO for multi-location brands'],
+  ['marketing-budget-by-stage','Marketing budget by stage'],
+  ['nine-reels-beat-2l-budget','Nine reels beat a 2L budget'],
+  ['whatsapp-funnels','WhatsApp funnels']
+];
+const PAGE_FILES = { blog:['blog.html'].concat(BLOG_POSTS.map(p=>'blog-'+p[0]+'.html')) };
 const MEDIA_CATS = ['Logos','Icons','Website Images','Service Images','Client Logos','Case Study Images','Team Images','Banners','Videos'];
 
 /* ===================================================== CONTENT SCHEMA
@@ -325,9 +346,13 @@ const SCHEMA = {
     SEO
   ]},
 
-  blog:{ label:'Blog', icon:'📝', desc:'Blog listing page.', sections:[
+  blog:{ label:'Blog', icon:'📝', desc:'Blog listing page and the cover image of every article.', sections:[
     {title:'Hero', fields:[{k:'heroTitle',label:'Heading',type:'text'},{k:'heroSub',label:'Sub',type:'textarea'}]},
     {title:'Intro', fields:[{k:'introText',label:'Intro text',type:'textarea'}]},
+    {title:'Cover images (article + blog card)', fields:BLOG_POSTS.flatMap(([s,l])=>[
+      {k:'cover_'+s,label:l+' — cover image',type:'image',hint:'16:9, at least 1600px wide. Replaces the article cover and its card on the blog page.'},
+      {k:'coverAlt_'+s,label:l+' — image description (alt text)',type:'text',hint:'Describe what is in the picture; include the topic naturally. Helps Google Images.'}
+    ])},
     SEO
   ]},
 

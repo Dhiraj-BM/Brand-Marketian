@@ -4,6 +4,7 @@
      data-cms-img="fieldName"   -> sets background-image (cover/center)
      data-cms-src="fieldName"   -> sets the src attribute (for <img>)
      data-cms-href="fieldName"  -> sets the href attribute (for <a>)
+     data-cms-alt="fieldName"   -> sets the alt attribute (for <img>)
    A value that is a bare "/uploads/..." path is resolved against the API
    origin, since uploaded media is served by the backend, not the website.
    Cloudinary image URLs get f_auto,q_auto added so they are served as
@@ -123,6 +124,12 @@
         setImg(el, resolveUrl(sv));
         el.setAttribute('data-cms-src-applied', sv);
       }
+    }
+    // <img> alt (kept in step with a CMS-swapped image for SEO / screen readers)
+    var ak = el.getAttribute('data-cms-alt');
+    if (ak) {
+      var av = data[ak];
+      if (typeof av === 'string' && av.length) el.setAttribute('alt', av);
     }
     // <a> href
     var hk = el.getAttribute('data-cms-href');
@@ -255,7 +262,7 @@
 
   function apply(root) {
     if (!data) return;
-    var nodes = (root || document).querySelectorAll('[data-cms],[data-cms-img],[data-cms-src],[data-cms-href]');
+    var nodes = (root || document).querySelectorAll('[data-cms],[data-cms-img],[data-cms-src],[data-cms-href],[data-cms-alt]');
     for (var i = 0; i < nodes.length; i++) applyOne(nodes[i]);
     applyEdits();
   }

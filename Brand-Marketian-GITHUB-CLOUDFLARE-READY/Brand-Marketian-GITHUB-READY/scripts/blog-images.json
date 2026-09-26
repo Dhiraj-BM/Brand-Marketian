@@ -1,0 +1,93 @@
+{
+  "_readme": "One entry per blog post (file blog-<slug>.html). 'image' is the cover: either /assets/blog/<slug>.webp (with its crops <slug>.jpg, -og.jpg, -4x3.webp, -1x1.jpg alongside) or a Cloudinary URL (crops made on the fly). Leave it empty to keep the image already in the page. 'alt' describes what is IN the image. Run: node scripts/blog-images.mjs. The admin panel (Blog -> Cover images) can override both live without a redeploy.",
+  "best-seo-agency-delhi-ncr": {
+    "label": "Best SEO agency Delhi NCR",
+    "image": "/assets/blog/best-seo-agency-delhi-ncr.webp",
+    "alt": "SEO specialist in a Delhi NCR office reviewing Google search results and a rising organic traffic chart on a laptop"
+  },
+  "best-marketing-agency-delhi-ncr": {
+    "label": "Best marketing agency Delhi NCR",
+    "image": "/assets/blog/best-marketing-agency-delhi-ncr.webp",
+    "alt": "Marketing team in a Gurugram agency office running a campaign strategy session with laptops and a wall screen"
+  },
+  "best-b2b-marketing-agency-delhi-ncr": {
+    "label": "Best B2B marketing agency Delhi NCR",
+    "image": "/assets/blog/best-b2b-marketing-agency-delhi-ncr.webp",
+    "alt": "B2B marketing head in a Noida office reviewing a sales pipeline dashboard with a colleague"
+  },
+  "best-branding-agency-delhi-ncr": {
+    "label": "Best branding agency Delhi NCR",
+    "image": "/assets/blog/best-branding-agency-delhi-ncr.webp",
+    "alt": "Brand designer arranging a brand identity mood board with colour swatches and packaging mockups"
+  },
+  "best-content-marketing-agency-india": {
+    "label": "Best content marketing agency India",
+    "image": "/assets/blog/best-content-marketing-agency-india.webp",
+    "alt": "Indian content team at work: a writer at a laptop and a creator filming a video in a bright studio"
+  },
+  "best-d2c-growth-agency-india": {
+    "label": "Best D2C growth agency India",
+    "image": "/assets/blog/best-d2c-growth-agency-india.webp",
+    "alt": "D2C founder packing product boxes in a small studio warehouse while online orders come in on a phone"
+  },
+  "best-influencer-marketing-agency-india": {
+    "label": "Best influencer marketing agency India",
+    "image": "/assets/blog/best-influencer-marketing-agency-india.webp",
+    "alt": "Indian lifestyle creator filming a skincare product reel on a smartphone with a ring light"
+  },
+  "best-lead-generation-agency-delhi-ncr": {
+    "label": "Best lead generation agency Delhi NCR",
+    "image": "/assets/blog/best-lead-generation-agency-delhi-ncr.webp",
+    "alt": "Sales executive in a Gurugram office on a call while new enquiries arrive in a CRM on the laptop"
+  },
+  "best-performance-marketing-agency-india": {
+    "label": "Best performance marketing agency India",
+    "image": "/assets/blog/best-performance-marketing-agency-india.webp",
+    "alt": "Performance marketer analysing ad campaign dashboards with ROAS and conversion charts on two monitors"
+  },
+  "best-social-media-marketing-agency-delhi-ncr": {
+    "label": "Best social media agency Delhi NCR",
+    "image": "/assets/blog/best-social-media-marketing-agency-delhi-ncr.webp",
+    "alt": "Social media manager planning an Instagram content grid on a phone and laptop"
+  },
+  "best-website-design-company-delhi-ncr": {
+    "label": "Best website design company Delhi NCR",
+    "image": "/assets/blog/best-website-design-company-delhi-ncr.webp",
+    "alt": "Web designer working on a responsive website layout across a monitor, tablet and phone"
+  },
+  "cpl-india-2026": {
+    "label": "CPL benchmarks India 2026",
+    "image": "/assets/blog/cpl-india-2026.webp",
+    "alt": "Laptop showing cost-per-lead charts and a lead funnel dashboard next to a calculator and notebook"
+  },
+  "digital-marketing-cost-india-2026": {
+    "label": "Digital marketing cost India 2026",
+    "image": "/assets/blog/digital-marketing-cost-india-2026.webp",
+    "alt": "Business owner planning a digital marketing budget with a spreadsheet, calculator and rupee notes"
+  },
+  "festive-ad-calendar-d2c": {
+    "label": "Festive ad calendar for D2C",
+    "image": "/assets/blog/festive-ad-calendar-d2c.webp",
+    "alt": "Diwali diyas and marigolds beside a phone showing an online festive sale and gift boxes"
+  },
+  "local-seo-multi-location": {
+    "label": "Local SEO for multi-location brands",
+    "image": "/assets/blog/local-seo-multi-location.webp",
+    "alt": "Phone showing a map with several store location pins in front of a busy Indian high street"
+  },
+  "marketing-budget-by-stage": {
+    "label": "Marketing budget by stage",
+    "image": "/assets/blog/marketing-budget-by-stage.webp",
+    "alt": "Startup founder sketching a three-stage growth chart on a whiteboard for the team"
+  },
+  "nine-reels-beat-2l-budget": {
+    "label": "Nine reels beat a 2L budget",
+    "image": "/assets/blog/nine-reels-beat-2l-budget.webp",
+    "alt": "Creator shooting a vertical Instagram reel on a phone gimbal in a colourful Indian street market"
+  },
+  "whatsapp-funnels": {
+    "label": "WhatsApp funnels",
+    "image": "/assets/blog/whatsapp-funnels.webp",
+    "alt": "Boutique owner replying to customer chats on WhatsApp from a smartphone at the shop counter"
+  }
+}

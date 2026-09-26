@@ -91,3 +91,23 @@ If you'd like each article's SEO to be **editable from inside the admin
 dashboard** instead of the file, that's possible too — it's a bit more setup
 because it touches your admin app and backend. Ask and it can be added as a
 next step.
+
+---
+
+## 6. Blog cover images (changeable from the CMS)
+
+Every article cover **and** its card on `blog.html` share one CMS image, so a
+change shows in both places.
+
+**From the admin panel (no code):** Blog → *Cover images (article + blog card)*.
+Each post has a *cover image* (pick/upload from Media — uploads go to Cloudinary)
+and an *image description (alt text)*. Save draft → Preview → Publish.
+
+**Baked into the HTML (best for Google):** list the Cloudinary URL and alt text
+for each post in `scripts/blog-images.json`, then run
+
+    node scripts/blog-images.mjs
+
+It updates the cover `<img>`, `og:image` / `twitter:image` (1200×630 crop),
+the article JSON-LD image (16:9, 4:3, 1:1 crops), the blog card, and adds the
+image to `sitemap.xml`. Store images in Cloudinary under `brand-marketian/blog/<slug>`.
