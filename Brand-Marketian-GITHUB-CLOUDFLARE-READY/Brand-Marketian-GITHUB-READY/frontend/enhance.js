@@ -42,7 +42,7 @@
         panel.appendChild(l);
       });
       var cta = document.createElement('a');
-      cta.href = 'contact.html';
+      cta.href = '/contact';
       cta.className = 'bm-mobile-cta';
       cta.textContent = 'Book a free audit';
       panel.appendChild(cta);

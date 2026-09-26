@@ -159,3 +159,23 @@ html.bm-motion [data-bm-stagger].is-in > *{opacity:1;transform:none}
   .bm-mosaic figcaption{font-size:12px}
 }
 @media (max-width:640px){.bm-wrap{padding:0 18px}.bm-logos img{height:30px}.bm-logos-track{gap:36px}.bm-stat,.bm-perk{padding-right:10px}.bm-stat + .bm-stat,.bm-perk + .bm-perk{padding-left:14px}}
+
+/* Mobile menu: the panel is always white, so keep its links dark. The home
+   page paints every header link cream for its transparent dark-hero header,
+   which made the open menu read white-on-white. */
+header .bm-mobile-menu a[href]{color:var(--color-text)!important}
+header .bm-mobile-menu a.bm-mobile-cta[href]{color:#fff!important}
+
+/* Wide tables that already sit in a scrolling wrapper: let the wrapper do the
+   horizontal scroll instead of turning the table into a second scroller. */
+@media (max-width:640px){[style*="overflow-x: auto"]>table.table,[style*="overflow-x:auto"]>table.table,.bm-table-wrap>table.bm-table{display:table;overflow:visible}}
+
+/* Let the window be the page scroller. The design runtime can inject
+   html,body{height:100%} for full-page layouts; combined with overflow-x:hidden
+   above that turns <body> into an inner scroller on phones (no collapsing
+   address bar, no tap-to-top, scroll effects not firing). */
+html,body{height:auto !important;min-height:100%}
+
+/* Footer bottom links (Pricing / Work / Careers / Contact): one consistent,
+   thumb-sized tap target so they line up on phones. */
+footer span[style*="gap: 18px"]>a{display:inline-flex !important;align-items:center;min-height:44px}

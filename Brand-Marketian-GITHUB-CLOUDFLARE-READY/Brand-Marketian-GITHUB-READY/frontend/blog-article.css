@@ -95,3 +95,5 @@
   .bm-related,.bm-cta{padding-left:20px;padding-right:20px}
   .bm-cta{padding:26px 22px}
 }
+/* phones: keep the cover and its caption off the screen edges, in line with the text */
+@media (max-width:960px){.bm-cover{padding:0 20px}}
