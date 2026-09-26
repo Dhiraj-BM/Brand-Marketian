@@ -61,10 +61,6 @@ for (const p of pages) {
   });
   const name = (p === '/' ? 'home' : p.replace(/^\//, '').replace(/\//g, '_'));
   await page.screenshot({ path: path.join(OUT, `${name}.jpg`), type: 'jpeg', quality: 55, fullPage: true });
-  // header over light content (scrolled well past the hero)
-  await page.evaluate(() => window.scrollTo(0, 1400));
-  await new Promise((r) => setTimeout(r, 700));
-  await page.screenshot({ path: path.join(OUT, `${name}__scrolled.jpg`), type: 'jpeg', quality: 60 });
   let menu = null;
   if (await page.$('.bm-hamburger')) {
     await page.click('.bm-hamburger');
@@ -76,6 +72,11 @@ for (const p of pages) {
       return m ? { bg: cs(m).backgroundColor, link: cs(a).color, opacity: cs(m).opacity } : 'no panel';
     });
   } else menu = 'NO HAMBURGER';
+  // header over light content (scrolled well past the hero); menu was tested at the top
+  await page.keyboard.press('Escape');
+  await page.evaluate(() => window.scrollTo(0, 1400));
+  await new Promise((r) => setTimeout(r, 700));
+  await page.screenshot({ path: path.join(OUT, `${name}__scrolled.jpg`), type: 'jpeg', quality: 60 });
   report.push({ p, ...info, menu });
   await page.close();
 }
